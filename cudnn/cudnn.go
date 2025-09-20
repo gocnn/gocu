@@ -1,1 +1,1 @@
-package cudnn
+package gocudnn

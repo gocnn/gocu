@@ -1,1 +1,1 @@
-package cublas
+package gocublas

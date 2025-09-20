@@ -4,10 +4,6 @@
 GO := go
 GOFLAGS := -v
 
-# Export CGO flags as environment variables
-export CGO_LDFLAGS := -LC:\x\lib -lmkl_rt
-export CGO_ENABLED := 1
-
 # Default target: run pre-commit
 .PHONY: all
 all: pre-commit
