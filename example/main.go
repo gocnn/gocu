@@ -9,9 +9,6 @@ import (
 )
 
 func main() {
-	fmt.Println("CUDA Go Example - Device Information and Memory Operations")
-	fmt.Println("=========================================================")
-
 	// Initialize CUDA
 	gocu.Init(0)
 	fmt.Println("✓ CUDA initialized successfully")
