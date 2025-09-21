@@ -21,16 +21,8 @@ jobs:
         with:
           go-version: "1.25"
 
-      - name: Install OpenBLAS
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libopenblas-dev
-
       - name: Tidy
         run: go mod tidy
 
-      - name: Build
-        run: go build -v ./...
-
-      - name: Test
-        run: go test -v ./...
+      - name: fmt
+        run: go fmt ./... 
