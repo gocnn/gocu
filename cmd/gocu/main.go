@@ -50,7 +50,7 @@ func main() {
 		fmt.Printf("Device %d\n========\n", i)
 		fmt.Printf("Name      : %q\n", name)
 		fmt.Printf("Clock Rate: %d kHz\n", cr)
-		fmt.Printf("Memory    : %d bytes\n", mem)
+		fmt.Printf("Memory    : %.2f GB (%d bytes)\n", float64(mem)/(1024*1024*1024), mem)
 		fmt.Printf("Compute   : %d.%d\n\n", maj, min)
 	}
 }

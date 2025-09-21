@@ -8,7 +8,7 @@ import (
 
 func main() {
 	if err := CheckCUDA(); err != nil {
-		fmt.Fprintf(os.Stderr, "CUDA Check Error: %v\n", err)
+		fmt.Fprintf(os.Stderr, "GoCU CUDA Check Error: %v\n", err)
 		os.Exit(1)
 	}
 }
