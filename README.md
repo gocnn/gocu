@@ -1,6 +1,6 @@
 # gocu
 
-Go Bindings for cuBLAS and cuDNN.
+Go Bindings for **cuBLAS** and **cuDNN**.
 
 ## Install
 
@@ -12,7 +12,6 @@ To verify that this library works, install and run the `gocu` program, which acc
 
 ```sh
 go install github.com/gocnn/gocu/cmd/gocu
-
 gocu
 ```
 
