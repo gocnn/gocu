@@ -33,15 +33,6 @@ func Memcpy(dst, src DevicePtr, size int64) error {
 	return Result(C.cuMemcpy(C.CUdeviceptr(dst), C.CUdeviceptr(src), C.size_t(size)))
 }
 
-// MemcpyAsync copies size bytes from src to dst on the current device asynchronously.
-// The copy is performed in the specified stream.
-func MemcpyAsync(dst, src DevicePtr, size int64, stream CUStream) error {
-	return Result(C.cuMemcpyAsync(
-		C.CUdeviceptr(dst), C.CUdeviceptr(src),
-		C.size_t(size), stream.c(),
-	))
-}
-
 // MemcpyPeer copies size bytes from src on srcCtx to dst on dstCtx across devices.
 // Requires peer access to be enabled between the contexts.
 func MemcpyPeer(dst DevicePtr, dstCtx CUContext, src DevicePtr, srcCtx CUContext, size int64) error {
@@ -49,6 +40,30 @@ func MemcpyPeer(dst DevicePtr, dstCtx CUContext, src DevicePtr, srcCtx CUContext
 		C.CUdeviceptr(dst), dstCtx.c(),
 		C.CUdeviceptr(src), srcCtx.c(),
 		C.size_t(size),
+	))
+}
+
+// MemcpyHtoD copies size bytes from host memory (src) to device memory (dst).
+func MemcpyHtoD(dst DevicePtr, src unsafe.Pointer, size int64) error {
+	return Result(C.cuMemcpyHtoD(C.CUdeviceptr(dst), src, C.size_t(size)))
+}
+
+// MemcpyDtoH copies size bytes from device memory (src) to host memory (dst).
+func MemcpyDtoH(dst unsafe.Pointer, src DevicePtr, size int64) error {
+	return Result(C.cuMemcpyDtoH(dst, C.CUdeviceptr(src), C.size_t(size)))
+}
+
+// MemcpyDtoD copies size bytes from src to dst on the same device.
+func MemcpyDtoD(dst, src DevicePtr, size int64) error {
+	return Result(C.cuMemcpyDtoD(C.CUdeviceptr(dst), C.CUdeviceptr(src), C.size_t(size)))
+}
+
+// MemcpyAsync copies size bytes from src to dst on the current device asynchronously.
+// The copy is performed in the specified stream.
+func MemcpyAsync(dst, src DevicePtr, size int64, stream CUStream) error {
+	return Result(C.cuMemcpyAsync(
+		C.CUdeviceptr(dst), C.CUdeviceptr(src),
+		C.size_t(size), stream.c(),
 	))
 }
 
@@ -62,31 +77,16 @@ func MemcpyPeerAsync(dst DevicePtr, dstCtx CUContext, src DevicePtr, srcCtx CUCo
 	))
 }
 
-// MemcpyHtoD copies size bytes from host memory (src) to device memory (dst).
-func MemcpyHtoD(dst DevicePtr, src unsafe.Pointer, size int64) error {
-	return Result(C.cuMemcpyHtoD(C.CUdeviceptr(dst), src, C.size_t(size)))
-}
-
 // MemcpyHtoDAsync copies size bytes from host memory (src) to device memory (dst) asynchronously.
 // The copy is performed in the specified stream.
 func MemcpyHtoDAsync(dst DevicePtr, src unsafe.Pointer, size int64, stream CUStream) error {
 	return Result(C.cuMemcpyHtoDAsync(C.CUdeviceptr(dst), src, C.size_t(size), stream.c()))
 }
 
-// MemcpyDtoH copies size bytes from device memory (src) to host memory (dst).
-func MemcpyDtoH(dst unsafe.Pointer, src DevicePtr, size int64) error {
-	return Result(C.cuMemcpyDtoH(dst, C.CUdeviceptr(src), C.size_t(size)))
-}
-
 // MemcpyDtoHAsync copies size bytes from device memory (src) to host memory (dst) asynchronously.
 // The copy is performed in the specified stream.
 func MemcpyDtoHAsync(dst unsafe.Pointer, src DevicePtr, size int64, stream CUStream) error {
 	return Result(C.cuMemcpyDtoHAsync(dst, C.CUdeviceptr(src), C.size_t(size), stream.c()))
-}
-
-// MemcpyDtoD copies size bytes from src to dst on the same device.
-func MemcpyDtoD(dst, src DevicePtr, size int64) error {
-	return Result(C.cuMemcpyDtoD(C.CUdeviceptr(dst), C.CUdeviceptr(src), C.size_t(size)))
 }
 
 // MemcpyDtoDAsync copies size bytes from src to dst on the same device asynchronously.
