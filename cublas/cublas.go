@@ -8,7 +8,6 @@ import (
 	"sync"
 
 	"github.com/gocnn/gocu"
-	"github.com/gocnn/gomat/blas"
 )
 
 type srotmParams struct {
@@ -38,62 +37,42 @@ const (
 	Device
 )
 
+// Transpose specifies the transposition operation for CUBLAS operations.
+// This directly maps to cublasOperation_t values for optimal performance.
+type Transpose C.cublasOperation_t
+
 const (
-	NoTrans   = C.CUBLAS_OP_N // NoTrans represents the no-transpose operation
-	Trans     = C.CUBLAS_OP_T // Trans represents the transpose operation
-	ConjTrans = C.CUBLAS_OP_C // ConjTrans represents the conjugate transpose operation
-
-	Upper = C.CUBLAS_FILL_MODE_UPPER // Upper is used to specify that the matrix is an upper triangular matrix
-	Lower = C.CUBLAS_FILL_MODE_LOWER // Lower is used to specify that the matrix is an lower triangular matrix
-
-	NonUnit = C.CUBLAS_DIAG_NON_UNIT // NonUnit is used to specify that the matrix is not a unit triangular matrix
-	Unit    = C.CUBLAS_DIAG_UNIT     // Unit is used to specify that the matrix is a unit triangular matrix
-
-	Left  = C.CUBLAS_SIDE_LEFT  // Left is used to specify a multiplication op is performed from the left
-	Right = C.CUBLAS_SIDE_RIGHT // Right is used to specify a multiplication op is performed from the right
+	NoTranspose   Transpose = Transpose(C.CUBLAS_OP_N) // No transpose operation
+	Transpose_    Transpose = Transpose(C.CUBLAS_OP_T) // Transpose operation
+	ConjTranspose Transpose = Transpose(C.CUBLAS_OP_C) // Conjugate transpose operation
 )
 
-func trans2cublasTrans(t blas.Transpose) C.cublasOperation_t {
-	switch t {
-	case blas.NoTrans:
-		return NoTrans
-	case blas.Trans:
-		return Trans
-	case blas.ConjTrans:
-		return ConjTrans
-	}
-	panic("Unreachable")
-}
+// Side specifies which side of the matrix operation is performed.
+// This directly maps to cublasSideMode_t values for optimal performance.
+type Side C.cublasSideMode_t
 
-func side2cublasSide(s blas.Side) C.cublasSideMode_t {
-	switch s {
-	case blas.Left:
-		return Left
-	case blas.Right:
-		return Right
-	}
-	panic("Unreachable")
-}
+const (
+	LeftSide  Side = Side(C.CUBLAS_SIDE_LEFT)  // Operation performed from the left
+	RightSide Side = Side(C.CUBLAS_SIDE_RIGHT) // Operation performed from the right
+)
 
-func diag2cublasDiag(d blas.Diag) C.cublasDiagType_t {
-	switch d {
-	case blas.Unit:
-		return Unit
-	case blas.NonUnit:
-		return NonUnit
-	}
-	panic("Unreachable")
-}
+// Diag specifies whether a matrix is unit triangular or not.
+// This directly maps to cublasDiagType_t values for optimal performance.
+type Diag C.cublasDiagType_t
 
-func uplo2cublasUplo(u blas.Uplo) C.cublasFillMode_t {
-	switch u {
-	case blas.Upper:
-		return Upper
-	case blas.Lower:
-		return Lower
-	}
-	panic("Unreachable")
-}
+const (
+	NonUnitDiag Diag = Diag(C.CUBLAS_DIAG_NON_UNIT) // Matrix is not unit triangular
+	UnitDiag    Diag = Diag(C.CUBLAS_DIAG_UNIT)     // Matrix is unit triangular
+)
+
+// Uplo specifies whether the matrix is upper or lower triangular.
+// This directly maps to cublasFillMode_t values for optimal performance.
+type Uplo C.cublasFillMode_t
+
+const (
+	UpperTriangular Uplo = Uplo(C.CUBLAS_FILL_MODE_UPPER) // Upper triangular matrix
+	LowerTriangular Uplo = Uplo(C.CUBLAS_FILL_MODE_LOWER) // Lower triangular matrix
+)
 
 // Standard is the standard cuBLAS handler.
 // By default it assumes that the data is in  RowMajor, DESPITE the fact that cuBLAS

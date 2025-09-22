@@ -6,7 +6,6 @@ import (
 
 	"github.com/gocnn/gocu/cublas"
 	"github.com/gocnn/gocu/cudart"
-	"github.com/gocnn/gomat/blas"
 )
 
 func main() {
@@ -53,12 +52,12 @@ func main() {
 		panic(err)
 	}
 
-	cublas := cublas.New()
-	defer cublas.Close()
+	impl := cublas.New()
+	defer impl.Close()
 
-	cublas.Sgemm(blas.NoTrans, blas.NoTrans, M, N, K, alpha, devA, M, devB, K, beta, devC, M)
+	impl.Sgemm(cublas.NoTranspose, cublas.NoTranspose, M, N, K, alpha, devA, M, devB, K, beta, devC, M)
 
-	if err := cublas.Err(); err != nil {
+	if err := impl.Err(); err != nil {
 		panic(err)
 	}
 
