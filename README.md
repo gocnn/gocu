@@ -1,6 +1,6 @@
 # gocu
 
-Go Bindings for **cuBLAS** and **cuDNN**.
+Go bindings for the CUDA Driver and Runtime APIs, cuBLAS, and cuDNN.
 
 ## Install
 
