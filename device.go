@@ -156,7 +156,7 @@ const (
 // Returns an error if the index is invalid.
 func DeviceGet(idx int) (Device, error) {
 	var dev C.CUdevice
-	err := Result(C.cuDeviceGet(&dev, C.int(idx)))
+	err := Check(C.cuDeviceGet(&dev, C.int(idx)))
 	return Device(dev), err
 }
 
@@ -164,7 +164,7 @@ func DeviceGet(idx int) (Device, error) {
 // Returns an error if the query fails.
 func DeviceGetCount() (int, error) {
 	var count C.int
-	err := Result(C.cuDeviceGetCount(&count))
+	err := Check(C.cuDeviceGetCount(&count))
 	return int(count), err
 }
 
@@ -175,7 +175,7 @@ func DeviceGetName(dev Device) (string, error) {
 	buf := make([]byte, size)
 	cstr := (*C.char)(unsafe.Pointer(&buf[0]))
 	defer C.free(unsafe.Pointer(cstr))
-	if err := Result(C.cuDeviceGetName(cstr, C.int(size), C.CUdevice(dev))); err != nil {
+	if err := Check(C.cuDeviceGetName(cstr, C.int(size), C.CUdevice(dev))); err != nil {
 		return "", err
 	}
 	return C.GoString(cstr), nil
@@ -191,7 +191,7 @@ func (dev Device) Name() (string, error) {
 // Returns an error if the query fails.
 func DeviceGetUUID(dev Device) (uuid.UUID, error) {
 	var id uuid.UUID
-	err := Result(C.cuDeviceGetUuid((*C.CUuuid)(unsafe.Pointer(&id)), C.CUdevice(dev)))
+	err := Check(C.cuDeviceGetUuid((*C.CUuuid)(unsafe.Pointer(&id)), C.CUdevice(dev)))
 	return id, err
 }
 
@@ -205,7 +205,7 @@ func (dev Device) UUID() (uuid.UUID, error) {
 // Returns an error if the query fails.
 func DeviceGetAttribute(attr DeviceAttribute, dev Device) (int, error) {
 	var val C.int
-	err := Result(C.cuDeviceGetAttribute(&val, C.CUdevice_attribute(attr), C.CUdevice(dev)))
+	err := Check(C.cuDeviceGetAttribute(&val, C.CUdevice_attribute(attr), C.CUdevice(dev)))
 	return int(val), err
 }
 
@@ -219,7 +219,7 @@ func (dev Device) Attribute(attr DeviceAttribute) (int, error) {
 // Returns an error if the query fails.
 func DeviceTotalMem(dev Device) (int64, error) {
 	var bytes C.size_t
-	err := Result(C.cuDeviceTotalMem(&bytes, C.CUdevice(dev)))
+	err := Check(C.cuDeviceTotalMem(&bytes, C.CUdevice(dev)))
 	return int64(bytes), err
 }
 

@@ -3,13 +3,13 @@ package cublas
 // #include <cublas_v2.h>
 import "C"
 
-// Status is the cublas status.
+// Status is the cublas Check.
 type Status int
 
 func (err Status) Error() string  { return err.String() }
 func (err Status) String() string { return resString[err] }
 
-func status(x C.cublasStatus_t) error {
+func Check(x C.cublasStatus_t) error {
 	err := Status(x)
 	if err == Success {
 		return nil

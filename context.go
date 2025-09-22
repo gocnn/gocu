@@ -3,8 +3,8 @@ package gocu
 // #include <cuda.h>
 import "C"
 
-// CUContext is a CUDA context
-type CUContext struct{ ctx C.CUcontext }
+// Context is a CUDA context
+type Context struct{ ctx C.CUcontext }
 
-// C returns the CUContext as its C version
-func (ctx CUContext) c() C.CUcontext { return ctx.ctx }
+// C returns the Context as its C version
+func (ctx Context) c() C.CUcontext { return ctx.ctx }

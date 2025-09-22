@@ -54,7 +54,7 @@ func LaunchKernel(function unsafe.Pointer, gridDim, blockDim Dim3, args []unsafe
 		argsPtr = &args[0]
 	}
 
-	return Result(C.cudaLaunchKernel(
+	return Check(C.cudaLaunchKernel(
 		function,
 		gridDim.toCDim3(),
 		blockDim.toCDim3(),
@@ -72,7 +72,7 @@ func LaunchCooperativeKernel(function unsafe.Pointer, gridDim, blockDim Dim3, ar
 		argsPtr = &args[0]
 	}
 
-	return Result(C.cudaLaunchCooperativeKernel(
+	return Check(C.cudaLaunchCooperativeKernel(
 		function,
 		gridDim.toCDim3(),
 		blockDim.toCDim3(),
@@ -90,7 +90,7 @@ func LaunchHostFunc(stream Stream, fn HostFn, userData unsafe.Pointer) error {
 
 	// For now, return an error indicating this function needs proper implementation
 	// TODO: Implement proper callback mechanism using cgo export functions
-	return Result(C.cudaErrorNotSupported)
+	return Check(C.cudaErrorNotSupported)
 }
 
 // MakeDim3 creates a Dim3 with the specified dimensions.

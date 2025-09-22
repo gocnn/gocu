@@ -14,7 +14,7 @@ func (err cudaError) String() string {
 	return fmt.Sprintf("UnknownErrorCode:%d", err)
 }
 
-func Result(x C.cudaError_t) error {
+func Check(x C.cudaError_t) error {
 	err := cudaError(x)
 	if err == Success {
 		return nil

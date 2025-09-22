@@ -27,32 +27,32 @@ const (
 // Malloc allocates memory on the device.
 func Malloc(bytes int64) (DevicePtr, error) {
 	var devptr unsafe.Pointer
-	err := Result(C.cudaMalloc(&devptr, C.size_t(bytes)))
+	err := Check(C.cudaMalloc(&devptr, C.size_t(bytes)))
 	return DevicePtr(devptr), err
 }
 
 // Free frees memory on the device.
 func Free(ptr DevicePtr) error {
-	return Result(C.cudaFree(unsafe.Pointer(ptr)))
+	return Check(C.cudaFree(unsafe.Pointer(ptr)))
 }
 
 // MallocHost allocates page-locked host memory.
 // Page-locked memory can be accessed by the device directly and enables faster transfers.
 func MallocHost(bytes int64) (HostPtr, error) {
 	var hostptr unsafe.Pointer
-	err := Result(C.cudaMallocHost(&hostptr, C.size_t(bytes)))
+	err := Check(C.cudaMallocHost(&hostptr, C.size_t(bytes)))
 	return HostPtr(hostptr), err
 }
 
 // FreeHost frees page-locked host memory allocated by MallocHost.
 func FreeHost(ptr HostPtr) error {
-	return Result(C.cudaFreeHost(unsafe.Pointer(ptr)))
+	return Check(C.cudaFreeHost(unsafe.Pointer(ptr)))
 }
 
 // MallocManaged allocates unified memory that can be accessed by both CPU and GPU.
 func MallocManaged(bytes int64) (unsafe.Pointer, error) {
 	var ptr unsafe.Pointer
-	err := Result(C.cudaMallocManaged(&ptr, C.size_t(bytes), C.cudaMemAttachGlobal))
+	err := Check(C.cudaMallocManaged(&ptr, C.size_t(bytes), C.cudaMemAttachGlobal))
 	return ptr, err
 }
 
@@ -60,20 +60,20 @@ func MallocManaged(bytes int64) (unsafe.Pointer, error) {
 func MallocPitch(width, height int64) (DevicePtr, int64, error) {
 	var devptr unsafe.Pointer
 	var pitch C.size_t
-	err := Result(C.cudaMallocPitch(&devptr, &pitch, C.size_t(width), C.size_t(height)))
+	err := Check(C.cudaMallocPitch(&devptr, &pitch, C.size_t(width), C.size_t(height)))
 	return DevicePtr(devptr), int64(pitch), err
 }
 
 // MemGetInfo returns the free and total amount of device memory.
 func MemGetInfo() (free, total int64, err error) {
 	var freeBytes, totalBytes C.size_t
-	err = Result(C.cudaMemGetInfo(&freeBytes, &totalBytes))
+	err = Check(C.cudaMemGetInfo(&freeBytes, &totalBytes))
 	return int64(freeBytes), int64(totalBytes), err
 }
 
 // Memcpy copies data between memory locations with specified direction.
 func Memcpy(dst, src unsafe.Pointer, bytes int64, kind uint) error {
-	return Result(C.cudaMemcpy(dst, src, C.size_t(bytes), uint32(kind)))
+	return Check(C.cudaMemcpy(dst, src, C.size_t(bytes), uint32(kind)))
 }
 
 // MemcpyAuto copies data with automatic direction detection.
@@ -103,15 +103,15 @@ func MemcpyHtoH(dst, src HostPtr, bytes int64) error {
 
 // Memset sets memory to a value.
 func Memset(dst DevicePtr, value byte, bytes int64) error {
-	return Result(C.cudaMemset(unsafe.Pointer(dst), C.int(value), C.size_t(bytes)))
+	return Check(C.cudaMemset(unsafe.Pointer(dst), C.int(value), C.size_t(bytes)))
 }
 
 // MemcpyAsync copies data between memory locations asynchronously.
 func MemcpyAsync(dst, src unsafe.Pointer, bytes int64, kind uint, stream Stream) error {
-	return Result(C.cudaMemcpyAsync(dst, src, C.size_t(bytes), uint32(kind), stream.c()))
+	return Check(C.cudaMemcpyAsync(dst, src, C.size_t(bytes), uint32(kind), stream.c()))
 }
 
 // MemsetAsync sets memory to a value asynchronously.
 func MemsetAsync(dst DevicePtr, value byte, bytes int64, stream Stream) error {
-	return Result(C.cudaMemsetAsync(unsafe.Pointer(dst), C.int(value), C.size_t(bytes), stream.c()))
+	return Check(C.cudaMemsetAsync(unsafe.Pointer(dst), C.int(value), C.size_t(bytes), stream.c()))
 }

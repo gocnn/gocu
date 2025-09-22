@@ -27,20 +27,20 @@ const (
 // EventCreate creates an event object.
 func EventCreate() (Event, error) {
 	var event C.cudaEvent_t
-	err := Result(C.cudaEventCreate(&event))
+	err := Check(C.cudaEventCreate(&event))
 	return Event{event: event}, err
 }
 
 // EventCreateWithFlags creates an event object with the specified flags.
 func EventCreateWithFlags(flags EventFlags) (Event, error) {
 	var event C.cudaEvent_t
-	err := Result(C.cudaEventCreateWithFlags(&event, C.uint(flags)))
+	err := Check(C.cudaEventCreateWithFlags(&event, C.uint(flags)))
 	return Event{event: event}, err
 }
 
 // EventDestroy destroys an event object.
 func EventDestroy(event Event) error {
-	return Result(C.cudaEventDestroy(event.c()))
+	return Check(C.cudaEventDestroy(event.c()))
 }
 
 // Destroy destroys the event object.
@@ -52,9 +52,9 @@ func (e Event) Destroy() error {
 // If stream is nil, records on the default stream.
 func EventRecord(event Event, stream *Stream) error {
 	if stream == nil {
-		return Result(C.cudaEventRecord(event.c(), C.cudaStream_t(nil)))
+		return Check(C.cudaEventRecord(event.c(), C.cudaStream_t(nil)))
 	}
-	return Result(C.cudaEventRecord(event.c(), stream.c()))
+	return Check(C.cudaEventRecord(event.c(), stream.c()))
 }
 
 // Record records the event on the specified stream.
@@ -65,9 +65,9 @@ func (e Event) Record(stream *Stream) error {
 // EventRecordWithFlags records an event with flags on the specified stream.
 func EventRecordWithFlags(event Event, stream *Stream, flags uint) error {
 	if stream == nil {
-		return Result(C.cudaEventRecordWithFlags(event.c(), C.cudaStream_t(nil), C.uint(flags)))
+		return Check(C.cudaEventRecordWithFlags(event.c(), C.cudaStream_t(nil), C.uint(flags)))
 	}
-	return Result(C.cudaEventRecordWithFlags(event.c(), stream.c(), C.uint(flags)))
+	return Check(C.cudaEventRecordWithFlags(event.c(), stream.c(), C.uint(flags)))
 }
 
 // RecordWithFlags records the event with flags on the specified stream.
@@ -77,7 +77,7 @@ func (e Event) RecordWithFlags(stream *Stream, flags uint) error {
 
 // EventSynchronize waits for an event to complete.
 func EventSynchronize(event Event) error {
-	return Result(C.cudaEventSynchronize(event.c()))
+	return Check(C.cudaEventSynchronize(event.c()))
 }
 
 // Synchronize waits for the event to complete.
@@ -85,13 +85,13 @@ func (e Event) Synchronize() error {
 	return EventSynchronize(e)
 }
 
-// EventQuery queries an event's status.
+// EventQuery queries an event's Check.
 // Returns nil if the event has completed, or an error if it's still pending.
 func EventQuery(event Event) error {
-	return Result(C.cudaEventQuery(event.c()))
+	return Check(C.cudaEventQuery(event.c()))
 }
 
-// Query queries the event's status.
+// Query queries the event's Check.
 func (e Event) Query() error {
 	return EventQuery(e)
 }
@@ -100,7 +100,7 @@ func (e Event) Query() error {
 // Both events must have been recorded before calling this function.
 func EventElapsedTime(start, end Event) (float32, error) {
 	var ms C.float
-	err := Result(C.cudaEventElapsedTime(&ms, start.c(), end.c()))
+	err := Check(C.cudaEventElapsedTime(&ms, start.c(), end.c()))
 	return float32(ms), err
 }
 
