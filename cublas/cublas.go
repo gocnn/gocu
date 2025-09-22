@@ -6,16 +6,14 @@ package cublas
 import "C"
 import (
 	"sync"
-
-	"github.com/gocnn/gocu"
 )
 
-type srotmParams struct {
+type SrotmParams struct {
 	flag float32
 	h    [4]float32
 }
 
-type drotmParams struct {
+type DrotmParams struct {
 	flag float64
 	h    [4]float64
 }
@@ -74,63 +72,40 @@ const (
 	LowerTriangular Uplo = Uplo(C.CUBLAS_FILL_MODE_LOWER) // Lower triangular matrix
 )
 
-// Standard is the standard cuBLAS handler.
+// Handler is the standard cuBLAS handler.
 // By default it assumes that the data is in  RowMajor, DESPITE the fact that cuBLAS
 // takes ColMajor only. This is done for the ease of use of developers writing in Go.
 //
 // Use New to create a new BLAS handler.
 // Use the various ConsOpts to set the options
-type Standard struct {
-	h C.cublasHandle_t
-	o Order
-	m PointerMode
+type Handler struct {
+	Handle
+
 	e error
 
-	ctx       gocu.Context
-	dataOnDev bool
-
-	sync.Mutex
+	sync.RWMutex
 }
 
-func New() *Standard {
-	var handle C.cublasHandle_t
-	if err := Check(C.cublasCreate(&handle)); err != nil {
+func New() *Handler {
+	handle, err := Create()
+	if err != nil {
 		panic(err)
 	}
-
-	impl := &Standard{
-		h: handle,
-	}
-
-	return impl
+	handler := &Handler{Handle: handle}
+	return handler
 }
 
-func (impl *Standard) SetContext(ctx gocu.Context) {
-	impl.Lock()
-	defer impl.Unlock()
-	impl.ctx = ctx
+func (h *Handler) Err() error {
+	h.RLock()
+	defer h.RUnlock()
+	return h.e
 }
 
-func (impl *Standard) WithNativeData() {
-	impl.Lock()
-	defer impl.Unlock()
-	impl.dataOnDev = false
-}
-
-func (impl *Standard) Err() error { return impl.e }
-
-func (impl *Standard) Close() error {
-	impl.Lock()
-	defer impl.Unlock()
-
-	var empty C.cublasHandle_t
-	if impl.h == empty {
-		return nil
-	}
-	if err := Check(C.cublasDestroy(impl.h)); err != nil {
+func (h *Handler) Close() error {
+	h.Lock()
+	defer h.Unlock()
+	if err := h.Handle.Destroy(); err != nil {
 		return err
 	}
-	impl.h = empty
-	impl.ctx = gocu.Context{}
 	return nil
 }
