@@ -8,7 +8,6 @@ A minimalist guide for installing GOCU, a Go library for NVIDIA GPU computing wi
 - **OS**:
   - Windows: Fully supported
   - Linux: Fully supported
-  - macOS: Limited support (untested on older NVIDIA GPU systems)
 - **CUDA Toolkit**:
   - 11.x: Supported
   - 12.x: Supported
@@ -33,9 +32,6 @@ A minimalist guide for installing GOCU, a Go library for NVIDIA GPU computing wi
    - Ubuntu/Debian: `sudo apt install build-essential`
    - CentOS/RHEL: `sudo yum groupinstall "Development Tools"`
    - Arch: `sudo pacman -S base-devel`
-
-   **macOS**:
-   - Install Xcode Command Line Tools: `xcode-select --install`
 
 2. **CUDA Toolkit**:
    - Download: [developer.nvidia.com/cuda-downloads](https://developer.nvidia.com/cuda-downloads)
