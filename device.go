@@ -174,7 +174,6 @@ func DeviceGetName(dev Device) (string, error) {
 	const size = 256
 	buf := make([]byte, size)
 	cstr := (*C.char)(unsafe.Pointer(&buf[0]))
-	defer C.free(unsafe.Pointer(cstr))
 	if err := Check(C.cuDeviceGetName(cstr, C.int(size), C.CUdevice(dev))); err != nil {
 		return "", err
 	}

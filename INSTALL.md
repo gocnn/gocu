@@ -79,4 +79,59 @@ Run:
 gocu
 ```
 
-Expect system info and CUDA device details.
+If successful, you should see output similar to:
+
+```bash
+$ gocu
+          _____                   _______                   _____                    _____
+         /\    \                 /::\    \                 /\    \                  /\    \
+        /::\    \               /::::\    \               /::\    \                /::\____\
+       /::::\    \             /::::::\    \             /::::\    \              /:::/    /
+      /::::::\    \           /::::::::\    \           /::::::\    \            /:::/    /
+     /:::/\:::\    \         /:::/~~\:::\    \         /:::/\:::\    \          /:::/    /
+    /:::/  \:::\    \       /:::/    \:::\    \       /:::/  \:::\    \        /:::/    /
+   /:::/    \:::\    \     /:::/    / \:::\    \     /:::/    \:::\    \      /:::/    /
+  /:::/    / \:::\    \   /:::/____/   \:::\____\   /:::/    / \:::\    \    /:::/    /      _____
+ /:::/    /   \:::\ ___\ |:::|    |     |:::|    | /:::/    /   \:::\    \  /:::/____/      /\    \
+/:::/____/  ___\:::|    ||:::|____|     |:::|    |/:::/____/     \:::\____\|:::|    /      /::\____\
+\:::\    \ /\  /:::|____| \:::\    \   /:::/    / \:::\    \      \::/    /|:::|____\     /:::/    /
+ \:::\    /::\ \::/    /   \:::\    \ /:::/    /   \:::\    \      \/____/  \:::\    \   /:::/    /
+  \:::\   \:::\ \/____/     \:::\    /:::/    /     \:::\    \               \:::\    \ /:::/    /
+   \:::\   \:::\____\        \:::\__/:::/    /       \:::\    \               \:::\    /:::/    /
+    \:::\  /:::/    /         \::::::::/    /         \:::\    \               \:::\__/:::/    /
+     \:::\/:::/    /           \::::::/    /           \:::\    \               \::::::::/    /
+      \::::::/    /             \::::/    /             \:::\    \               \::::::/    /
+       \::::/    /               \::/____/               \:::\____\               \::::/    /
+        \::/____/                 ~~                      \::/    /                \::/____/
+                                                           \/____/                  ~~
+Detected 1 CUDA Capable device(s)
+
+Device 0: "NVIDIA GeForce RTX 4060 Ti"
+  CUDA Driver Version / Runtime Version          13.0 / 13.0
+  CUDA Capability Major/Minor version number:    8.9
+  Total amount of global memory:                 16380 MBytes (17175150592 bytes)
+  GPU Clock rate:                                2535 MHz (2.54 GHz)
+  Memory Clock rate:                             9001 Mhz
+  Memory Bus Width:                              128-bit
+  L2 Cache Size:                                 33554432 bytes
+  Max Texture Dimension Size (x,y,z)             1D=(131072), 2D=(131072, 65536), 3D=(16384, 16384, 16384)
+  Max Layered Texture Size (dim) x layers        1D=(131072) x 2048, 2D=(32768, 32768) x 2048
+  Total amount of constant memory:               65536 bytes
+  Total amount of shared memory per block:       49152 bytes
+  Total number of registers available per block: 65536
+  Warp size:                                     32
+  Maximum number of threads per multiprocessor:  1536
+  Maximum number of threads per block:           1024
+  Maximum sizes of each dimension of a block:    1024 x 1024 x 64
+  Maximum sizes of each dimension of a grid:     2147483647 x 65535 x 65535
+  Maximum memory pitch:                          2147483647 bytes
+```
+
+This output confirms that:
+
+- CUDA is properly installed and detected
+- GOCU can successfully interface with CUDA drivers
+- Your GPU specifications are correctly identified
+- All device attributes are accessible
+
+If you see this output, GOCU is installed and working correctly. You can now proceed to use GOCU in your projects.
