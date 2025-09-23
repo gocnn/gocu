@@ -107,24 +107,36 @@ $ gocu
 Detected 1 CUDA Capable device(s)
 
 Device 0: "NVIDIA GeForce RTX 4060 Ti"
-  CUDA Driver Version / Runtime Version          13.0 / 13.0
+  CUDA Driver Version / Runtime Version          13.0 / 12.0
   CUDA Capability Major/Minor version number:    8.9
   Total amount of global memory:                 16380 MBytes (17175150592 bytes)
-  GPU Clock rate:                                2535 MHz (2.54 GHz)
+  (34) Multiprocessors, (128) CUDA Cores/MP:     4352 CUDA Cores
+  GPU Max Clock rate:                            2535 MHz (2.54 GHz)
   Memory Clock rate:                             9001 Mhz
   Memory Bus Width:                              128-bit
   L2 Cache Size:                                 33554432 bytes
-  Max Texture Dimension Size (x,y,z)             1D=(131072), 2D=(131072, 65536), 3D=(16384, 16384, 16384)
-  Max Layered Texture Size (dim) x layers        1D=(131072) x 2048, 2D=(32768, 32768) x 2048
+  Maximum Texture Dimension Size (x,y,z)         1D=(131072), 2D=(131072, 65536), 3D=(16384, 16384, 16384)
+  Maximum Layered 1D Texture Size, (num) layers  1D=(32768), 2048 layers
+  Maximum Layered 2D Texture Size, (num) layers  2D=(32768, 32768), 2048 layers
   Total amount of constant memory:               65536 bytes
   Total amount of shared memory per block:       49152 bytes
   Total number of registers available per block: 65536
   Warp size:                                     32
   Maximum number of threads per multiprocessor:  1536
   Maximum number of threads per block:           1024
-  Maximum sizes of each dimension of a block:    1024 x 1024 x 64
-  Maximum sizes of each dimension of a grid:     2147483647 x 65535 x 65535
+  Max dimension size of a thread block (x,y,z): (1024, 1024, 64)
+  Max dimension size of a grid size    (x,y,z): (2147483647, 65535, 65535)
   Maximum memory pitch:                          2147483647 bytes
+  Texture alignment:                             512 bytes
+  Concurrent copy and kernel execution:          Yes with 1 copy engine(s)
+  Run time limit on kernels:                     Yes
+  Integrated GPU sharing Host Memory:            No
+  Support host page-locked memory mapping:       Yes
+  Alignment requirement for Surfaces:            Yes
+  Device has ECC support:                        No
+  CUDA Device Driver Mode (TCC or WDDM):         Default (multiple host threads can use ::cudaSetDevice() with device simultaneously)
+
+Result = PASS
 ```
 
 This output confirms that:

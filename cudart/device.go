@@ -2,6 +2,11 @@ package cudart
 
 // #include <cuda_runtime.h>
 import "C"
+import (
+	"unsafe"
+
+	"github.com/google/uuid"
+)
 
 // Device represents a CUDA device ordinal.
 type Device int
@@ -195,4 +200,191 @@ func DeviceGetLimit(limit CudaLimit) (int64, error) {
 // DeviceSetLimit sets resource limits.
 func DeviceSetLimit(limit CudaLimit, value int64) error {
 	return Check(C.cudaDeviceSetLimit(uint32(limit), C.size_t(value)))
+}
+
+// DeviceProperties represents CUDA device properties from cudaDeviceProp.
+type DeviceProperties struct {
+	Name                                   string
+	UUID                                   uuid.UUID
+	LUID                                   [8]byte
+	LUIDDeviceNodeMask                     uint32
+	TotalGlobalMem                         int64
+	SharedMemPerBlock                      int64
+	RegsPerBlock                           int32
+	WarpSize                               int32
+	MemPitch                               int64
+	MaxThreadsPerBlock                     int32
+	MaxThreadsDim                          [3]int32
+	MaxGridSize                            [3]int32
+	ClockRate                              int32
+	TotalConstMem                          int64
+	Major                                  int32
+	Minor                                  int32
+	TextureAlignment                       int64
+	TexturePitchAlignment                  int64
+	DeviceOverlap                          int32
+	MultiProcessorCount                    int32
+	KernelExecTimeoutEnabled               int32
+	Integrated                             int32
+	CanMapHostMemory                       int32
+	ComputeMode                            int32
+	MaxTexture1D                           int32
+	MaxTexture1DMipmap                     int32
+	MaxTexture1DLinear                     int32
+	MaxTexture2D                           [2]int32
+	MaxTexture2DMipmap                     [2]int32
+	MaxTexture2DLinear                     [3]int32
+	MaxTexture2DGather                     [2]int32
+	MaxTexture3D                           [3]int32
+	MaxTexture3DAlt                        [3]int32
+	MaxTextureCubemap                      int32
+	MaxTexture1DLayered                    [2]int32
+	MaxTexture2DLayered                    [3]int32
+	MaxTextureCubemapLayered               [2]int32
+	MaxSurface1D                           int32
+	MaxSurface2D                           [2]int32
+	MaxSurface3D                           [3]int32
+	MaxSurface1DLayered                    [2]int32
+	MaxSurface2DLayered                    [3]int32
+	MaxSurfaceCubemap                      int32
+	MaxSurfaceCubemapLayered               [2]int32
+	SurfaceAlignment                       int64
+	ConcurrentKernels                      int32
+	ECCEnabled                             int32
+	PCIBusID                               int32
+	PCIDeviceID                            int32
+	PCIDomainID                            int32
+	TccDriver                              int32
+	AsyncEngineCount                       int32
+	UnifiedAddressing                      int32
+	MemoryClockRate                        int32
+	MemoryBusWidth                         int32
+	L2CacheSize                            int32
+	PersistingL2CacheMaxSize               int32
+	MaxThreadsPerMultiProcessor            int32
+	StreamPrioritiesSupported              int32
+	GlobalL1CacheSupported                 int32
+	LocalL1CacheSupported                  int32
+	SharedMemPerMultiprocessor             int64
+	RegsPerMultiprocessor                  int32
+	ManagedMemory                          int32
+	IsMultiGpuBoard                        int32
+	MultiGpuBoardGroupID                   int32
+	HostNativeAtomicSupported              int32
+	SingleToDoublePrecisionPerfRatio       int32
+	PageableMemoryAccess                   int32
+	ConcurrentManagedAccess                int32
+	ComputePreemptionSupported             int32
+	CanUseHostPointerForRegisteredMem      int32
+	CooperativeLaunch                      int32
+	CooperativeMultiDeviceLaunch           int32
+	SharedMemPerBlockOptin                 int64
+	PageableMemoryAccessUsesHostPageTables int32
+	DirectManagedMemAccessFromHost         int32
+	MaxBlocksPerMultiProcessor             int32
+	AccessPolicyMaxWindowSize              int32
+	ReservedSharedMemPerBlock              int64
+}
+
+// GetDeviceProperties returns the properties of a compute device.
+func GetDeviceProperties(device Device) (*DeviceProperties, error) {
+	var prop C.struct_cudaDeviceProp
+	err := Check(C.cudaGetDeviceProperties(&prop, C.int(device)))
+	if err != nil {
+		return nil, err
+	}
+
+	// Convert C struct to Go struct
+	properties := &DeviceProperties{
+		Name:                                   C.GoString(&prop.name[0]),
+		TotalGlobalMem:                         int64(prop.totalGlobalMem),
+		SharedMemPerBlock:                      int64(prop.sharedMemPerBlock),
+		RegsPerBlock:                           int32(prop.regsPerBlock),
+		WarpSize:                               int32(prop.warpSize),
+		MemPitch:                               int64(prop.memPitch),
+		MaxThreadsPerBlock:                     int32(prop.maxThreadsPerBlock),
+		ClockRate:                              int32(prop.clockRate),
+		TotalConstMem:                          int64(prop.totalConstMem),
+		Major:                                  int32(prop.major),
+		Minor:                                  int32(prop.minor),
+		TextureAlignment:                       int64(prop.textureAlignment),
+		TexturePitchAlignment:                  int64(prop.texturePitchAlignment),
+		DeviceOverlap:                          int32(prop.deviceOverlap),
+		MultiProcessorCount:                    int32(prop.multiProcessorCount),
+		KernelExecTimeoutEnabled:               int32(prop.kernelExecTimeoutEnabled),
+		Integrated:                             int32(prop.integrated),
+		CanMapHostMemory:                       int32(prop.canMapHostMemory),
+		ComputeMode:                            int32(prop.computeMode),
+		MaxTexture1D:                           int32(prop.maxTexture1D),
+		MaxTexture1DMipmap:                     int32(prop.maxTexture1DMipmap),
+		MaxTexture1DLinear:                     int32(prop.maxTexture1DLinear),
+		MaxTextureCubemap:                      int32(prop.maxTextureCubemap),
+		SurfaceAlignment:                       int64(prop.surfaceAlignment),
+		ConcurrentKernels:                      int32(prop.concurrentKernels),
+		ECCEnabled:                             int32(prop.ECCEnabled),
+		PCIBusID:                               int32(prop.pciBusID),
+		PCIDeviceID:                            int32(prop.pciDeviceID),
+		PCIDomainID:                            int32(prop.pciDomainID),
+		TccDriver:                              int32(prop.tccDriver),
+		AsyncEngineCount:                       int32(prop.asyncEngineCount),
+		UnifiedAddressing:                      int32(prop.unifiedAddressing),
+		MemoryClockRate:                        int32(prop.memoryClockRate),
+		MemoryBusWidth:                         int32(prop.memoryBusWidth),
+		L2CacheSize:                            int32(prop.l2CacheSize),
+		PersistingL2CacheMaxSize:               int32(prop.persistingL2CacheMaxSize),
+		MaxThreadsPerMultiProcessor:            int32(prop.maxThreadsPerMultiProcessor),
+		StreamPrioritiesSupported:              int32(prop.streamPrioritiesSupported),
+		GlobalL1CacheSupported:                 int32(prop.globalL1CacheSupported),
+		LocalL1CacheSupported:                  int32(prop.localL1CacheSupported),
+		SharedMemPerMultiprocessor:             int64(prop.sharedMemPerMultiprocessor),
+		RegsPerMultiprocessor:                  int32(prop.regsPerMultiprocessor),
+		ManagedMemory:                          int32(prop.managedMemory),
+		IsMultiGpuBoard:                        int32(prop.isMultiGpuBoard),
+		MultiGpuBoardGroupID:                   int32(prop.multiGpuBoardGroupID),
+		HostNativeAtomicSupported:              int32(prop.hostNativeAtomicSupported),
+		SingleToDoublePrecisionPerfRatio:       int32(prop.singleToDoublePrecisionPerfRatio),
+		PageableMemoryAccess:                   int32(prop.pageableMemoryAccess),
+		ConcurrentManagedAccess:                int32(prop.concurrentManagedAccess),
+		ComputePreemptionSupported:             int32(prop.computePreemptionSupported),
+		CanUseHostPointerForRegisteredMem:      int32(prop.canUseHostPointerForRegisteredMem),
+		CooperativeLaunch:                      int32(prop.cooperativeLaunch),
+		CooperativeMultiDeviceLaunch:           int32(prop.cooperativeMultiDeviceLaunch),
+		SharedMemPerBlockOptin:                 int64(prop.sharedMemPerBlockOptin),
+		PageableMemoryAccessUsesHostPageTables: int32(prop.pageableMemoryAccessUsesHostPageTables),
+		DirectManagedMemAccessFromHost:         int32(prop.directManagedMemAccessFromHost),
+		MaxBlocksPerMultiProcessor:             int32(prop.maxBlocksPerMultiProcessor),
+		AccessPolicyMaxWindowSize:              int32(prop.accessPolicyMaxWindowSize),
+		ReservedSharedMemPerBlock:              int64(prop.reservedSharedMemPerBlock),
+		LUIDDeviceNodeMask:                     uint32(prop.luidDeviceNodeMask),
+	}
+
+	// Copy UUID and LUID
+	copy(properties.UUID[:], C.GoBytes(unsafe.Pointer(&prop.uuid), 16))
+	copy(properties.LUID[:], C.GoBytes(unsafe.Pointer(&prop.luid), 8))
+
+	// Copy array fields
+	for i := 0; i < 3; i++ {
+		properties.MaxThreadsDim[i] = int32(prop.maxThreadsDim[i])
+		properties.MaxGridSize[i] = int32(prop.maxGridSize[i])
+		if i < 2 {
+			properties.MaxTexture2D[i] = int32(prop.maxTexture2D[i])
+			properties.MaxTexture2DMipmap[i] = int32(prop.maxTexture2DMipmap[i])
+			properties.MaxTexture2DGather[i] = int32(prop.maxTexture2DGather[i])
+			properties.MaxTexture1DLayered[i] = int32(prop.maxTexture1DLayered[i])
+			properties.MaxTextureCubemapLayered[i] = int32(prop.maxTextureCubemapLayered[i])
+			properties.MaxSurface2D[i] = int32(prop.maxSurface2D[i])
+			properties.MaxSurface1DLayered[i] = int32(prop.maxSurface1DLayered[i])
+			properties.MaxSurfaceCubemapLayered[i] = int32(prop.maxSurfaceCubemapLayered[i])
+		}
+		if i < 3 {
+			properties.MaxTexture2DLinear[i] = int32(prop.maxTexture2DLinear[i])
+			properties.MaxTexture3D[i] = int32(prop.maxTexture3D[i])
+			properties.MaxTexture3DAlt[i] = int32(prop.maxTexture3DAlt[i])
+			properties.MaxTexture2DLayered[i] = int32(prop.maxTexture2DLayered[i])
+			properties.MaxSurface3D[i] = int32(prop.maxSurface3D[i])
+			properties.MaxSurface2DLayered[i] = int32(prop.maxSurface2DLayered[i])
+		}
+	}
+
+	return properties, nil
 }
