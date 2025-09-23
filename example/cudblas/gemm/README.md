@@ -59,7 +59,7 @@ This README provides a step-by-step guide to performing matrix multiplication us
 
 4. **Allocate GPU Memory**  
    Use `cudart.Malloc` to allocate GPU memory for matrices `A`, `B`, and `C` based on their slice sizes. The helper function `cudart.SliceBytes(slice)` computes the total byte size of a slice by multiplying its length by the element size (e.g., 4 bytes for `float32`), simplifying memory allocation without manual calculations.  
-   Without this helper, you would manually compute the size like `uintptr(len(A)) * 4` (assuming `float32` is 4 bytes).  
+   Without this helper, you would manually compute the size like `int64(len(A) * 4)` (assuming `float32` is 4 bytes).  
    Handle errors for each allocation and defer memory deallocation with `cudart.Free`.  
 
    ```go
