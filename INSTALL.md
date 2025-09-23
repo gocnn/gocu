@@ -76,7 +76,7 @@ go env -w CGO_LDFLAGS="-L/your/custom/cuda/lib64"
 Run:
 
 ```bash
-gocu
+$ gocu
 ```
 
 If successful, you should see output similar to:
