@@ -133,23 +133,23 @@ const (
 	MpsMaxClientsReached           cudaError = C.cudaErrorMpsMaxClientsReached
 	MpsMaxConnectionsReached       cudaError = C.cudaErrorMpsMaxConnectionsReached
 	MpsClientTerminated            cudaError = C.cudaErrorMpsClientTerminated
-	CdpNotSupported                cudaError = C.cudaErrorCdpNotSupported
-	CdpVersionMismatch             cudaError = C.cudaErrorCdpVersionMismatch
-	StreamCaptureUnsupported       cudaError = C.cudaErrorStreamCaptureUnsupported
-	StreamCaptureInvalidated       cudaError = C.cudaErrorStreamCaptureInvalidated
-	StreamCaptureMerge             cudaError = C.cudaErrorStreamCaptureMerge
-	StreamCaptureUnmatched         cudaError = C.cudaErrorStreamCaptureUnmatched
-	StreamCaptureUnjoined          cudaError = C.cudaErrorStreamCaptureUnjoined
-	StreamCaptureIsolation         cudaError = C.cudaErrorStreamCaptureIsolation
-	StreamCaptureImplicit          cudaError = C.cudaErrorStreamCaptureImplicit
-	CapturedEvent                  cudaError = C.cudaErrorCapturedEvent
-	StreamCaptureWrongThread       cudaError = C.cudaErrorStreamCaptureWrongThread
-	Timeout                        cudaError = C.cudaErrorTimeout
-	GraphExecUpdateFailure         cudaError = C.cudaErrorGraphExecUpdateFailure
-	ExternalDevice                 cudaError = C.cudaErrorExternalDevice
-	InvalidClusterSize             cudaError = C.cudaErrorInvalidClusterSize
-	Unknown                        cudaError = C.cudaErrorUnknown
-	ApiFailureBase                 cudaError = C.cudaErrorApiFailureBase
+	// CdpNotSupported                cudaError = C.cudaErrorCdpNotSupported
+	// CdpVersionMismatch             cudaError = C.cudaErrorCdpVersionMismatch
+	StreamCaptureUnsupported cudaError = C.cudaErrorStreamCaptureUnsupported
+	StreamCaptureInvalidated cudaError = C.cudaErrorStreamCaptureInvalidated
+	StreamCaptureMerge       cudaError = C.cudaErrorStreamCaptureMerge
+	StreamCaptureUnmatched   cudaError = C.cudaErrorStreamCaptureUnmatched
+	StreamCaptureUnjoined    cudaError = C.cudaErrorStreamCaptureUnjoined
+	StreamCaptureIsolation   cudaError = C.cudaErrorStreamCaptureIsolation
+	StreamCaptureImplicit    cudaError = C.cudaErrorStreamCaptureImplicit
+	CapturedEvent            cudaError = C.cudaErrorCapturedEvent
+	StreamCaptureWrongThread cudaError = C.cudaErrorStreamCaptureWrongThread
+	Timeout                  cudaError = C.cudaErrorTimeout
+	GraphExecUpdateFailure   cudaError = C.cudaErrorGraphExecUpdateFailure
+	ExternalDevice           cudaError = C.cudaErrorExternalDevice
+	InvalidClusterSize       cudaError = C.cudaErrorInvalidClusterSize
+	Unknown                  cudaError = C.cudaErrorUnknown
+	ApiFailureBase           cudaError = C.cudaErrorApiFailureBase
 )
 
 var resString = map[cudaError]string{
@@ -263,21 +263,21 @@ var resString = map[cudaError]string{
 	MpsMaxClientsReached:           "MpsMaxClientsReached",
 	MpsMaxConnectionsReached:       "MpsMaxConnectionsReached",
 	MpsClientTerminated:            "MpsClientTerminated",
-	CdpNotSupported:                "CdpNotSupported",
-	CdpVersionMismatch:             "CdpVersionMismatch",
-	StreamCaptureUnsupported:       "StreamCaptureUnsupported",
-	StreamCaptureInvalidated:       "StreamCaptureInvalidated",
-	StreamCaptureMerge:             "StreamCaptureMerge",
-	StreamCaptureUnmatched:         "StreamCaptureUnmatched",
-	StreamCaptureUnjoined:          "StreamCaptureUnjoined",
-	StreamCaptureIsolation:         "StreamCaptureIsolation",
-	StreamCaptureImplicit:          "StreamCaptureImplicit",
-	CapturedEvent:                  "CapturedEvent",
-	StreamCaptureWrongThread:       "StreamCaptureWrongThread",
-	Timeout:                        "Timeout",
-	GraphExecUpdateFailure:         "GraphExecUpdateFailure",
-	ExternalDevice:                 "ExternalDevice",
-	InvalidClusterSize:             "InvalidClusterSize",
-	Unknown:                        "Unknown",
-	ApiFailureBase:                 "ApiFailureBase",
+	// CdpNotSupported:                "CdpNotSupported",
+	// CdpVersionMismatch:             "CdpVersionMismatch",
+	StreamCaptureUnsupported: "StreamCaptureUnsupported",
+	StreamCaptureInvalidated: "StreamCaptureInvalidated",
+	StreamCaptureMerge:       "StreamCaptureMerge",
+	StreamCaptureUnmatched:   "StreamCaptureUnmatched",
+	StreamCaptureUnjoined:    "StreamCaptureUnjoined",
+	StreamCaptureIsolation:   "StreamCaptureIsolation",
+	StreamCaptureImplicit:    "StreamCaptureImplicit",
+	CapturedEvent:            "CapturedEvent",
+	StreamCaptureWrongThread: "StreamCaptureWrongThread",
+	Timeout:                  "Timeout",
+	GraphExecUpdateFailure:   "GraphExecUpdateFailure",
+	ExternalDevice:           "ExternalDevice",
+	InvalidClusterSize:       "InvalidClusterSize",
+	Unknown:                  "Unknown",
+	ApiFailureBase:           "ApiFailureBase",
 }
