@@ -125,8 +125,8 @@ const (
 	MemoryPoolSupportedHandleTypes         DeviceAttribute = C.cudaDevAttrMemoryPoolSupportedHandleTypes         // Handle types supported with mempool based IPC
 	ClusterLaunch                          DeviceAttribute = C.cudaDevAttrClusterLaunch                          // Indicates device supports cluster launch
 	DeferredMappingCudaArraySupported      DeviceAttribute = C.cudaDevAttrDeferredMappingCudaArraySupported      // Device supports deferred mapping CUDA arrays and CUDA mipmapped arrays
-	IpcEventSupport                        DeviceAttribute = C.cudaDevAttrIpcEventSupport                        // Device supports IPC Events
-	MemSyncDomainCount                     DeviceAttribute = C.cudaDevAttrMemSyncDomainCount                     // Number of memory synchronization domains the device supports
+	// IpcEventSupport                        DeviceAttribute = C.cudaDevAttrIpcEventSupport                        // Device supports IPC Events
+	// MemSyncDomainCount                     DeviceAttribute = C.cudaDevAttrMemSyncDomainCount                     // Number of memory synchronization domains the device supports
 )
 
 // CudaLimit represents CUDA limits that can be queried or set. Generated from cudaLimit enum.
