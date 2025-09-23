@@ -38,7 +38,7 @@ A minimalist guide for installing GOCU, a Go library for NVIDIA GPU computing wi
 3. Install and test GOCU:
 
    ```bash
-   go install github.com/gocnn/gocu/cmd/gocu
+   go install github.com/gocnn/gocu/cmd/gocu@latest
    gocu
    ```
 
@@ -48,7 +48,7 @@ A minimalist guide for installing GOCU, a Go library for NVIDIA GPU computing wi
 2. Install and test GOCU:
 
    ```bash
-   go install github.com/gocnn/gocu/cmd/gocu
+   go install github.com/gocnn/gocu/cmd/gocu@latest
    gocu
    ```
 
@@ -61,7 +61,6 @@ For non-standard CUDA paths:
 ```bash
 export CGO_CFLAGS="-I/your/custom/cuda/include"
 export CGO_LDFLAGS="-L/your/custom/cuda/lib64"
-go build your-app.go
 ```
 
 Or set permanently:
