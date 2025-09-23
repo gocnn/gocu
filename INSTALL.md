@@ -16,11 +16,35 @@ A minimalist guide for installing GOCU, a Go library for NVIDIA GPU computing wi
 
 ## Prerequisites
 
-1. **CUDA Toolkit**:
+1. **C Compiler (Required for CGO)**:
+
+   **Windows**:
+   - Install MinGW-w64 via Chocolatey (recommended):
+
+     ```cmd
+     choco install mingw
+     ```
+
+   - Or use MSYS2: [msys2.org](https://www.msys2.org/)
+
+   - Ensure `gcc` is in your PATH: `gcc --version`
+
+   **Linux**:
+   - Ubuntu/Debian: `sudo apt install build-essential`
+   - CentOS/RHEL: `sudo yum groupinstall "Development Tools"`
+   - Arch: `sudo pacman -S base-devel`
+
+   **macOS**:
+   - Install Xcode Command Line Tools: `xcode-select --install`
+
+2. **CUDA Toolkit**:
    - Download: [developer.nvidia.com/cuda-downloads](https://developer.nvidia.com/cuda-downloads)
    - Install per NVIDIA's instructions for your OS.
 
-2. **cuDNN (Optional)**:
+   **⚠️ Important**: CUDA Toolkit version must be compatible with your CUDA Driver version，see [compatibility table.](https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html#cuda-major-component-versions)
+
+3. **cuDNN (Optional)**:
+
    - For deep learning, download: [developer.nvidia.com/cudnn](https://developer.nvidia.com/cudnn)
    - Match version to CUDA Toolkit and follow NVIDIA's guide.
 
@@ -75,7 +99,7 @@ go env -w CGO_LDFLAGS="-L/your/custom/cuda/lib64"
 Run:
 
 ```bash
-$ gocu
+gocu
 ```
 
 If successful, you should see output similar to:
