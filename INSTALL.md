@@ -129,15 +129,15 @@ $ gocu
                                                            \/____/                  ~~
 Detected 1 CUDA Capable device(s)
 
-Device 0: "NVIDIA GeForce RTX 4060 Ti"
-  CUDA Driver Version / Runtime Version          13.0 / 12.0
+Device 0: "NVIDIA GeForce RTX 4090"
+  CUDA Driver Version / Runtime Version          13.0 / 11.8
   CUDA Capability Major/Minor version number:    8.9
-  Total amount of global memory:                 16380 MBytes (17175150592 bytes)
-  (34) Multiprocessors, (128) CUDA Cores/MP:     4352 CUDA Cores
-  GPU Max Clock rate:                            2535 MHz (2.54 GHz)
-  Memory Clock rate:                             9001 Mhz
-  Memory Bus Width:                              128-bit
-  L2 Cache Size:                                 33554432 bytes
+  Total amount of global memory:                 24081 MBytes (25250627584 bytes)
+  (128) Multiprocessors, (128) CUDA Cores/MP:     16384 CUDA Cores
+  GPU Max Clock rate:                            2520 MHz (2.52 GHz)
+  Memory Clock rate:                             10501 Mhz
+  Memory Bus Width:                              384-bit
+  L2 Cache Size:                                 75497472 bytes
   Maximum Texture Dimension Size (x,y,z)         1D=(131072), 2D=(131072, 65536), 3D=(16384, 16384, 16384)
   Maximum Layered 1D Texture Size, (num) layers  1D=(32768), 2048 layers
   Maximum Layered 2D Texture Size, (num) layers  2D=(32768, 32768), 2048 layers
@@ -151,8 +151,8 @@ Device 0: "NVIDIA GeForce RTX 4060 Ti"
   Max dimension size of a grid size    (x,y,z): (2147483647, 65535, 65535)
   Maximum memory pitch:                          2147483647 bytes
   Texture alignment:                             512 bytes
-  Concurrent copy and kernel execution:          Yes with 1 copy engine(s)
-  Run time limit on kernels:                     Yes
+  Concurrent copy and kernel execution:          Yes with 2 copy engine(s)
+  Run time limit on kernels:                     No
   Integrated GPU sharing Host Memory:            No
   Support host page-locked memory mapping:       Yes
   Alignment requirement for Surfaces:            Yes
