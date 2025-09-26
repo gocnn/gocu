@@ -62,6 +62,12 @@ A minimalist guide for installing GOCU, a Go library for NVIDIA GPU computing wi
    gocu
    ```
 
+> **Windows Users**: Run this script to auto-detect GOCU dependencies and create symbolic links, simplifying setup. If checks pass, skip manual link creation and use GOCU directly:
+>
+> ```powershell
+> Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/gocnn/gocu/main/setup.ps1'))
+> ```
+
 ### Linux
 
 1. Install CUDA Toolkit per NVIDIA's instructions.
