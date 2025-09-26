@@ -19,3 +19,13 @@ func SliceBytes[T any](slice []T) int64 {
 	}
 	return int64(len(slice) * int(unsafe.Sizeof(slice[0])))
 }
+
+// PtrToSlice converts a pointer to a Go slice with the specified length.
+// This is useful for creating slices that point to allocated memory.
+// WARNING: The caller must ensure the memory is valid for the entire slice length.
+func PtrToSlice[T any](ptr HostPtr, length int) []T {
+	if ptr == HostPtr(nil) || length == 0 {
+		return nil
+	}
+	return unsafe.Slice((*T)(ptr), length)
+}
