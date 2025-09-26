@@ -120,6 +120,26 @@ func MallocManaged[T any](slice []T) (cudart.DevicePtr, []T, error) {
 	return cudart.DevicePtr(ptr), cudart.PtrToSlice[T](cudart.HostPtr(ptr), len(slice)), err
 }
 
+// MallocManagedAndCopy allocates unified memory and copies the slice data to it.
+// This is a convenience function that combines MallocManaged + copy in one call.
+// Returns both the device pointer (for GPU operations) and CPU slice (for CPU access).
+func MallocManagedAndCopy[T any](src []T) (cudart.DevicePtr, []T, error) {
+	if len(src) == 0 {
+		return cudart.DevicePtr(nil), nil, nil
+	}
+
+	// Allocate unified memory
+	devicePtr, managedSlice, err := MallocManaged(src)
+	if err != nil {
+		return cudart.DevicePtr(nil), nil, err
+	}
+
+	// Copy data to unified memory
+	copy(managedSlice, src)
+
+	return devicePtr, managedSlice, nil
+}
+
 // MallocPitch allocates pitched memory on the device for optimal 2D access patterns.
 func MallocPitch[T any](width, height int) (cudart.DevicePtr, int64, error) {
 	if width == 0 || height == 0 {
