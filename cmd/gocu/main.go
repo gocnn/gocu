@@ -88,18 +88,6 @@ func displayDeviceInfo(dev cudart.Device, deviceId int, driverVer, runtimeVer in
 		props.MultiProcessorCount, getCoresPerMP(props.Major, props.Minor),
 		int(props.MultiProcessorCount)*getCoresPerMP(props.Major, props.Minor))
 
-	// GPU Clock Rate
-	fmt.Printf("  GPU Max Clock rate:                            %.0f MHz (%.2f GHz)\n",
-		float64(props.ClockRate)/1000, float64(props.ClockRate)/1000000)
-
-	// Memory Clock Rate
-	fmt.Printf("  Memory Clock rate:                             %.0f Mhz\n",
-		float64(props.MemoryClockRate)/1000)
-
-	// Memory Bus Width
-	fmt.Printf("  Memory Bus Width:                              %d-bit\n",
-		props.MemoryBusWidth)
-
 	// L2 Cache Size
 	fmt.Printf("  L2 Cache Size:                                 %d bytes\n",
 		props.L2CacheSize)
@@ -108,13 +96,6 @@ func displayDeviceInfo(dev cudart.Device, deviceId int, driverVer, runtimeVer in
 	fmt.Printf("  Maximum Texture Dimension Size (x,y,z)         1D=(%d), 2D=(%d, %d), 3D=(%d, %d, %d)\n",
 		props.MaxTexture1D, props.MaxTexture2D[0], props.MaxTexture2D[1],
 		props.MaxTexture3D[0], props.MaxTexture3D[1], props.MaxTexture3D[2])
-
-	// Maximum Layered Texture Dimensions
-	fmt.Printf("  Maximum Layered 1D Texture Size, (num) layers  1D=(%d), %d layers\n",
-		props.MaxTexture1DLayered[0], props.MaxTexture1DLayered[1])
-
-	fmt.Printf("  Maximum Layered 2D Texture Size, (num) layers  2D=(%d, %d), %d layers\n",
-		props.MaxTexture2DLayered[0], props.MaxTexture2DLayered[1], props.MaxTexture2DLayered[2])
 
 	// Total Constant Memory
 	fmt.Printf("  Total amount of constant memory:               %d bytes\n",
@@ -156,21 +137,6 @@ func displayDeviceInfo(dev cudart.Device, deviceId int, driverVer, runtimeVer in
 	fmt.Printf("  Texture alignment:                             %d bytes\n",
 		props.TextureAlignment)
 
-	// Concurrent Copy and Kernel Execution
-	if props.DeviceOverlap != 0 {
-		fmt.Printf("  Concurrent copy and kernel execution:          Yes with %d copy engine(s)\n",
-			props.AsyncEngineCount)
-	} else {
-		fmt.Printf("  Concurrent copy and kernel execution:          No\n")
-	}
-
-	// Kernel Execution Timeout
-	if props.KernelExecTimeoutEnabled != 0 {
-		fmt.Printf("  Run time limit on kernels:                     Yes\n")
-	} else {
-		fmt.Printf("  Run time limit on kernels:                     No\n")
-	}
-
 	// Integrated GPU
 	if props.Integrated != 0 {
 		fmt.Printf("  Integrated GPU sharing Host Memory:            Yes\n")
@@ -192,18 +158,6 @@ func displayDeviceInfo(dev cudart.Device, deviceId int, driverVer, runtimeVer in
 	// Concurrent Kernel Execution
 	fmt.Printf("  Device has ECC support:                        %s\n",
 		boolToYesNo(props.ECCEnabled != 0))
-
-	// CUDA Compute Mode
-	computeMode := "Default (multiple host threads can use ::cudaSetDevice() with device simultaneously)"
-	switch props.ComputeMode {
-	case 1:
-		computeMode = "Exclusive (only one host thread in one process is able to use ::cudaSetDevice() with this device)"
-	case 2:
-		computeMode = "Prohibited (no host thread can use ::cudaSetDevice() with this device)"
-	case 3:
-		computeMode = "Exclusive Process (many threads in one process is able to use ::cudaSetDevice() with this device)"
-	}
-	fmt.Printf("  CUDA Device Driver Mode (TCC or WDDM):         %s\n", computeMode)
 
 	fmt.Println()
 }
