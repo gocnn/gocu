@@ -1,0 +1,13 @@
+
+name: Docker
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  docker:
+    uses: qntx/workflows/.github/workflows/docker.yml@main
