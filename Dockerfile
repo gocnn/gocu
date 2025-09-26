@@ -6,7 +6,9 @@ RUN apt-get update && apt-get install -y \
     golang-go \
     && rm -rf /var/lib/apt/lists/*
 
+ENV GOPATH=/root/go
 ENV PATH=$PATH:$GOPATH/bin
+
 RUN go install github.com/gocnn/gocu/cmd/gocu@latest
 
 WORKDIR /app
