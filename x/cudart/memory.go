@@ -94,7 +94,7 @@ func MallocHostAndCopy[T any](src []T) (cudart.HostPtr, []T, error) {
 	}
 
 	// Create a slice that points to the allocated memory
-	hostSlice := cudart.PtrToSlice[T](ptr, len(src))
+	hostSlice := cudart.HostPtrToSlice[T](ptr, len(src))
 	copy(hostSlice, src)
 
 	return ptr, hostSlice, nil
@@ -117,7 +117,7 @@ func MallocManaged[T any](slice []T) (cudart.DevicePtr, []T, error) {
 	}
 	bytes := cudart.SliceBytes(slice)
 	ptr, err := cudart.MallocManaged(bytes)
-	return cudart.DevicePtr(ptr), cudart.PtrToSlice[T](cudart.HostPtr(ptr), len(slice)), err
+	return cudart.DevicePtr(ptr), cudart.HostPtrToSlice[T](cudart.HostPtr(ptr), len(slice)), err
 }
 
 // MallocManagedAndCopy allocates unified memory and copies the slice data to it.
