@@ -9,4 +9,4 @@ This directory contains header files from the NVIDIA CUDA Toolkit, which are use
 
 ## License
 
-The header files in this directory are governed by the NVIDIA CUDA Toolkit End User License Agreement (EULA). Please review the full license terms at [NVIDIA CUDA Toolkit License](https://developer.nvidia.com/cuda-toolkit) before using these files in your project. All files in this directory are copyrighted by NVIDIA Corporation and are subject to the terms outlined in the NVIDIA CUDA Toolkit license.
+The header files in this directory are governed by the NVIDIA CUDA Toolkit End User License Agreement (EULA). Please review the full license terms at [NVIDIA CUDA Toolkit License](https://developer.nvidia.com/cuda-toolkit) and [LICENSE](LICENSE) before using these files in your project. All files in this directory are copyrighted by NVIDIA Corporation and are subject to the terms outlined in the NVIDIA CUDA Toolkit license.

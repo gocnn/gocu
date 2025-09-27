@@ -10,8 +10,8 @@ import (
 	"strings"
 )
 
-// ParseHeader extracts fields from a C header file.
-func ParseHeader(path, structName string, fieldRegex *regexp.Regexp) ([]Field, error) {
+// ParseHeader parses fields from a C header file for structs or enums.
+func ParseHeader(cfg Config, path string) ([]Field, error) {
 	file, err := os.Open(path)
 	if err != nil {
 		return nil, fmt.Errorf("opening %s: %w", path, err)
@@ -19,10 +19,15 @@ func ParseHeader(path, structName string, fieldRegex *regexp.Regexp) ([]Field, e
 	defer file.Close()
 
 	var fields []Field
-	inStruct := false
-	reField := fieldRegex
+	inDef := false
+	var currentDoc strings.Builder
+	reField := cfg.FieldRegex
 	if reField == nil {
-		reField = regexp.MustCompile(`^\s*([\w\s]+)\s+([\w]+)(\[[\d\w]+\])?\s*;\s*(?:/\*\*.*)?$`)
+		if cfg.IsEnum {
+			reField = regexp.MustCompile(`^\s*(\w+)\s*=\s*(0x[0-9a-fA-F]+|\d+),?\s*(?:/\*\*<?\s*(.*?)\s*\*/)?$`)
+		} else {
+			reField = regexp.MustCompile(`^\s*([\w\s]+)\s+([\w]+)(\[[\d\w]+\])?\s*;\s*(?:/\*\*<?\s*(.*?)\s*\*/)?$`)
+		}
 	}
 
 	scanner := bufio.NewScanner(file)
@@ -31,117 +36,121 @@ func ParseHeader(path, structName string, fieldRegex *regexp.Regexp) ([]Field, e
 		if line == "" {
 			continue
 		}
-		if strings.Contains(line, "struct __device_builtin__ "+structName) {
-			inStruct = true
+
+		// Collect multi-line documentation
+		if prefix, ok := strings.CutPrefix(line, "/**"); ok {
+			currentDoc.WriteString(strings.TrimSpace(prefix))
+			currentDoc.WriteRune(' ')
 			continue
 		}
-		if inStruct && strings.Contains(line, "};") {
-			break
+		if prefix, ok := strings.CutPrefix(line, " *"); ok {
+			currentDoc.WriteString(strings.TrimSpace(prefix))
+			currentDoc.WriteRune(' ')
+			continue
 		}
-		if !inStruct {
+		if prefix, ok := strings.CutPrefix(line, " */"); ok {
+			currentDoc.WriteString(strings.TrimSpace(prefix))
 			continue
 		}
 
+		// Detect start
+		if !inDef && strings.Contains(line, cfg.StartString) {
+			inDef = true
+			currentDoc.Reset()
+			continue
+		}
+
+		// Detect end (relaxed to any line containing "}")
+		if inDef && strings.Contains(line, "}") {
+			break
+		}
+		if !inDef {
+			continue
+		}
+
+		// Parse field
 		matches := reField.FindStringSubmatch(line)
 		if len(matches) < 3 {
 			continue
 		}
 
-		fieldType := strings.TrimSpace(matches[1])
-		if len(matches) >= 4 && matches[3] != "" {
+		var fieldType, fieldName string
+		if cfg.IsEnum {
+			// For enums: matches[1] is name, matches[2] is value
+			fieldName = strings.TrimSpace(matches[1]) // enum name (e.g., cudaSuccess)
+			fieldType = strings.TrimSpace(matches[2]) // enum value (e.g., "0")
+		} else {
+			// For structs: matches[1] is type, matches[2] is name
+			fieldType = strings.TrimSpace(matches[1])
+			fieldName = strings.TrimSpace(matches[2])
+		}
+
+		doc := strings.TrimSpace(currentDoc.String())
+		if len(matches) >= 4 && matches[3] != "" && !cfg.IsEnum {
 			fieldType += matches[3]
 		}
+		if len(matches) >= 5 && matches[4] != "" {
+			doc = strings.TrimSpace(matches[4])
+		} else if len(matches) >= 4 && matches[3] != "" && cfg.IsEnum {
+			doc = strings.TrimSpace(matches[3])
+		}
 		fields = append(fields, Field{
-			Name: matches[2],
+			Name: fieldName,
 			Type: fieldType,
-		})
-	}
-	return fields, scanner.Err()
-}
-
-// ParseEnum extracts enum values from a C header file.
-func ParseEnum(path, enumName string, fieldRegex *regexp.Regexp) ([]Field, error) {
-	file, err := os.Open(path)
-	if err != nil {
-		return nil, fmt.Errorf("opening %s: %w", path, err)
-	}
-	defer file.Close()
-
-	var fields []Field
-	inEnum := false
-	reField := fieldRegex
-	if reField == nil {
-		reField = regexp.MustCompile(`^\s*(\w+)\s*=\s*(0x[0-9a-fA-F]+|\d+),?\s*(?:/\*\*<?\s*(.*?)\s*\*/)?`)
-	}
-
-	var currentDoc strings.Builder
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		line := strings.TrimSpace(scanner.Text())
-		if line == "" {
-			currentDoc.Reset()
-			continue
-		}
-
-		// Collect documentation (/** ... */)
-		if strings.HasPrefix(line, "/**") {
-			currentDoc.WriteString(strings.TrimSpace(strings.TrimPrefix(line, "/**")))
-			currentDoc.WriteString(" ")
-			continue
-		}
-		if strings.HasPrefix(line, " *") {
-			currentDoc.WriteString(strings.TrimSpace(strings.TrimPrefix(line, " *")))
-			currentDoc.WriteString(" ")
-			continue
-		}
-		if strings.HasPrefix(line, " */") {
-			currentDoc.WriteString(strings.TrimSpace(strings.TrimPrefix(line, " */")))
-			currentDoc.WriteString(" ")
-			continue
-		}
-
-		if strings.Contains(line, "enum __device_builtin__ "+enumName) {
-			inEnum = true
-			currentDoc.Reset()
-			continue
-		}
-		if inEnum && strings.Contains(line, "};") {
-			break
-		}
-		if !inEnum {
-			continue
-		}
-
-		matches := reField.FindStringSubmatch(line)
-		if len(matches) < 3 {
-			continue
-		}
-
-		name := strings.TrimSpace(matches[1])
-		value := strings.TrimSpace(matches[2])
-		doc := strings.TrimSpace(currentDoc.String())
-		fields = append(fields, Field{
-			Name: name,
-			Type: value,
 			Doc:  doc,
 		})
 		currentDoc.Reset()
 	}
+
+	if cfg.IsEnum {
+		fields = filterDeprecatedDuplicates(fields)
+	}
 	return fields, scanner.Err()
 }
 
-// ParseAllVersions parses fields for multiple versions of a header file.
-func ParseAllVersions(headerDir string, versions []Version, structOrEnumName string, fieldRegex *regexp.Regexp, isEnum bool) (map[string][]Field, error) {
-	versionFields := make(map[string][]Field)
-	for _, ver := range versions {
-		path := filepath.Join(headerDir, ver.Version, "driver_types.h")
-		var fields []Field
-		var err error
-		if isEnum {
-			fields, err = ParseEnum(path, structOrEnumName, fieldRegex)
-		} else {
-			fields, err = ParseHeader(path, structOrEnumName, fieldRegex)
+// filterDeprecatedDuplicates removes deprecated enum values that conflict with non-deprecated ones.
+func filterDeprecatedDuplicates(fields []Field) []Field {
+	valueMap := make(map[string][]Field)
+	for _, f := range fields {
+		valueMap[f.Type] = append(valueMap[f.Type], f)
+	}
+
+	var result []Field
+	for _, group := range valueMap {
+		var nonDep []Field
+		for _, f := range group {
+			if !isDeprecated(f) {
+				nonDep = append(nonDep, f)
+			}
 		}
+		if len(nonDep) > 0 {
+			result = append(result, nonDep...)
+		} else {
+			result = append(result, group...)
+		}
+	}
+	sort.Slice(result, func(i, j int) bool { return result[i].Name < result[j].Name })
+	return result
+}
+
+// isDeprecated checks if a field is marked as deprecated.
+func isDeprecated(field Field) bool {
+	doc := strings.ToLower(field.Doc)
+	keywords := []string{"deprecated", "do not use", "obsolete", "superseded", "legacy"}
+	for _, kw := range keywords {
+		if strings.Contains(doc, kw) {
+			return true
+		}
+	}
+	return false
+}
+
+// ParseAllVersions parses fields for multiple versions of a header file.
+func ParseAllVersions(cfg Config) (map[string][]Field, error) {
+	versionFields := make(map[string][]Field)
+	for _, ver := range cfg.Versions {
+		path := filepath.Join(cfg.HeaderDir, ver.Version, cfg.HeaderFile)
+		fields, err := ParseHeader(cfg, path)
 		if err != nil {
 			return nil, fmt.Errorf("version %s: %w", ver.Version, err)
 		}
@@ -155,43 +164,37 @@ func FindCommonFields(versionFields map[string][]Field) []Field {
 	if len(versionFields) == 0 {
 		return nil
 	}
-
-	var refVersion string
+	var refVer string
 	var refFields []Field
 	for v, f := range versionFields {
-		refVersion, refFields = v, f
+		refVer = v
+		refFields = f
 		break
 	}
 
 	var common []Field
 	for _, f := range refFields {
-		if isCommonField(f, versionFields, refVersion) {
-			common = append(common, f)
-		}
-	}
-
-	sort.Slice(common, func(i, j int) bool {
-		return common[i].Name < common[j].Name
-	})
-	return common
-}
-
-// isCommonField checks if a field exists in all versions with the same type/value.
-func isCommonField(field Field, versionFields map[string][]Field, refVersion string) bool {
-	for version, fields := range versionFields {
-		if version == refVersion {
-			continue
-		}
-		found := false
-		for _, vf := range fields {
-			if vf.Name == field.Name && vf.Type == field.Type {
-				found = true
+		commonInAll := true
+		for ver, fields := range versionFields {
+			if ver == refVer {
+				continue
+			}
+			found := false
+			for _, vf := range fields {
+				if vf.Name == f.Name && vf.Type == f.Type {
+					found = true
+					break
+				}
+			}
+			if !found {
+				commonInAll = false
 				break
 			}
 		}
-		if !found {
-			return false
+		if commonInAll {
+			common = append(common, f)
 		}
 	}
-	return true
+	sort.Slice(common, func(i, j int) bool { return common[i].Name < common[j].Name })
+	return common
 }

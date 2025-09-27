@@ -4,178 +4,20 @@ package gocu
 import "C"
 import "fmt"
 
-type cuResult int
+type CUResult int
 
-func (err cuResult) Error() string { return err.String() }
-func (err cuResult) String() string {
-	if msg, ok := resString[err]; ok {
+func (err CUResult) Error() string { return err.String() }
+func (err CUResult) String() string {
+	if msg, ok := CUResultMessages[err]; ok {
 		return msg
 	}
 	return fmt.Sprintf("UnknownErrorCode:%d", err)
 }
 
 func Check(x C.CUresult) error {
-	err := cuResult(x)
-	if err == Success {
+	err := CUResult(x)
+	if err == CudaSuccess {
 		return nil
 	}
 	return err
-}
-
-const (
-	Success                     cuResult = C.CUDA_SUCCESS
-	InvalidValue                cuResult = C.CUDA_ERROR_INVALID_VALUE
-	OutOfMemory                 cuResult = C.CUDA_ERROR_OUT_OF_MEMORY
-	NotInitialized              cuResult = C.CUDA_ERROR_NOT_INITIALIZED
-	Deinitialized               cuResult = C.CUDA_ERROR_DEINITIALIZED
-	ProfilerDisabled            cuResult = C.CUDA_ERROR_PROFILER_DISABLED
-	ProfilerNotInitialized      cuResult = C.CUDA_ERROR_PROFILER_NOT_INITIALIZED
-	ProfilerAlreadyStarted      cuResult = C.CUDA_ERROR_PROFILER_ALREADY_STARTED
-	ProfilerAlreadyStopped      cuResult = C.CUDA_ERROR_PROFILER_ALREADY_STOPPED
-	NoDevice                    cuResult = C.CUDA_ERROR_NO_DEVICE
-	InvalidDevice               cuResult = C.CUDA_ERROR_INVALID_DEVICE
-	InvalidImage                cuResult = C.CUDA_ERROR_INVALID_IMAGE
-	InvalidContext              cuResult = C.CUDA_ERROR_INVALID_CONTEXT
-	ContextAlreadyCurrent       cuResult = C.CUDA_ERROR_CONTEXT_ALREADY_CURRENT
-	MapFailed                   cuResult = C.CUDA_ERROR_MAP_FAILED
-	UnmapFailed                 cuResult = C.CUDA_ERROR_UNMAP_FAILED
-	ArrayIsMapped               cuResult = C.CUDA_ERROR_ARRAY_IS_MAPPED
-	AlreadyMapped               cuResult = C.CUDA_ERROR_ALREADY_MAPPED
-	NoBinaryForGpu              cuResult = C.CUDA_ERROR_NO_BINARY_FOR_GPU
-	AlreadyAcquired             cuResult = C.CUDA_ERROR_ALREADY_ACQUIRED
-	NotMapped                   cuResult = C.CUDA_ERROR_NOT_MAPPED
-	NotMappedAsArray            cuResult = C.CUDA_ERROR_NOT_MAPPED_AS_ARRAY
-	NotMappedAsPointer          cuResult = C.CUDA_ERROR_NOT_MAPPED_AS_POINTER
-	EccUncorrectable            cuResult = C.CUDA_ERROR_ECC_UNCORRECTABLE
-	UnsupportedLimit            cuResult = C.CUDA_ERROR_UNSUPPORTED_LIMIT
-	ContextAlreadyInUse         cuResult = C.CUDA_ERROR_CONTEXT_ALREADY_IN_USE
-	PeerAccessUnsupported       cuResult = C.CUDA_ERROR_PEER_ACCESS_UNSUPPORTED
-	InvalidPtx                  cuResult = C.CUDA_ERROR_INVALID_PTX
-	InvalidGraphicsContext      cuResult = C.CUDA_ERROR_INVALID_GRAPHICS_CONTEXT
-	NvlinkUncorrectable         cuResult = C.CUDA_ERROR_NVLINK_UNCORRECTABLE
-	JitCompilerNotFound         cuResult = C.CUDA_ERROR_JIT_COMPILER_NOT_FOUND
-	InvalidSource               cuResult = C.CUDA_ERROR_INVALID_SOURCE
-	FileNotFound                cuResult = C.CUDA_ERROR_FILE_NOT_FOUND
-	SharedObjectSymbolNotFound  cuResult = C.CUDA_ERROR_SHARED_OBJECT_SYMBOL_NOT_FOUND
-	SharedObjectInitFailed      cuResult = C.CUDA_ERROR_SHARED_OBJECT_INIT_FAILED
-	OperatingSystem             cuResult = C.CUDA_ERROR_OPERATING_SYSTEM
-	InvalidHandle               cuResult = C.CUDA_ERROR_INVALID_HANDLE
-	IllegalState                cuResult = C.CUDA_ERROR_ILLEGAL_STATE
-	NotFound                    cuResult = C.CUDA_ERROR_NOT_FOUND
-	NotReady                    cuResult = C.CUDA_ERROR_NOT_READY
-	IllegalAddress              cuResult = C.CUDA_ERROR_ILLEGAL_ADDRESS
-	LaunchOutOfResources        cuResult = C.CUDA_ERROR_LAUNCH_OUT_OF_RESOURCES
-	LaunchTimeout               cuResult = C.CUDA_ERROR_LAUNCH_TIMEOUT
-	LaunchIncompatibleTexturing cuResult = C.CUDA_ERROR_LAUNCH_INCOMPATIBLE_TEXTURING
-	PeerAccessAlreadyEnabled    cuResult = C.CUDA_ERROR_PEER_ACCESS_ALREADY_ENABLED
-	PeerAccessNotEnabled        cuResult = C.CUDA_ERROR_PEER_ACCESS_NOT_ENABLED
-	PrimaryContextActive        cuResult = C.CUDA_ERROR_PRIMARY_CONTEXT_ACTIVE
-	ContextIsDestroyed          cuResult = C.CUDA_ERROR_CONTEXT_IS_DESTROYED
-	Assert                      cuResult = C.CUDA_ERROR_ASSERT
-	TooManyPeers                cuResult = C.CUDA_ERROR_TOO_MANY_PEERS
-	HostMemoryAlreadyRegistered cuResult = C.CUDA_ERROR_HOST_MEMORY_ALREADY_REGISTERED
-	HostMemoryNotRegistered     cuResult = C.CUDA_ERROR_HOST_MEMORY_NOT_REGISTERED
-	HardwareStackError          cuResult = C.CUDA_ERROR_HARDWARE_STACK_ERROR
-	IllegalInstruction          cuResult = C.CUDA_ERROR_ILLEGAL_INSTRUCTION
-	MisalignedAddress           cuResult = C.CUDA_ERROR_MISALIGNED_ADDRESS
-	InvalidAddressSpace         cuResult = C.CUDA_ERROR_INVALID_ADDRESS_SPACE
-	InvalidPc                   cuResult = C.CUDA_ERROR_INVALID_PC
-	LaunchFailed                cuResult = C.CUDA_ERROR_LAUNCH_FAILED
-	CooperativeLaunchTooLarge   cuResult = C.CUDA_ERROR_COOPERATIVE_LAUNCH_TOO_LARGE
-	NotPermitted                cuResult = C.CUDA_ERROR_NOT_PERMITTED
-	NotSupported                cuResult = C.CUDA_ERROR_NOT_SUPPORTED
-	SystemNotReady              cuResult = C.CUDA_ERROR_SYSTEM_NOT_READY
-	SystemDriverMismatch        cuResult = C.CUDA_ERROR_SYSTEM_DRIVER_MISMATCH
-	CompatNotSupportedOnDevice  cuResult = C.CUDA_ERROR_COMPAT_NOT_SUPPORTED_ON_DEVICE
-	StreamCaptureUnsupported    cuResult = C.CUDA_ERROR_STREAM_CAPTURE_UNSUPPORTED
-	StreamCaptureInvalidated    cuResult = C.CUDA_ERROR_STREAM_CAPTURE_INVALIDATED
-	StreamCaptureMerge          cuResult = C.CUDA_ERROR_STREAM_CAPTURE_MERGE
-	StreamCaptureUnmatched      cuResult = C.CUDA_ERROR_STREAM_CAPTURE_UNMATCHED
-	StreamCaptureUnjoined       cuResult = C.CUDA_ERROR_STREAM_CAPTURE_UNJOINED
-	StreamCaptureIsolation      cuResult = C.CUDA_ERROR_STREAM_CAPTURE_ISOLATION
-	StreamCaptureImplicit       cuResult = C.CUDA_ERROR_STREAM_CAPTURE_IMPLICIT
-	CapturedEvent               cuResult = C.CUDA_ERROR_CAPTURED_EVENT
-	StreamCaptureWrongThread    cuResult = C.CUDA_ERROR_STREAM_CAPTURE_WRONG_THREAD
-	Timeout                     cuResult = C.CUDA_ERROR_TIMEOUT
-	GraphExecUpdateFailure      cuResult = C.CUDA_ERROR_GRAPH_EXEC_UPDATE_FAILURE
-	Unknown                     cuResult = C.CUDA_ERROR_UNKNOWN
-)
-
-var resString = map[cuResult]string{
-	Success:                     "Success",
-	InvalidValue:                "InvalidValue",
-	OutOfMemory:                 "OutOfMemory",
-	NotInitialized:              "NotInitialized",
-	Deinitialized:               "Deinitialized",
-	ProfilerDisabled:            "ProfilerDisabled",
-	ProfilerNotInitialized:      "ProfilerNotInitialized",
-	ProfilerAlreadyStarted:      "ProfilerAlreadyStarted",
-	ProfilerAlreadyStopped:      "ProfilerAlreadyStopped",
-	NoDevice:                    "NoDevice",
-	InvalidDevice:               "InvalidDevice",
-	InvalidImage:                "InvalidImage",
-	InvalidContext:              "InvalidContext",
-	ContextAlreadyCurrent:       "ContextAlreadyCurrent",
-	MapFailed:                   "MapFailed",
-	UnmapFailed:                 "UnmapFailed",
-	ArrayIsMapped:               "ArrayIsMapped",
-	AlreadyMapped:               "AlreadyMapped",
-	NoBinaryForGpu:              "NoBinaryForGpu",
-	AlreadyAcquired:             "AlreadyAcquired",
-	NotMapped:                   "NotMapped",
-	NotMappedAsArray:            "NotMappedAsArray",
-	NotMappedAsPointer:          "NotMappedAsPointer",
-	EccUncorrectable:            "EccUncorrectable",
-	UnsupportedLimit:            "UnsupportedLimit",
-	ContextAlreadyInUse:         "ContextAlreadyInUse",
-	PeerAccessUnsupported:       "PeerAccessUnsupported",
-	InvalidPtx:                  "InvalidPtx",
-	InvalidGraphicsContext:      "InvalidGraphicsContext",
-	NvlinkUncorrectable:         "NvlinkUncorrectable",
-	JitCompilerNotFound:         "JitCompilerNotFound",
-	InvalidSource:               "InvalidSource",
-	FileNotFound:                "FileNotFound",
-	SharedObjectSymbolNotFound:  "SharedObjectSymbolNotFound",
-	SharedObjectInitFailed:      "SharedObjectInitFailed",
-	OperatingSystem:             "OperatingSystem",
-	InvalidHandle:               "InvalidHandle",
-	IllegalState:                "IllegalState",
-	NotFound:                    "NotFound",
-	NotReady:                    "NotReady",
-	IllegalAddress:              "IllegalAddress",
-	LaunchOutOfResources:        "LaunchOutOfResources",
-	LaunchTimeout:               "LaunchTimeout",
-	LaunchIncompatibleTexturing: "LaunchIncompatibleTexturing",
-	PeerAccessAlreadyEnabled:    "PeerAccessAlreadyEnabled",
-	PeerAccessNotEnabled:        "PeerAccessNotEnabled",
-	PrimaryContextActive:        "PrimaryContextActive",
-	ContextIsDestroyed:          "ContextIsDestroyed",
-	Assert:                      "Assert",
-	TooManyPeers:                "TooManyPeers",
-	HostMemoryAlreadyRegistered: "HostMemoryAlreadyRegistered",
-	HostMemoryNotRegistered:     "HostMemoryNotRegistered",
-	HardwareStackError:          "HardwareStackError",
-	IllegalInstruction:          "IllegalInstruction",
-	MisalignedAddress:           "MisalignedAddress",
-	InvalidAddressSpace:         "InvalidAddressSpace",
-	InvalidPc:                   "InvalidPc",
-	LaunchFailed:                "LaunchFailed",
-	CooperativeLaunchTooLarge:   "CooperativeLaunchTooLarge",
-	NotPermitted:                "NotPermitted",
-	NotSupported:                "NotSupported",
-	SystemNotReady:              "SystemNotReady",
-	SystemDriverMismatch:        "SystemDriverMismatch",
-	CompatNotSupportedOnDevice:  "CompatNotSupportedOnDevice",
-	StreamCaptureUnsupported:    "StreamCaptureUnsupported",
-	StreamCaptureInvalidated:    "StreamCaptureInvalidated",
-	StreamCaptureMerge:          "StreamCaptureMerge",
-	StreamCaptureUnmatched:      "StreamCaptureUnmatched",
-	StreamCaptureUnjoined:       "StreamCaptureUnjoined",
-	StreamCaptureIsolation:      "StreamCaptureIsolation",
-	StreamCaptureImplicit:       "StreamCaptureImplicit",
-	CapturedEvent:               "CapturedEvent",
-	StreamCaptureWrongThread:    "StreamCaptureWrongThread",
-	Timeout:                     "Timeout",
-	GraphExecUpdateFailure:      "GraphExecUpdateFailure",
-	Unknown:                     "Unknown",
 }

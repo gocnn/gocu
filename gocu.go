@@ -1,5 +1,7 @@
 package gocu
 
+//go:generate go run generate.go
+
 //#include <cuda.h>
 import "C"
 import (

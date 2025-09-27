@@ -7,27 +7,26 @@
 package {{ .Package }}
 
 /*
-#include <cuda_runtime.h>
+#include <{{ .Include }}>
 */
 import (
 	"C"
 	"unsafe"
-
 
 {{- if hasUUID .Fields }}
 	"github.com/google/uuid"
 {{- end }}
 )
 
-// {{ .StructName }} holds properties of a CUDA device.
+// {{ .StructName }} holds the definition.
 type {{ .StructName }} struct {
 {{- range .Fields }}
 	{{ .GoName }} {{ .GoType }} // {{ .CType }}
 {{- end }}
 }
 
-// fromC converts a C.cudaDeviceProp to a Go {{ .StructName }}.
-func (p *{{ .StructName }}) fromC(prop *C.struct_cudaDeviceProp) {
+// fromC converts a C.{{ .CGoType }} to a Go {{ .StructName }}.
+func (p *{{ .StructName }}) fromC(prop *C.{{ .CGoType }}) {
 {{- range .Fields }}
 	p.{{ .GoName }} = {{ .FromCExpr }}
 {{- end }}

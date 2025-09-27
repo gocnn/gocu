@@ -1,5 +1,30 @@
 package codegen
 
+import "regexp"
+
+// Version defines a version and its build tag.
+type Version struct {
+	Version  string
+	BuildTag string
+}
+
+// Config holds configuration for code generation.
+type Config struct {
+	Package      string
+	Filename     string
+	Versions     []Version
+	HeaderDir    string
+	HeaderFile   string         // e.g., "cuda.h"
+	Include      string         // e.g., "cuda_runtime.h"
+	StructName   string         // Go name, e.g., "DeviceProp" or "CudaError"
+	CGoType      string         // CGo type, e.g., "struct_cudaDeviceProp" (for structs)
+	StartString  string         // Start marker, e.g., "struct __device_builtin__ cudaDeviceProp"
+	EndString    string         // End marker, e.g., "};" (relaxed to any line containing "}")
+	FieldRegex   *regexp.Regexp // Optional: custom regex for fields
+	TemplatePath string
+	IsEnum       bool
+}
+
 // Field represents a field in a C header (struct or enum).
 type Field struct {
 	Name string // C name (e.g., cudaSuccess)
@@ -14,35 +39,21 @@ type StructDef struct {
 	Fields   []Field
 }
 
-// TemplateData prepares data for the Go template.
-type TemplateData struct {
-	StructDef
-	StructName string // For structs: struct name; for enums: type name (e.g., cudaError)
-	Fields     []TemplateField
-}
-
 // TemplateField holds field data for the template.
 type TemplateField struct {
 	Name      string // Original C name (e.g., cudaSuccess)
 	GoName    string // Go-style name (e.g., Success)
-	GoType    string // For structs: Go type; for enums: base type (e.g., cudaError)
+	GoType    string // For structs: Go type; for enums: base type (e.g., CudaError)
 	CType     string // For structs: C type; for enums: empty or value
 	FromCExpr string // For structs: conversion expr; for enums: C constant (e.g., C.cudaSuccess)
 	Doc       string // Optional: documentation
 }
 
-// Version defines a version and its build tag.
-type Version struct {
-	Version  string
-	BuildTag string
-}
-
-// Config holds configuration for code generation.
-type Config struct {
-	Package      string
-	Filename     string
-	Versions     []Version
-	HeaderDir    string
-	StructName   string
-	TemplatePath string
+// TemplateData prepares data for the Go template.
+type TemplateData struct {
+	StructDef
+	StructName string // For structs: struct name; for enums: type name (e.g., CudaError)
+	CGoType    string // CGo type for structs (e.g., struct_cudaDeviceProp)
+	Include    string // Header include (e.g., cuda_runtime.h)
+	Fields     []TemplateField
 }

@@ -3,73 +3,57 @@ package codegen
 import (
 	"fmt"
 	"strings"
+	"unicode"
 )
 
 // ToGoFieldName converts a C-style field name to Go-style UpperCamelCase.
 func ToGoFieldName(name string) string {
-	// Handle snake case
-	if strings.Contains(name, "_") {
-		words := strings.Split(strings.TrimSpace(name), "_")
-		for i, word := range words {
-			if word == "" {
-				continue
-			}
-			word = strings.ToLower(word)
-			words[i] = strings.ToUpper(string(word[0])) + word[1:]
-		}
-		return strings.Join(words, "")
+	name = strings.TrimSpace(name)
+	if name == "" {
+		return ""
 	}
 
-	// Handle camelCase or run-together lowercase
-	var words []string
-	var currentWord strings.Builder
-	var prevIsUpper bool
+	var result strings.Builder
+	var word strings.Builder
+	isSnakeCase := strings.Contains(name, "_")
 
 	for i, r := range name {
-		isUpper := r >= 'A' && r <= 'Z'
-		isDigit := r >= '0' && r <= '9'
-
-		if i == 0 {
-			currentWord.WriteRune(r)
-			prevIsUpper = isUpper
+		if isSnakeCase && r == '_' {
+			if word.Len() > 0 {
+				runes := []rune(strings.ToLower(word.String()))
+				if len(runes) > 0 {
+					runes[0] = unicode.ToUpper(runes[0])
+					result.WriteString(string(runes))
+				}
+				word.Reset()
+			}
 			continue
 		}
-
-		if isUpper && !prevIsUpper || isDigit && currentWord.Len() > 0 {
-			words = append(words, currentWord.String())
-			currentWord.Reset()
+		if !isSnakeCase && i > 0 && unicode.IsUpper(r) && unicode.IsLower(rune(name[i-1])) {
+			runes := []rune(strings.ToLower(word.String()))
+			if len(runes) > 0 {
+				runes[0] = unicode.ToUpper(runes[0])
+				result.WriteString(string(runes))
+			}
+			word.Reset()
 		}
-		currentWord.WriteRune(r)
-		prevIsUpper = isUpper
+		word.WriteRune(r)
 	}
-	if currentWord.Len() > 0 {
-		words = append(words, currentWord.String())
+	if word.Len() > 0 {
+		runes := []rune(strings.ToLower(word.String()))
+		if len(runes) > 0 {
+			runes[0] = unicode.ToUpper(runes[0])
+			result.WriteString(string(runes))
+		}
 	}
 
-	for i, word := range words {
-		if word == "" {
-			continue
-		}
-		word = strings.ToLower(word)
-		words[i] = strings.ToUpper(string(word[0])) + word[1:]
-	}
-	return strings.Join(words, "")
+	return result.String()
 }
 
-// ToGoType converts a C type to a Go type (for enums, returns the base type).
-func ToGoType(cType string, isEnum bool) string {
+// ToGoType converts a C type to a Go type.
+func ToGoType(cType string, isEnum bool, goBaseType string) string {
 	if isEnum {
-		// Handle different enum types
-		switch cType {
-		case "cudaError":
-			return "CudaError"
-		case "cudaDeviceAttr":
-			return "DeviceAttribute"
-		case "cudaLimit":
-			return "CudaLimit"
-		default:
-			return "cudaError" // Default fallback
-		}
+		return goBaseType
 	}
 	switch {
 	case strings.HasPrefix(cType, "char["):
@@ -85,20 +69,20 @@ func ToGoType(cType string, isEnum bool) string {
 	case cType == "size_t":
 		return "uint64"
 	case cType == "cudaUUID_t":
-		return "uuid.UUID"
+		return "uuid.UUID" // Import handled in template
 	default:
-		return "unknown /* " + cType + " */"
+		return fmt.Sprintf("unknown /* %s */", cType)
 	}
 }
 
 // ToFromCExpr generates the expression to convert a C field to a Go field.
 func ToFromCExpr(fieldName, cType, goType string, isEnum bool) string {
 	if isEnum {
-		return "C." + fieldName
+		return "C." + fieldName // Use fieldName (enum name) not cType (enum value)
 	}
 	switch {
 	case strings.HasPrefix(cType, "char["):
-		return "C.GoString(&prop." + fieldName + "[0])"
+		return fmt.Sprintf("C.GoString(&prop.%s[0])", fieldName)
 	case strings.HasPrefix(cType, "int["):
 		size := strings.Trim(cType[strings.Index(cType, "[")+1:], "]")
 		return fmt.Sprintf("intSlice(&prop.%s[0], %s)", fieldName, size)
@@ -106,14 +90,14 @@ func ToFromCExpr(fieldName, cType, goType string, isEnum bool) string {
 		size := strings.Trim(cType[strings.Index(cType, "[")+1:], "]")
 		return fmt.Sprintf("uint64Slice(&prop.%s[0], %s)", fieldName, size)
 	case cType == "int":
-		return "int(prop." + fieldName + ")"
+		return fmt.Sprintf("int(prop.%s)", fieldName)
 	case cType == "unsigned int":
-		return "uint32(prop." + fieldName + ")"
+		return fmt.Sprintf("uint32(prop.%s)", fieldName)
 	case cType == "size_t":
-		return "uint64(prop." + fieldName + ")"
+		return fmt.Sprintf("uint64(prop.%s)", fieldName)
 	case cType == "cudaUUID_t":
-		return "*(*uuid.UUID)(unsafe.Pointer(&prop." + fieldName + "))"
+		return fmt.Sprintf("*(*uuid.UUID)(unsafe.Pointer(&prop.%s))", fieldName)
 	default:
-		return "/* unsupported type " + cType + " */ prop." + fieldName
+		return fmt.Sprintf("/* unsupported type %s */ prop.%s", cType, fieldName)
 	}
 }

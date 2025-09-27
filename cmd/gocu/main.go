@@ -90,12 +90,12 @@ func displayDeviceInfo(dev cudart.Device, deviceId int, driverVer, runtimeVer in
 
 	// L2 Cache Size
 	fmt.Printf("  L2 Cache Size:                                 %d bytes\n",
-		props.L2CacheSize)
+		props.L2cacheSize)
 
 	// Maximum Texture Dimensions
 	fmt.Printf("  Maximum Texture Dimension Size (x,y,z)         1D=(%d), 2D=(%d, %d), 3D=(%d, %d, %d)\n",
-		props.MaxTexture1D, props.MaxTexture2D[0], props.MaxTexture2D[1],
-		props.MaxTexture3D[0], props.MaxTexture3D[1], props.MaxTexture3D[2])
+		props.MaxTexture1d, props.MaxTexture2d[0], props.MaxTexture2d[1],
+		props.MaxTexture3d[0], props.MaxTexture3d[1], props.MaxTexture3d[2])
 
 	// Total Constant Memory
 	fmt.Printf("  Total amount of constant memory:               %d bytes\n",
