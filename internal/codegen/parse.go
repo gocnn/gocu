@@ -71,7 +71,7 @@ func ParseEnum(path, enumName string, fieldRegex *regexp.Regexp) ([]Field, error
 	inEnum := false
 	reField := fieldRegex
 	if reField == nil {
-		reField = regexp.MustCompile(`^\s*(\w+)\s*=\s*(\d+),?\s*(?:/\*\*.*)?$`)
+		reField = regexp.MustCompile(`^\s*(\w+)\s*=\s*(0x[0-9a-fA-F]+|\d+),?\s*(?:/\*\*<?\s*(.*?)\s*\*/)?`)
 	}
 
 	var currentDoc strings.Builder

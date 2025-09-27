@@ -18,8 +18,8 @@ const (
 {{- end }}
 )
 
-// ErrorMessages maps {{ $.StructName }} values to their string representations.
-var ErrorMessages = map[{{ $.StructName }}]string{
+// {{ $.StructName }}Messages maps {{ $.StructName }} values to their string representations.
+var {{ $.StructName }}Messages = map[{{ $.StructName }}]string{
 {{- range .Fields }}
 	{{ .GoName }}: "{{ .GoName }}",
 {{- end }}

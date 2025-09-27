@@ -146,8 +146,8 @@ const (
 	CudaSuccess                             CudaError = C.cudaSuccess
 )
 
-// ErrorMessages maps CudaError values to their string representations.
-var ErrorMessages = map[CudaError]string{
+// CudaErrorMessages maps CudaError values to their string representations.
+var CudaErrorMessages = map[CudaError]string{
 	CudaErrorAddressOfConstant:              "CudaErrorAddressOfConstant",
 	CudaErrorAlreadyAcquired:                "CudaErrorAlreadyAcquired",
 	CudaErrorAlreadyMapped:                  "CudaErrorAlreadyMapped",

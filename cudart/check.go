@@ -11,7 +11,7 @@ type CudaError C.enum_cudaError
 
 func (err CudaError) Error() string { return err.String() }
 func (err CudaError) String() string {
-	if msg, ok := ErrorMessages[err]; ok {
+	if msg, ok := CudaErrorMessages[err]; ok {
 		return msg
 	}
 	return fmt.Sprintf("UnknownErrorCode:%d", err)
