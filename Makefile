@@ -39,8 +39,13 @@ gen:
 
 # Build the project
 .PHONY: build
-build: gen
+build: clean gen
 	$(GO) build $(GOFLAGS) ./...
+
+# Clean build cache and temporary files
+.PHONY: clean
+clean:
+	$(GO) clean -cache
 
 # Benchmark the project
 .PHONY: bench
@@ -63,6 +68,7 @@ help:
 	@echo "  make test     - Run all tests"
 	@echo "  make gen      - Generate code"
 	@echo "  make build    - Build the project"
+	@echo "  make clean    - Clean build cache and temporary files"
 	@echo "  make bench    - Run benchmarks"
 	@echo "  make pre-commit - Run all pre-commit checks (deps, fmt, lint, test)"
 	@echo "  make help     - Show this help message"
