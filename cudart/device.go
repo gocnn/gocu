@@ -14,6 +14,17 @@ type CudaDeviceAttr uint32
 // CudaLimit represents CUDA limits that can be queried or set.
 type CudaLimit uint32
 
+// Constants for CudaLimit.
+const (
+	CudaLimitDevRuntimePendingLaunchCount CudaLimit = C.cudaLimitDevRuntimePendingLaunchCount
+	CudaLimitDevRuntimeSyncDepth          CudaLimit = C.cudaLimitDevRuntimeSyncDepth
+	CudaLimitMallocHeapSize               CudaLimit = C.cudaLimitMallocHeapSize
+	CudaLimitMaxL2FetchGranularity        CudaLimit = C.cudaLimitMaxL2FetchGranularity
+	CudaLimitPersistingL2CacheSize        CudaLimit = C.cudaLimitPersistingL2CacheSize
+	CudaLimitPrintfFifoSize               CudaLimit = C.cudaLimitPrintfFifoSize
+	CudaLimitStackSize                    CudaLimit = C.cudaLimitStackSize
+)
+
 // GetDevice returns which device is currently being used.
 func GetDevice() (Device, error) {
 	var device C.int
