@@ -1,6 +1,7 @@
 # GOCU Installation Guide
 
 A minimalist guide for installing GOCU, a Go library for NVIDIA GPU computing with CUDA Runtime API and CUBLAS bindings.
+> **Quick Start with Docker**: For a hassle-free setup, consider using our pre-configured Docker environment. See [DOCKER.md](DOCKER.md) for details.
 
 ## System Requirements
 
