@@ -32,7 +32,7 @@ func main() {
 		StructName:   "CUResult",
 		CGoType:      "",
 		StartString:  "typedef enum cudaError_enum",
-		TemplatePath: filepath.Join("internal", "tmpl", "cuda_enum.go.tmpl"),
+		TemplatePath: filepath.Join("internal", "tmpl", "cuda_enum.tmpl"),
 		IsEnum:       true,
 		FieldRegex:   regexp.MustCompile(`^\s*(\w+)\s*=\s*(0x[0-9a-fA-F]+|\d+),?\s*(?:/\*\*<?\s*(.*?)\s*\*/)?$`),
 	}
@@ -46,7 +46,7 @@ func main() {
 		StructName:   "CUDeviceAttr",
 		CGoType:      "",
 		StartString:  "typedef enum CUdevice_attribute_enum",
-		TemplatePath: filepath.Join("internal", "tmpl", "cuda_enum.go.tmpl"),
+		TemplatePath: filepath.Join("internal", "tmpl", "cuda_enum.tmpl"),
 		IsEnum:       true,
 		FieldRegex:   regexp.MustCompile(`^\s*(\w+)\s*=\s*(0x[0-9a-fA-F]+|\d+),?\s*(?:/\*\*<?\s*(.*?)\s*\*/)?$`),
 	}
