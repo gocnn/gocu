@@ -10,9 +10,10 @@ A minimalist guide for installing GOCU, a Go library for NVIDIA GPU computing wi
   - Windows: Fully supported
   - Linux: Fully supported
 - **CUDA Toolkit**:
+  - 10.x and below: Untested (you may test at your own risk)
   - 11.x: Supported
   - 12.x: Supported
-  - 13.0: Unsupported (linking issues)
+  - 13.0: Supported (Only supported on Linux)
 
 ## Prerequisites
 
