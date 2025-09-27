@@ -85,8 +85,8 @@ func displayDeviceInfo(dev cudart.Device, deviceId int, driverVer, runtimeVer in
 
 	// Multiprocessor Count
 	fmt.Printf("  (%2d) Multiprocessors, (%3d) CUDA Cores/MP:     %d CUDA Cores\n",
-		props.MultiProcessorCount, getCoresPerMP(props.Major, props.Minor),
-		int(props.MultiProcessorCount)*getCoresPerMP(props.Major, props.Minor))
+		props.MultiProcessorCount, getCoresPerMP(int32(props.Major), int32(props.Minor)),
+		int(props.MultiProcessorCount)*getCoresPerMP(int32(props.Major), int32(props.Minor)))
 
 	// L2 Cache Size
 	fmt.Printf("  L2 Cache Size:                                 %d bytes\n",
@@ -157,7 +157,7 @@ func displayDeviceInfo(dev cudart.Device, deviceId int, driverVer, runtimeVer in
 
 	// Concurrent Kernel Execution
 	fmt.Printf("  Device has ECC support:                        %s\n",
-		boolToYesNo(props.ECCEnabled != 0))
+		boolToYesNo(props.Eccenabled != 0))
 
 	fmt.Println()
 }

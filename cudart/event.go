@@ -1,6 +1,8 @@
 package cudart
 
-// #include <cuda_runtime.h>
+/*
+#include <cuda_runtime.h>
+*/
 import "C"
 
 // Event represents a CUDA event for synchronization and timing.

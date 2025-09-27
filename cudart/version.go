@@ -1,6 +1,8 @@
 package cudart
 
-// #include <cuda_runtime.h>
+/*
+#include <cuda_runtime.h>
+*/
 import "C"
 
 // DriverGetVersion returns the latest version of CUDA supported by the driver.
