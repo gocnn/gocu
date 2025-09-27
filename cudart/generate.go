@@ -32,9 +32,9 @@ func main() {
 		StructName:   "CudaDeviceProp",
 		CGoType:      "struct_cudaDeviceProp",
 		StartString:  "struct __device_builtin__ cudaDeviceProp",
-		TemplatePath: filepath.Join("..", "internal", "tmpl", "cuda_device_prop.go.tmpl"),
+		TemplatePath: filepath.Join("..", "internal", "tmpl", "cuda_struct.tmpl"),
 		IsEnum:       false,
-		FieldRegex:   regexp.MustCompile(`^\s*([\w\s*]+)\s+([\w]+)(\[[\d\w]*\])?\s*;\s*(?:/\*\*?\s*(.*?)\s*\*/)?$`),
+		FieldRegex:   regexp.MustCompile(`^\s*([\w\s]+)\s+([\w]+)(\[[\d\w]+\])?\s*;\s*(?:/\*\*<?\s*(.*?)\s*\*/)?$`),
 	}
 	errorCfg := codegen.Config{
 		Package:      Package,
@@ -46,7 +46,7 @@ func main() {
 		StructName:   "CudaError",
 		CGoType:      "",
 		StartString:  "enum __device_builtin__ cudaError",
-		TemplatePath: filepath.Join("..", "internal", "tmpl", "cuda_enum.go.tmpl"),
+		TemplatePath: filepath.Join("..", "internal", "tmpl", "cuda_enum.tmpl"),
 		IsEnum:       true,
 		FieldRegex:   regexp.MustCompile(`^\s*(\w+)\s*=\s*(0x[0-9a-fA-F]+|\d+),?\s*(?:/\*\*?\s*(.*?)\s*\*/)?$`),
 	}
@@ -60,7 +60,7 @@ func main() {
 		StructName:   "CudaDeviceAttr",
 		CGoType:      "",
 		StartString:  "enum __device_builtin__ cudaDeviceAttr",
-		TemplatePath: filepath.Join("..", "internal", "tmpl", "cuda_enum.go.tmpl"),
+		TemplatePath: filepath.Join("..", "internal", "tmpl", "cuda_enum.tmpl"),
 		IsEnum:       true,
 		FieldRegex:   regexp.MustCompile(`^\s*(\w+)\s*=\s*(0x[0-9a-fA-F]+|\d+),?\s*(?:/\*\*?\s*(.*?)\s*\*/)?$`),
 	}
