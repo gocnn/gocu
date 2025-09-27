@@ -1,12 +1,9 @@
 package cudart
 
-// #include <cuda_runtime.h>
+/*
+#include <cuda_runtime.h>
+*/
 import "C"
-import (
-	"unsafe"
-
-	"github.com/google/uuid"
-)
 
 // Device represents a CUDA device ordinal.
 type Device int
@@ -179,112 +176,14 @@ func DeviceSetLimit(limit CudaLimit, value int64) error {
 	return Check(C.cudaDeviceSetLimit(uint32(limit), C.size_t(value)))
 }
 
-// DeviceProperties represents essential CUDA device properties from cudaDeviceProp, compatible with CUDA 10-13.
-type DeviceProperties struct {
-	Name                        string    // Device name
-	UUID                        uuid.UUID // Device UUID
-	TotalGlobalMem              int64     // Total global memory in bytes
-	SharedMemPerBlock           int64     // Shared memory per block in bytes
-	TotalConstMem               int64     // Constant memory in bytes
-	MemPitch                    int64     // Maximum pitch in bytes
-	TextureAlignment            int64     // Texture alignment in bytes
-	TexturePitchAlignment       int64     // Texture pitch alignment in bytes
-	SurfaceAlignment            int64     // Surface alignment in bytes
-	MaxThreadsPerBlock          int32     // Maximum threads per block
-	MaxThreadsDim               [3]int32  // Maximum threads per dimension
-	MaxGridSize                 [3]int32  // Maximum grid dimensions
-	WarpSize                    int32     // Warp size in threads
-	MultiProcessorCount         int32     // Number of multiprocessors
-	RegsPerBlock                int32     // Registers per block
-	MaxThreadsPerMultiProcessor int32     // Maximum threads per multiprocessor
-	SharedMemPerMultiprocessor  int64     // Shared memory per multiprocessor in bytes
-	RegsPerMultiprocessor       int32     // Registers per multiprocessor
-	MaxTexture1D                int32     // Maximum 1D texture width
-	MaxTexture2D                [2]int32  // Maximum 2D texture dimensions
-	MaxTexture3D                [3]int32  // Maximum 3D texture dimensions
-	MaxTextureCubemap           int32     // Maximum cubemap texture width/height
-	MaxSurface1D                int32     // Maximum 1D surface width
-	MaxSurface2D                [2]int32  // Maximum 2D surface dimensions
-	MaxSurface3D                [3]int32  // Maximum 3D surface dimensions
-	MaxSurfaceCubemap           int32     // Maximum cubemap surface width
-	ConcurrentKernels           int32     // Supports concurrent kernel execution
-	ECCEnabled                  int32     // ECC support enabled
-	Integrated                  int32     // Integrated with host memory
-	CanMapHostMemory            int32     // Can map host memory
-	UnifiedAddressing           int32     // Supports unified addressing
-	TccDriver                   int32     // Using TCC driver model
-	AsyncEngineCount            int32     // Number of asynchronous engines
-	L2CacheSize                 int32     // L2 cache size in bytes
-	GlobalL1CacheSupported      int32     // Supports global L1 cache
-	LocalL1CacheSupported       int32     // Supports local L1 cache
-	Major                       int32     // Major compute capability
-	Minor                       int32     // Minor compute capability
-	PCIBusID                    int32     // PCI bus ID
-	PCIDeviceID                 int32     // PCI device ID
-	PCIDomainID                 int32     // PCI domain ID
-}
-
 // GetDeviceProperties returns the properties of a compute device.
 func GetDeviceProperties(device Device) (*DeviceProperties, error) {
 	var prop C.struct_cudaDeviceProp
+	var properties DeviceProperties
 	err := Check(C.cudaGetDeviceProperties(&prop, C.int(device)))
 	if err != nil {
 		return nil, err
 	}
-
-	properties := &DeviceProperties{
-		Name:                        C.GoString(&prop.name[0]),
-		TotalGlobalMem:              int64(prop.totalGlobalMem),
-		SharedMemPerBlock:           int64(prop.sharedMemPerBlock),
-		TotalConstMem:               int64(prop.totalConstMem),
-		MemPitch:                    int64(prop.memPitch),
-		TextureAlignment:            int64(prop.textureAlignment),
-		TexturePitchAlignment:       int64(prop.texturePitchAlignment),
-		SurfaceAlignment:            int64(prop.surfaceAlignment),
-		MaxThreadsPerBlock:          int32(prop.maxThreadsPerBlock),
-		WarpSize:                    int32(prop.warpSize),
-		MultiProcessorCount:         int32(prop.multiProcessorCount),
-		RegsPerBlock:                int32(prop.regsPerBlock),
-		MaxThreadsPerMultiProcessor: int32(prop.maxThreadsPerMultiProcessor),
-		SharedMemPerMultiprocessor:  int64(prop.sharedMemPerMultiprocessor),
-		RegsPerMultiprocessor:       int32(prop.regsPerMultiprocessor),
-		MaxTexture1D:                int32(prop.maxTexture1D),
-		MaxTextureCubemap:           int32(prop.maxTextureCubemap),
-		MaxSurface1D:                int32(prop.maxSurface1D),
-		MaxSurfaceCubemap:           int32(prop.maxSurfaceCubemap),
-		ConcurrentKernels:           int32(prop.concurrentKernels),
-		ECCEnabled:                  int32(prop.ECCEnabled),
-		Integrated:                  int32(prop.integrated),
-		CanMapHostMemory:            int32(prop.canMapHostMemory),
-		UnifiedAddressing:           int32(prop.unifiedAddressing),
-		TccDriver:                   int32(prop.tccDriver),
-		AsyncEngineCount:            int32(prop.asyncEngineCount),
-		L2CacheSize:                 int32(prop.l2CacheSize),
-		GlobalL1CacheSupported:      int32(prop.globalL1CacheSupported),
-		LocalL1CacheSupported:       int32(prop.localL1CacheSupported),
-		Major:                       int32(prop.major),
-		Minor:                       int32(prop.minor),
-		PCIBusID:                    int32(prop.pciBusID),
-		PCIDeviceID:                 int32(prop.pciDeviceID),
-		PCIDomainID:                 int32(prop.pciDomainID),
-	}
-
-	// Copy UUID
-	copy(properties.UUID[:], C.GoBytes(unsafe.Pointer(&prop.uuid), 16))
-
-	// Copy array fields
-	for i := range 3 {
-		properties.MaxThreadsDim[i] = int32(prop.maxThreadsDim[i])
-		properties.MaxGridSize[i] = int32(prop.maxGridSize[i])
-		if i < 2 {
-			properties.MaxTexture2D[i] = int32(prop.maxTexture2D[i])
-			properties.MaxSurface2D[i] = int32(prop.maxSurface2D[i])
-		}
-		if i < 3 {
-			properties.MaxTexture3D[i] = int32(prop.maxTexture3D[i])
-			properties.MaxSurface3D[i] = int32(prop.maxSurface3D[i])
-		}
-	}
-
-	return properties, nil
+	properties.fromC(&prop)
+	return &properties, nil
 }

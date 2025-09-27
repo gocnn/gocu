@@ -1,5 +1,7 @@
 package cudart
 
+//go:generate go run generate.go
+
 import "unsafe"
 
 // SliceToHostPtr converts a Go slice to HostPtr for the first element.

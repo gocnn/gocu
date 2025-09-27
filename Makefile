@@ -35,10 +35,11 @@ test:
 .PHONY: gen
 gen:
 	$(GO) generate ./...
+	$(GO) fmt ./...
 
 # Build the project
 .PHONY: build
-build:
+build: gen
 	$(GO) build $(GOFLAGS) ./...
 
 # Benchmark the project
