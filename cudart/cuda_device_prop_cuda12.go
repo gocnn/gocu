@@ -13,7 +13,7 @@ import (
 	"unsafe"
 )
 
-// CudaDeviceProp holds properties of a CUDA device.
+// CudaDeviceProp holds the definition.
 type CudaDeviceProp struct {
 	Eccenabled                             int       // int
 	AccessPolicyMaxWindowSize              int       // int
@@ -31,7 +31,7 @@ type CudaDeviceProp struct {
 	DeferredMappingCudaArraySupported      int       // int
 	DeviceOverlap                          int       // int
 	DirectManagedMemAccessFromHost         int       // int
-	GlobalL1CacheSupported                 int       // int
+	GlobalL1cacheSupported                 int       // int
 	GpuDirectRdmaflushWritesOptions        uint32    // unsigned int
 	GpuDirectRdmasupported                 int       // int
 	GpuDirectRdmawritesOrdering            int       // int
@@ -42,32 +42,32 @@ type CudaDeviceProp struct {
 	IpcEventSupported                      int       // int
 	IsMultiGpuBoard                        int       // int
 	KernelExecTimeoutEnabled               int       // int
-	L2CacheSize                            int       // int
-	LocalL1CacheSupported                  int       // int
+	L2cacheSize                            int       // int
+	LocalL1cacheSupported                  int       // int
 	Luid                                   string    // char[8]
 	LuidDeviceNodeMask                     uint32    // unsigned int
 	Major                                  int       // int
 	ManagedMemory                          int       // int
 	MaxBlocksPerMultiProcessor             int       // int
 	MaxGridSize                            []int     // int[3]
-	MaxSurface1D                           int       // int
-	MaxSurface1Dlayered                    []int     // int[2]
-	MaxSurface2D                           []int     // int[2]
-	MaxSurface2Dlayered                    []int     // int[3]
-	MaxSurface3D                           []int     // int[3]
+	MaxSurface1d                           int       // int
+	MaxSurface1dlayered                    []int     // int[2]
+	MaxSurface2d                           []int     // int[2]
+	MaxSurface2dlayered                    []int     // int[3]
+	MaxSurface3d                           []int     // int[3]
 	MaxSurfaceCubemap                      int       // int
 	MaxSurfaceCubemapLayered               []int     // int[2]
-	MaxTexture1D                           int       // int
-	MaxTexture1Dlayered                    []int     // int[2]
-	MaxTexture1Dlinear                     int       // int
-	MaxTexture1Dmipmap                     int       // int
-	MaxTexture2D                           []int     // int[2]
-	MaxTexture2Dgather                     []int     // int[2]
-	MaxTexture2Dlayered                    []int     // int[3]
-	MaxTexture2Dlinear                     []int     // int[3]
-	MaxTexture2Dmipmap                     []int     // int[2]
-	MaxTexture3D                           []int     // int[3]
-	MaxTexture3Dalt                        []int     // int[3]
+	MaxTexture1d                           int       // int
+	MaxTexture1dlayered                    []int     // int[2]
+	MaxTexture1dlinear                     int       // int
+	MaxTexture1dmipmap                     int       // int
+	MaxTexture2d                           []int     // int[2]
+	MaxTexture2dgather                     []int     // int[2]
+	MaxTexture2dlayered                    []int     // int[3]
+	MaxTexture2dlinear                     []int     // int[3]
+	MaxTexture2dmipmap                     []int     // int[2]
+	MaxTexture3d                           []int     // int[3]
+	MaxTexture3dalt                        []int     // int[3]
 	MaxTextureCubemap                      int       // int
 	MaxTextureCubemapLayered               []int     // int[2]
 	MaxThreadsDim                          []int     // int[3]
@@ -87,7 +87,7 @@ type CudaDeviceProp struct {
 	PciBusId                               int       // int
 	PciDeviceId                            int       // int
 	PciDomainId                            int       // int
-	PersistingL2CacheMaxSize               int       // int
+	PersistingL2cacheMaxSize               int       // int
 	RegsPerBlock                           int       // int
 	RegsPerMultiprocessor                  int       // int
 	Reserved                               []int     // int[63]
@@ -111,7 +111,7 @@ type CudaDeviceProp struct {
 	WarpSize                               int       // int
 }
 
-// fromC converts a C.cudaDeviceProp to a Go CudaDeviceProp.
+// fromC converts a C.struct_cudaDeviceProp to a Go CudaDeviceProp.
 func (p *CudaDeviceProp) fromC(prop *C.struct_cudaDeviceProp) {
 	p.Eccenabled = int(prop.ECCEnabled)
 	p.AccessPolicyMaxWindowSize = int(prop.accessPolicyMaxWindowSize)
@@ -129,7 +129,7 @@ func (p *CudaDeviceProp) fromC(prop *C.struct_cudaDeviceProp) {
 	p.DeferredMappingCudaArraySupported = int(prop.deferredMappingCudaArraySupported)
 	p.DeviceOverlap = int(prop.deviceOverlap)
 	p.DirectManagedMemAccessFromHost = int(prop.directManagedMemAccessFromHost)
-	p.GlobalL1CacheSupported = int(prop.globalL1CacheSupported)
+	p.GlobalL1cacheSupported = int(prop.globalL1CacheSupported)
 	p.GpuDirectRdmaflushWritesOptions = uint32(prop.gpuDirectRDMAFlushWritesOptions)
 	p.GpuDirectRdmasupported = int(prop.gpuDirectRDMASupported)
 	p.GpuDirectRdmawritesOrdering = int(prop.gpuDirectRDMAWritesOrdering)
@@ -140,32 +140,32 @@ func (p *CudaDeviceProp) fromC(prop *C.struct_cudaDeviceProp) {
 	p.IpcEventSupported = int(prop.ipcEventSupported)
 	p.IsMultiGpuBoard = int(prop.isMultiGpuBoard)
 	p.KernelExecTimeoutEnabled = int(prop.kernelExecTimeoutEnabled)
-	p.L2CacheSize = int(prop.l2CacheSize)
-	p.LocalL1CacheSupported = int(prop.localL1CacheSupported)
+	p.L2cacheSize = int(prop.l2CacheSize)
+	p.LocalL1cacheSupported = int(prop.localL1CacheSupported)
 	p.Luid = C.GoString(&prop.luid[0])
 	p.LuidDeviceNodeMask = uint32(prop.luidDeviceNodeMask)
 	p.Major = int(prop.major)
 	p.ManagedMemory = int(prop.managedMemory)
 	p.MaxBlocksPerMultiProcessor = int(prop.maxBlocksPerMultiProcessor)
 	p.MaxGridSize = intSlice(&prop.maxGridSize[0], 3)
-	p.MaxSurface1D = int(prop.maxSurface1D)
-	p.MaxSurface1Dlayered = intSlice(&prop.maxSurface1DLayered[0], 2)
-	p.MaxSurface2D = intSlice(&prop.maxSurface2D[0], 2)
-	p.MaxSurface2Dlayered = intSlice(&prop.maxSurface2DLayered[0], 3)
-	p.MaxSurface3D = intSlice(&prop.maxSurface3D[0], 3)
+	p.MaxSurface1d = int(prop.maxSurface1D)
+	p.MaxSurface1dlayered = intSlice(&prop.maxSurface1DLayered[0], 2)
+	p.MaxSurface2d = intSlice(&prop.maxSurface2D[0], 2)
+	p.MaxSurface2dlayered = intSlice(&prop.maxSurface2DLayered[0], 3)
+	p.MaxSurface3d = intSlice(&prop.maxSurface3D[0], 3)
 	p.MaxSurfaceCubemap = int(prop.maxSurfaceCubemap)
 	p.MaxSurfaceCubemapLayered = intSlice(&prop.maxSurfaceCubemapLayered[0], 2)
-	p.MaxTexture1D = int(prop.maxTexture1D)
-	p.MaxTexture1Dlayered = intSlice(&prop.maxTexture1DLayered[0], 2)
-	p.MaxTexture1Dlinear = int(prop.maxTexture1DLinear)
-	p.MaxTexture1Dmipmap = int(prop.maxTexture1DMipmap)
-	p.MaxTexture2D = intSlice(&prop.maxTexture2D[0], 2)
-	p.MaxTexture2Dgather = intSlice(&prop.maxTexture2DGather[0], 2)
-	p.MaxTexture2Dlayered = intSlice(&prop.maxTexture2DLayered[0], 3)
-	p.MaxTexture2Dlinear = intSlice(&prop.maxTexture2DLinear[0], 3)
-	p.MaxTexture2Dmipmap = intSlice(&prop.maxTexture2DMipmap[0], 2)
-	p.MaxTexture3D = intSlice(&prop.maxTexture3D[0], 3)
-	p.MaxTexture3Dalt = intSlice(&prop.maxTexture3DAlt[0], 3)
+	p.MaxTexture1d = int(prop.maxTexture1D)
+	p.MaxTexture1dlayered = intSlice(&prop.maxTexture1DLayered[0], 2)
+	p.MaxTexture1dlinear = int(prop.maxTexture1DLinear)
+	p.MaxTexture1dmipmap = int(prop.maxTexture1DMipmap)
+	p.MaxTexture2d = intSlice(&prop.maxTexture2D[0], 2)
+	p.MaxTexture2dgather = intSlice(&prop.maxTexture2DGather[0], 2)
+	p.MaxTexture2dlayered = intSlice(&prop.maxTexture2DLayered[0], 3)
+	p.MaxTexture2dlinear = intSlice(&prop.maxTexture2DLinear[0], 3)
+	p.MaxTexture2dmipmap = intSlice(&prop.maxTexture2DMipmap[0], 2)
+	p.MaxTexture3d = intSlice(&prop.maxTexture3D[0], 3)
+	p.MaxTexture3dalt = intSlice(&prop.maxTexture3DAlt[0], 3)
 	p.MaxTextureCubemap = int(prop.maxTextureCubemap)
 	p.MaxTextureCubemapLayered = intSlice(&prop.maxTextureCubemapLayered[0], 2)
 	p.MaxThreadsDim = intSlice(&prop.maxThreadsDim[0], 3)
@@ -185,7 +185,7 @@ func (p *CudaDeviceProp) fromC(prop *C.struct_cudaDeviceProp) {
 	p.PciBusId = int(prop.pciBusID)
 	p.PciDeviceId = int(prop.pciDeviceID)
 	p.PciDomainId = int(prop.pciDomainID)
-	p.PersistingL2CacheMaxSize = int(prop.persistingL2CacheMaxSize)
+	p.PersistingL2cacheMaxSize = int(prop.persistingL2CacheMaxSize)
 	p.RegsPerBlock = int(prop.regsPerBlock)
 	p.RegsPerMultiprocessor = int(prop.regsPerMultiprocessor)
 	p.Reserved = intSlice(&prop.reserved[0], 63)

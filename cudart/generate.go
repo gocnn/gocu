@@ -1,5 +1,4 @@
 //go:build ignore
-// +build ignore
 
 package main
 
@@ -7,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"regexp"
 
 	"github.com/gocnn/gocu/internal/codegen"
 )
@@ -25,146 +25,56 @@ func main() {
 	devicePropCfg := codegen.Config{
 		Package:      Package,
 		Filename:     "cuda_device_prop",
-		HeaderDir:    HeaderDir,
-		StructName:   "CudaDeviceProp",
-		TemplatePath: filepath.Join("..", "internal", "tmpl", "cuda_device_prop.go.tmpl"),
 		Versions:     Versions,
+		HeaderDir:    HeaderDir,
+		HeaderFile:   "driver_types.h",
+		Include:      "cuda_runtime.h",
+		StructName:   "CudaDeviceProp",
+		CGoType:      "struct_cudaDeviceProp",
+		StartString:  "struct __device_builtin__ cudaDeviceProp",
+		TemplatePath: filepath.Join("..", "internal", "tmpl", "cuda_device_prop.go.tmpl"),
+		IsEnum:       false,
+		FieldRegex:   regexp.MustCompile(`^\s*([\w\s*]+)\s+([\w]+)(\[[\d\w]*\])?\s*;\s*(?:/\*\*?\s*(.*?)\s*\*/)?$`),
 	}
-	checkErrorCfg := codegen.Config{
+	errorCfg := codegen.Config{
 		Package:      Package,
 		Filename:     "cuda_error",
-		HeaderDir:    HeaderDir,
-		StructName:   "CudaError",
-		TemplatePath: filepath.Join("..", "internal", "tmpl", "cuda_enum.go.tmpl"),
 		Versions:     Versions,
+		HeaderDir:    HeaderDir,
+		HeaderFile:   "driver_types.h",
+		Include:      "cuda_runtime.h",
+		StructName:   "CudaError",
+		CGoType:      "",
+		StartString:  "enum __device_builtin__ cudaError",
+		TemplatePath: filepath.Join("..", "internal", "tmpl", "cuda_enum.go.tmpl"),
+		IsEnum:       true,
+		FieldRegex:   regexp.MustCompile(`^\s*(\w+)\s*=\s*(0x[0-9a-fA-F]+|\d+),?\s*(?:/\*\*?\s*(.*?)\s*\*/)?$`),
 	}
 	deviceAttrCfg := codegen.Config{
 		Package:      Package,
 		Filename:     "cuda_device_attr",
-		HeaderDir:    HeaderDir,
-		StructName:   "CudaDeviceAttr",
-		TemplatePath: filepath.Join("..", "internal", "tmpl", "cuda_enum.go.tmpl"),
 		Versions:     Versions,
+		HeaderDir:    HeaderDir,
+		HeaderFile:   "driver_types.h",
+		Include:      "cuda_runtime.h",
+		StructName:   "CudaDeviceAttr",
+		CGoType:      "",
+		StartString:  "enum __device_builtin__ cudaDeviceAttr",
+		TemplatePath: filepath.Join("..", "internal", "tmpl", "cuda_enum.go.tmpl"),
+		IsEnum:       true,
+		FieldRegex:   regexp.MustCompile(`^\s*(\w+)\s*=\s*(0x[0-9a-fA-F]+|\d+),?\s*(?:/\*\*?\s*(.*?)\s*\*/)?$`),
 	}
 
-	if err := generateDeviceProp(devicePropCfg); err != nil {
+	if err := codegen.Generate(devicePropCfg); err != nil {
+		fmt.Fprintf(os.Stderr, "DeviceProp: %v\n", err)
+		os.Exit(1)
+	}
+	if err := codegen.Generate(errorCfg); err != nil {
 		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		os.Exit(1)
 	}
-	if err := generateCheckError(checkErrorCfg); err != nil {
-		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+	if err := codegen.Generate(deviceAttrCfg); err != nil {
+		fmt.Fprintf(os.Stderr, "DeviceAttr: %v\n", err)
 		os.Exit(1)
 	}
-	if err := generateDeviceAttr(deviceAttrCfg); err != nil {
-		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-		os.Exit(1)
-	}
-}
-
-func generateDeviceProp(cfg codegen.Config) error {
-	// Parse fields for all CUDA versions.
-	versionFields, err := codegen.ParseAllVersions(cfg.HeaderDir, cfg.Versions, "cudaDeviceProp", nil, false)
-	if err != nil {
-		return fmt.Errorf("parsing versions: %w", err)
-	}
-
-	// Generate default file with common fields.
-	commonFields := codegen.FindCommonFields(versionFields)
-	if err := codegen.GenerateFile(cfg.Filename+".go", codegen.StructDef{
-		Package:  cfg.Package,
-		BuildTag: codegen.BuildDefaultTag(cfg.Versions),
-		Fields:   commonFields,
-	}, cfg, false); err != nil {
-		return fmt.Errorf("generating default file: %w", err)
-	}
-
-	// Generate version-specific files.
-	for _, ver := range cfg.Versions {
-		if err := codegen.GenerateFile(
-			fmt.Sprintf("%s_%s.go", cfg.Filename, ver.BuildTag),
-			codegen.StructDef{
-				Package:  cfg.Package,
-				BuildTag: ver.BuildTag,
-				Fields:   versionFields[ver.Version],
-			},
-			cfg,
-			false,
-		); err != nil {
-			return fmt.Errorf("generating file for %s: %w", ver.Version, err)
-		}
-	}
-
-	return nil
-}
-
-func generateCheckError(cfg codegen.Config) error {
-	// Parse enum values for all CUDA versions.
-	versionFields, err := codegen.ParseAllVersions(cfg.HeaderDir, cfg.Versions, "cudaError", nil, true)
-	if err != nil {
-		return fmt.Errorf("parsing versions: %w", err)
-	}
-
-	// Generate default file with common enum values.
-	commonFields := codegen.FindCommonFields(versionFields)
-	if err := codegen.GenerateFile(cfg.Filename+".go", codegen.StructDef{
-		Package:  cfg.Package,
-		BuildTag: codegen.BuildDefaultTag(cfg.Versions),
-		Fields:   commonFields,
-	}, cfg, true); err != nil {
-		return fmt.Errorf("generating default file: %w", err)
-	}
-
-	// Generate version-specific files.
-	for _, ver := range cfg.Versions {
-		if err := codegen.GenerateFile(
-			fmt.Sprintf("%s_%s.go", cfg.Filename, ver.BuildTag),
-			codegen.StructDef{
-				Package:  cfg.Package,
-				BuildTag: ver.BuildTag,
-				Fields:   versionFields[ver.Version],
-			},
-			cfg,
-			true,
-		); err != nil {
-			return fmt.Errorf("generating file for %s: %w", ver.Version, err)
-		}
-	}
-
-	return nil
-}
-
-func generateDeviceAttr(cfg codegen.Config) error {
-	// Parse enum values for all CUDA versions.
-	versionFields, err := codegen.ParseAllVersions(cfg.HeaderDir, cfg.Versions, "cudaDeviceAttr", nil, true)
-	if err != nil {
-		return fmt.Errorf("parsing versions: %w", err)
-	}
-
-	// Generate default file with common enum values.
-	commonFields := codegen.FindCommonFields(versionFields)
-	if err := codegen.GenerateFile(cfg.Filename+".go", codegen.StructDef{
-		Package:  cfg.Package,
-		BuildTag: codegen.BuildDefaultTag(cfg.Versions),
-		Fields:   commonFields,
-	}, cfg, true); err != nil {
-		return fmt.Errorf("generating default file: %w", err)
-	}
-
-	// Generate version-specific files.
-	for _, ver := range cfg.Versions {
-		if err := codegen.GenerateFile(
-			fmt.Sprintf("%s_%s.go", cfg.Filename, ver.BuildTag),
-			codegen.StructDef{
-				Package:  cfg.Package,
-				BuildTag: ver.BuildTag,
-				Fields:   versionFields[ver.Version],
-			},
-			cfg,
-			true,
-		); err != nil {
-			return fmt.Errorf("generating file for %s: %w", ver.Version, err)
-		}
-	}
-
-	return nil
 }

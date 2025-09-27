@@ -11,117 +11,117 @@ import "C"
 
 // Constants for CudaDeviceAttr.
 const (
-	CudaDevAttrAsyncEngineCount                       CudaDeviceAttr = C.cudaDevAttrAsyncEngineCount
-	CudaDevAttrCanFlushRemoteWrites                   CudaDeviceAttr = C.cudaDevAttrCanFlushRemoteWrites
-	CudaDevAttrCanMapHostMemory                       CudaDeviceAttr = C.cudaDevAttrCanMapHostMemory
-	CudaDevAttrCanUseHostPointerForRegisteredMem      CudaDeviceAttr = C.cudaDevAttrCanUseHostPointerForRegisteredMem
-	CudaDevAttrClockRate                              CudaDeviceAttr = C.cudaDevAttrClockRate
-	CudaDevAttrClusterLaunch                          CudaDeviceAttr = C.cudaDevAttrClusterLaunch
-	CudaDevAttrComputeCapabilityMajor                 CudaDeviceAttr = C.cudaDevAttrComputeCapabilityMajor
-	CudaDevAttrComputeCapabilityMinor                 CudaDeviceAttr = C.cudaDevAttrComputeCapabilityMinor
-	CudaDevAttrComputeMode                            CudaDeviceAttr = C.cudaDevAttrComputeMode
-	CudaDevAttrComputePreemptionSupported             CudaDeviceAttr = C.cudaDevAttrComputePreemptionSupported
-	CudaDevAttrConcurrentKernels                      CudaDeviceAttr = C.cudaDevAttrConcurrentKernels
-	CudaDevAttrConcurrentManagedAccess                CudaDeviceAttr = C.cudaDevAttrConcurrentManagedAccess
-	CudaDevAttrCooperativeLaunch                      CudaDeviceAttr = C.cudaDevAttrCooperativeLaunch
-	CudaDevAttrD3D12CigSupported                      CudaDeviceAttr = C.cudaDevAttrD3D12CigSupported
-	CudaDevAttrDeferredMappingCudaArraySupported      CudaDeviceAttr = C.cudaDevAttrDeferredMappingCudaArraySupported
-	CudaDevAttrDirectManagedMemAccessFromHost         CudaDeviceAttr = C.cudaDevAttrDirectManagedMemAccessFromHost
-	CudaDevAttrEccEnabled                             CudaDeviceAttr = C.cudaDevAttrEccEnabled
-	CudaDevAttrGpudirectRdmaflushWritesOptions        CudaDeviceAttr = C.cudaDevAttrGPUDirectRDMAFlushWritesOptions
-	CudaDevAttrGpudirectRdmasupported                 CudaDeviceAttr = C.cudaDevAttrGPUDirectRDMASupported
-	CudaDevAttrGpudirectRdmawritesOrdering            CudaDeviceAttr = C.cudaDevAttrGPUDirectRDMAWritesOrdering
-	CudaDevAttrGlobalL1CacheSupported                 CudaDeviceAttr = C.cudaDevAttrGlobalL1CacheSupported
-	CudaDevAttrGlobalMemoryBusWidth                   CudaDeviceAttr = C.cudaDevAttrGlobalMemoryBusWidth
-	CudaDevAttrGpuOverlap                             CudaDeviceAttr = C.cudaDevAttrGpuOverlap
-	CudaDevAttrGpuPciDeviceId                         CudaDeviceAttr = C.cudaDevAttrGpuPciDeviceId
-	CudaDevAttrGpuPciSubsystemId                      CudaDeviceAttr = C.cudaDevAttrGpuPciSubsystemId
-	CudaDevAttrHostMemoryPoolsSupported               CudaDeviceAttr = C.cudaDevAttrHostMemoryPoolsSupported
-	CudaDevAttrHostNativeAtomicSupported              CudaDeviceAttr = C.cudaDevAttrHostNativeAtomicSupported
-	CudaDevAttrHostNumaId                             CudaDeviceAttr = C.cudaDevAttrHostNumaId
-	CudaDevAttrHostNumaMemoryPoolsSupported           CudaDeviceAttr = C.cudaDevAttrHostNumaMemoryPoolsSupported
-	CudaDevAttrHostNumaMultinodeIpcSupported          CudaDeviceAttr = C.cudaDevAttrHostNumaMultinodeIpcSupported
-	CudaDevAttrHostRegisterReadOnlySupported          CudaDeviceAttr = C.cudaDevAttrHostRegisterReadOnlySupported
-	CudaDevAttrHostRegisterSupported                  CudaDeviceAttr = C.cudaDevAttrHostRegisterSupported
-	CudaDevAttrIntegrated                             CudaDeviceAttr = C.cudaDevAttrIntegrated
-	CudaDevAttrIpcEventSupport                        CudaDeviceAttr = C.cudaDevAttrIpcEventSupport
-	CudaDevAttrIsMultiGpuBoard                        CudaDeviceAttr = C.cudaDevAttrIsMultiGpuBoard
-	CudaDevAttrKernelExecTimeout                      CudaDeviceAttr = C.cudaDevAttrKernelExecTimeout
-	CudaDevAttrL2CacheSize                            CudaDeviceAttr = C.cudaDevAttrL2CacheSize
-	CudaDevAttrLocalL1CacheSupported                  CudaDeviceAttr = C.cudaDevAttrLocalL1CacheSupported
-	CudaDevAttrManagedMemory                          CudaDeviceAttr = C.cudaDevAttrManagedMemory
-	CudaDevAttrMaxAccessPolicyWindowSize              CudaDeviceAttr = C.cudaDevAttrMaxAccessPolicyWindowSize
-	CudaDevAttrMaxBlockDimX                           CudaDeviceAttr = C.cudaDevAttrMaxBlockDimX
-	CudaDevAttrMaxBlockDimY                           CudaDeviceAttr = C.cudaDevAttrMaxBlockDimY
-	CudaDevAttrMaxBlockDimZ                           CudaDeviceAttr = C.cudaDevAttrMaxBlockDimZ
-	CudaDevAttrMaxBlocksPerMultiprocessor             CudaDeviceAttr = C.cudaDevAttrMaxBlocksPerMultiprocessor
-	CudaDevAttrMaxGridDimX                            CudaDeviceAttr = C.cudaDevAttrMaxGridDimX
-	CudaDevAttrMaxGridDimY                            CudaDeviceAttr = C.cudaDevAttrMaxGridDimY
-	CudaDevAttrMaxGridDimZ                            CudaDeviceAttr = C.cudaDevAttrMaxGridDimZ
-	CudaDevAttrMaxPersistingL2CacheSize               CudaDeviceAttr = C.cudaDevAttrMaxPersistingL2CacheSize
-	CudaDevAttrMaxPitch                               CudaDeviceAttr = C.cudaDevAttrMaxPitch
-	CudaDevAttrMaxRegistersPerBlock                   CudaDeviceAttr = C.cudaDevAttrMaxRegistersPerBlock
-	CudaDevAttrMaxRegistersPerMultiprocessor          CudaDeviceAttr = C.cudaDevAttrMaxRegistersPerMultiprocessor
-	CudaDevAttrMaxSharedMemoryPerBlock                CudaDeviceAttr = C.cudaDevAttrMaxSharedMemoryPerBlock
-	CudaDevAttrMaxSharedMemoryPerBlockOptin           CudaDeviceAttr = C.cudaDevAttrMaxSharedMemoryPerBlockOptin
-	CudaDevAttrMaxSharedMemoryPerMultiprocessor       CudaDeviceAttr = C.cudaDevAttrMaxSharedMemoryPerMultiprocessor
-	CudaDevAttrMaxSurface1DlayeredLayers              CudaDeviceAttr = C.cudaDevAttrMaxSurface1DLayeredLayers
-	CudaDevAttrMaxSurface1DlayeredWidth               CudaDeviceAttr = C.cudaDevAttrMaxSurface1DLayeredWidth
-	CudaDevAttrMaxSurface1Dwidth                      CudaDeviceAttr = C.cudaDevAttrMaxSurface1DWidth
-	CudaDevAttrMaxSurface2Dheight                     CudaDeviceAttr = C.cudaDevAttrMaxSurface2DHeight
-	CudaDevAttrMaxSurface2DlayeredHeight              CudaDeviceAttr = C.cudaDevAttrMaxSurface2DLayeredHeight
-	CudaDevAttrMaxSurface2DlayeredLayers              CudaDeviceAttr = C.cudaDevAttrMaxSurface2DLayeredLayers
-	CudaDevAttrMaxSurface2DlayeredWidth               CudaDeviceAttr = C.cudaDevAttrMaxSurface2DLayeredWidth
-	CudaDevAttrMaxSurface2Dwidth                      CudaDeviceAttr = C.cudaDevAttrMaxSurface2DWidth
-	CudaDevAttrMaxSurface3Ddepth                      CudaDeviceAttr = C.cudaDevAttrMaxSurface3DDepth
-	CudaDevAttrMaxSurface3Dheight                     CudaDeviceAttr = C.cudaDevAttrMaxSurface3DHeight
-	CudaDevAttrMaxSurface3Dwidth                      CudaDeviceAttr = C.cudaDevAttrMaxSurface3DWidth
-	CudaDevAttrMaxSurfaceCubemapLayeredLayers         CudaDeviceAttr = C.cudaDevAttrMaxSurfaceCubemapLayeredLayers
-	CudaDevAttrMaxSurfaceCubemapLayeredWidth          CudaDeviceAttr = C.cudaDevAttrMaxSurfaceCubemapLayeredWidth
-	CudaDevAttrMaxSurfaceCubemapWidth                 CudaDeviceAttr = C.cudaDevAttrMaxSurfaceCubemapWidth
-	CudaDevAttrMaxTexture1DlayeredLayers              CudaDeviceAttr = C.cudaDevAttrMaxTexture1DLayeredLayers
-	CudaDevAttrMaxTexture1DlayeredWidth               CudaDeviceAttr = C.cudaDevAttrMaxTexture1DLayeredWidth
-	CudaDevAttrMaxTexture1DlinearWidth                CudaDeviceAttr = C.cudaDevAttrMaxTexture1DLinearWidth
-	CudaDevAttrMaxTexture1DmipmappedWidth             CudaDeviceAttr = C.cudaDevAttrMaxTexture1DMipmappedWidth
-	CudaDevAttrMaxTexture1Dwidth                      CudaDeviceAttr = C.cudaDevAttrMaxTexture1DWidth
-	CudaDevAttrMaxTexture2DgatherHeight               CudaDeviceAttr = C.cudaDevAttrMaxTexture2DGatherHeight
-	CudaDevAttrMaxTexture2DgatherWidth                CudaDeviceAttr = C.cudaDevAttrMaxTexture2DGatherWidth
-	CudaDevAttrMaxTexture2Dheight                     CudaDeviceAttr = C.cudaDevAttrMaxTexture2DHeight
-	CudaDevAttrMaxTexture2DlayeredHeight              CudaDeviceAttr = C.cudaDevAttrMaxTexture2DLayeredHeight
-	CudaDevAttrMaxTexture2DlayeredLayers              CudaDeviceAttr = C.cudaDevAttrMaxTexture2DLayeredLayers
-	CudaDevAttrMaxTexture2DlayeredWidth               CudaDeviceAttr = C.cudaDevAttrMaxTexture2DLayeredWidth
-	CudaDevAttrMaxTexture2DlinearHeight               CudaDeviceAttr = C.cudaDevAttrMaxTexture2DLinearHeight
-	CudaDevAttrMaxTexture2DlinearPitch                CudaDeviceAttr = C.cudaDevAttrMaxTexture2DLinearPitch
-	CudaDevAttrMaxTexture2DlinearWidth                CudaDeviceAttr = C.cudaDevAttrMaxTexture2DLinearWidth
-	CudaDevAttrMaxTexture2DmipmappedHeight            CudaDeviceAttr = C.cudaDevAttrMaxTexture2DMipmappedHeight
-	CudaDevAttrMaxTexture2DmipmappedWidth             CudaDeviceAttr = C.cudaDevAttrMaxTexture2DMipmappedWidth
-	CudaDevAttrMaxTexture2Dwidth                      CudaDeviceAttr = C.cudaDevAttrMaxTexture2DWidth
-	CudaDevAttrMaxTexture3Ddepth                      CudaDeviceAttr = C.cudaDevAttrMaxTexture3DDepth
-	CudaDevAttrMaxTexture3DdepthAlt                   CudaDeviceAttr = C.cudaDevAttrMaxTexture3DDepthAlt
-	CudaDevAttrMaxTexture3Dheight                     CudaDeviceAttr = C.cudaDevAttrMaxTexture3DHeight
-	CudaDevAttrMaxTexture3DheightAlt                  CudaDeviceAttr = C.cudaDevAttrMaxTexture3DHeightAlt
-	CudaDevAttrMaxTexture3Dwidth                      CudaDeviceAttr = C.cudaDevAttrMaxTexture3DWidth
-	CudaDevAttrMaxTexture3DwidthAlt                   CudaDeviceAttr = C.cudaDevAttrMaxTexture3DWidthAlt
-	CudaDevAttrMaxTextureCubemapLayeredLayers         CudaDeviceAttr = C.cudaDevAttrMaxTextureCubemapLayeredLayers
-	CudaDevAttrMaxTextureCubemapLayeredWidth          CudaDeviceAttr = C.cudaDevAttrMaxTextureCubemapLayeredWidth
-	CudaDevAttrMaxTextureCubemapWidth                 CudaDeviceAttr = C.cudaDevAttrMaxTextureCubemapWidth
-	CudaDevAttrMaxThreadsPerBlock                     CudaDeviceAttr = C.cudaDevAttrMaxThreadsPerBlock
-	CudaDevAttrMaxThreadsPerMultiProcessor            CudaDeviceAttr = C.cudaDevAttrMaxThreadsPerMultiProcessor
-	CudaDevAttrMemSyncDomainCount                     CudaDeviceAttr = C.cudaDevAttrMemSyncDomainCount
-	CudaDevAttrMemoryClockRate                        CudaDeviceAttr = C.cudaDevAttrMemoryClockRate
-	CudaDevAttrMemoryPoolSupportedHandleTypes         CudaDeviceAttr = C.cudaDevAttrMemoryPoolSupportedHandleTypes
-	CudaDevAttrMemoryPoolsSupported                   CudaDeviceAttr = C.cudaDevAttrMemoryPoolsSupported
-	CudaDevAttrMpsEnabled                             CudaDeviceAttr = C.cudaDevAttrMpsEnabled
-	CudaDevAttrMultiGpuBoardGroupId                   CudaDeviceAttr = C.cudaDevAttrMultiGpuBoardGroupID
-	CudaDevAttrMultiProcessorCount                    CudaDeviceAttr = C.cudaDevAttrMultiProcessorCount
-	CudaDevAttrNumaConfig                             CudaDeviceAttr = C.cudaDevAttrNumaConfig
-	CudaDevAttrNumaId                                 CudaDeviceAttr = C.cudaDevAttrNumaId
-	CudaDevAttrOnlyPartialHostNativeAtomicSupported   CudaDeviceAttr = C.cudaDevAttrOnlyPartialHostNativeAtomicSupported
-	CudaDevAttrPageableMemoryAccess                   CudaDeviceAttr = C.cudaDevAttrPageableMemoryAccess
-	CudaDevAttrPageableMemoryAccessUsesHostPageTables CudaDeviceAttr = C.cudaDevAttrPageableMemoryAccessUsesHostPageTables
-	CudaDevAttrPciBusId                               CudaDeviceAttr = C.cudaDevAttrPciBusId
-	CudaDevAttrPciDeviceId                            CudaDeviceAttr = C.cudaDevAttrPciDeviceId
-	CudaDevAttrPciDomainId                            CudaDeviceAttr = C.cudaDevAttrPciDomainId
+	CudaDevAttrAsyncEngineCount                       CudaDeviceAttr = C.cudaDevAttrAsyncEngineCount                       // < Number of asynchronous engines
+	CudaDevAttrCanFlushRemoteWrites                   CudaDeviceAttr = C.cudaDevAttrCanFlushRemoteWrites                   // < Device supports flushing of outstanding remote writes.
+	CudaDevAttrCanMapHostMemory                       CudaDeviceAttr = C.cudaDevAttrCanMapHostMemory                       // < Device can map host memory into CUDA address space
+	CudaDevAttrCanUseHostPointerForRegisteredMem      CudaDeviceAttr = C.cudaDevAttrCanUseHostPointerForRegisteredMem      // < Device can access host registered memory at the same virtual address as the CPU
+	CudaDevAttrClockRate                              CudaDeviceAttr = C.cudaDevAttrClockRate                              // < Peak clock frequency in kilohertz
+	CudaDevAttrClusterLaunch                          CudaDeviceAttr = C.cudaDevAttrClusterLaunch                          // < Indicates device supports cluster launch
+	CudaDevAttrComputeCapabilityMajor                 CudaDeviceAttr = C.cudaDevAttrComputeCapabilityMajor                 // < Major compute capability version number
+	CudaDevAttrComputeCapabilityMinor                 CudaDeviceAttr = C.cudaDevAttrComputeCapabilityMinor                 // < Minor compute capability version number
+	CudaDevAttrComputeMode                            CudaDeviceAttr = C.cudaDevAttrComputeMode                            // < Compute mode (See ::cudaComputeMode for details)
+	CudaDevAttrComputePreemptionSupported             CudaDeviceAttr = C.cudaDevAttrComputePreemptionSupported             // < Device supports Compute Preemption
+	CudaDevAttrConcurrentKernels                      CudaDeviceAttr = C.cudaDevAttrConcurrentKernels                      // < Device can possibly execute multiple kernels concurrently
+	CudaDevAttrConcurrentManagedAccess                CudaDeviceAttr = C.cudaDevAttrConcurrentManagedAccess                // < Device can coherently access managed memory concurrently with the CPU
+	CudaDevAttrCooperativeLaunch                      CudaDeviceAttr = C.cudaDevAttrCooperativeLaunch                      // < Device supports launching cooperative kernels via ::cudaLaunchCooperativeKernel
+	CudaDevAttrD3d12cigSupported                      CudaDeviceAttr = C.cudaDevAttrD3D12CigSupported                      // < Device supports CIG with D3D12.
+	CudaDevAttrDeferredMappingCudaArraySupported      CudaDeviceAttr = C.cudaDevAttrDeferredMappingCudaArraySupported      // < Device supports deferred mapping CUDA arrays and CUDA mipmapped arrays
+	CudaDevAttrDirectManagedMemAccessFromHost         CudaDeviceAttr = C.cudaDevAttrDirectManagedMemAccessFromHost         // < Host can directly access managed memory on the device without migration.
+	CudaDevAttrEccEnabled                             CudaDeviceAttr = C.cudaDevAttrEccEnabled                             // < Device has ECC support enabled
+	CudaDevAttrGpudirectRdmaflushWritesOptions        CudaDeviceAttr = C.cudaDevAttrGPUDirectRDMAFlushWritesOptions        // < The returned attribute shall be interpreted as a bitmask, where the individual bits are listed in the ::cudaFlushGPUDirectRDMAWritesOptions enum
+	CudaDevAttrGpudirectRdmasupported                 CudaDeviceAttr = C.cudaDevAttrGPUDirectRDMASupported                 // < Device supports GPUDirect RDMA APIs, like nvidia_p2p_get_pages (see https://docs.nvidia.com/cuda/gpudirect-rdma for more information)
+	CudaDevAttrGpudirectRdmawritesOrdering            CudaDeviceAttr = C.cudaDevAttrGPUDirectRDMAWritesOrdering            // < GPUDirect RDMA writes to the device do not need to be flushed for consumers within the scope indicated by the returned attribute. See ::cudaGPUDirectRDMAWritesOrdering for the numerical values returned here.
+	CudaDevAttrGlobalL1cacheSupported                 CudaDeviceAttr = C.cudaDevAttrGlobalL1CacheSupported                 // < Device supports caching globals in L1
+	CudaDevAttrGlobalMemoryBusWidth                   CudaDeviceAttr = C.cudaDevAttrGlobalMemoryBusWidth                   // < Global memory bus width in bits
+	CudaDevAttrGpuOverlap                             CudaDeviceAttr = C.cudaDevAttrGpuOverlap                             // < Device can possibly copy memory and execute a kernel concurrently
+	CudaDevAttrGpuPciDeviceId                         CudaDeviceAttr = C.cudaDevAttrGpuPciDeviceId                         // < The combined 16-bit PCI device ID and 16-bit PCI vendor ID.
+	CudaDevAttrGpuPciSubsystemId                      CudaDeviceAttr = C.cudaDevAttrGpuPciSubsystemId                      // < The combined 16-bit PCI subsystem ID and 16-bit PCI subsystem vendor ID.
+	CudaDevAttrHostMemoryPoolsSupported               CudaDeviceAttr = C.cudaDevAttrHostMemoryPoolsSupported               // < Device suports HOST location with the ::cuMemAllocAsync and ::cuMemPool family of APIs
+	CudaDevAttrHostNativeAtomicSupported              CudaDeviceAttr = C.cudaDevAttrHostNativeAtomicSupported              // < Link between the device and the host supports native atomic operations
+	CudaDevAttrHostNumaId                             CudaDeviceAttr = C.cudaDevAttrHostNumaId                             // < NUMA ID of the host node closest to the device or -1 when system does not support NUMA
+	CudaDevAttrHostNumaMemoryPoolsSupported           CudaDeviceAttr = C.cudaDevAttrHostNumaMemoryPoolsSupported           // < Device supports HOST_NUMA location with the ::cudaMallocAsync and ::cudaMemPool family of APIs
+	CudaDevAttrHostNumaMultinodeIpcSupported          CudaDeviceAttr = C.cudaDevAttrHostNumaMultinodeIpcSupported          // < Device supports HostNuma location IPC between nodes in a multi-node system.
+	CudaDevAttrHostRegisterReadOnlySupported          CudaDeviceAttr = C.cudaDevAttrHostRegisterReadOnlySupported          // < Device supports using the ::cudaHostRegister flag cudaHostRegisterReadOnly to register memory that must be mapped as read-only to the GPU
+	CudaDevAttrHostRegisterSupported                  CudaDeviceAttr = C.cudaDevAttrHostRegisterSupported                  // < Device supports host memory registration via ::cudaHostRegister.
+	CudaDevAttrIntegrated                             CudaDeviceAttr = C.cudaDevAttrIntegrated                             // < Device is integrated with host memory
+	CudaDevAttrIpcEventSupport                        CudaDeviceAttr = C.cudaDevAttrIpcEventSupport                        // < Device supports IPC Events.
+	CudaDevAttrIsMultiGpuBoard                        CudaDeviceAttr = C.cudaDevAttrIsMultiGpuBoard                        // < Device is on a multi-GPU board
+	CudaDevAttrKernelExecTimeout                      CudaDeviceAttr = C.cudaDevAttrKernelExecTimeout                      // < Specifies whether there is a run time limit on kernels
+	CudaDevAttrL2cacheSize                            CudaDeviceAttr = C.cudaDevAttrL2CacheSize                            // < Size of L2 cache in bytes
+	CudaDevAttrLocalL1cacheSupported                  CudaDeviceAttr = C.cudaDevAttrLocalL1CacheSupported                  // < Device supports caching locals in L1
+	CudaDevAttrManagedMemory                          CudaDeviceAttr = C.cudaDevAttrManagedMemory                          // < Device can allocate managed memory on this system
+	CudaDevAttrMaxAccessPolicyWindowSize              CudaDeviceAttr = C.cudaDevAttrMaxAccessPolicyWindowSize              // < Maximum value of cudaAccessPolicyWindow::num_bytes.
+	CudaDevAttrMaxBlockDimX                           CudaDeviceAttr = C.cudaDevAttrMaxBlockDimX                           // < Maximum block dimension X
+	CudaDevAttrMaxBlockDimY                           CudaDeviceAttr = C.cudaDevAttrMaxBlockDimY                           // < Maximum block dimension Y
+	CudaDevAttrMaxBlockDimZ                           CudaDeviceAttr = C.cudaDevAttrMaxBlockDimZ                           // < Maximum block dimension Z
+	CudaDevAttrMaxBlocksPerMultiprocessor             CudaDeviceAttr = C.cudaDevAttrMaxBlocksPerMultiprocessor             // < Maximum number of blocks per multiprocessor
+	CudaDevAttrMaxGridDimX                            CudaDeviceAttr = C.cudaDevAttrMaxGridDimX                            // < Maximum grid dimension X
+	CudaDevAttrMaxGridDimY                            CudaDeviceAttr = C.cudaDevAttrMaxGridDimY                            // < Maximum grid dimension Y
+	CudaDevAttrMaxGridDimZ                            CudaDeviceAttr = C.cudaDevAttrMaxGridDimZ                            // < Maximum grid dimension Z
+	CudaDevAttrMaxPersistingL2cacheSize               CudaDeviceAttr = C.cudaDevAttrMaxPersistingL2CacheSize               // < Maximum L2 persisting lines capacity setting in bytes.
+	CudaDevAttrMaxPitch                               CudaDeviceAttr = C.cudaDevAttrMaxPitch                               // < Maximum pitch in bytes allowed by memory copies
+	CudaDevAttrMaxRegistersPerBlock                   CudaDeviceAttr = C.cudaDevAttrMaxRegistersPerBlock                   // < Maximum number of 32-bit registers available per block
+	CudaDevAttrMaxRegistersPerMultiprocessor          CudaDeviceAttr = C.cudaDevAttrMaxRegistersPerMultiprocessor          // < Maximum number of 32-bit registers available per multiprocessor
+	CudaDevAttrMaxSharedMemoryPerBlock                CudaDeviceAttr = C.cudaDevAttrMaxSharedMemoryPerBlock                // < Maximum shared memory available per block in bytes
+	CudaDevAttrMaxSharedMemoryPerBlockOptin           CudaDeviceAttr = C.cudaDevAttrMaxSharedMemoryPerBlockOptin           // < The maximum optin shared memory per block. This value may vary by chip. See ::cudaFuncSetAttribute
+	CudaDevAttrMaxSharedMemoryPerMultiprocessor       CudaDeviceAttr = C.cudaDevAttrMaxSharedMemoryPerMultiprocessor       // < Maximum shared memory available per multiprocessor in bytes
+	CudaDevAttrMaxSurface1dlayeredLayers              CudaDeviceAttr = C.cudaDevAttrMaxSurface1DLayeredLayers              // < Maximum layers in a 1D layered surface
+	CudaDevAttrMaxSurface1dlayeredWidth               CudaDeviceAttr = C.cudaDevAttrMaxSurface1DLayeredWidth               // < Maximum 1D layered surface width
+	CudaDevAttrMaxSurface1dwidth                      CudaDeviceAttr = C.cudaDevAttrMaxSurface1DWidth                      // < Maximum 1D surface width
+	CudaDevAttrMaxSurface2dheight                     CudaDeviceAttr = C.cudaDevAttrMaxSurface2DHeight                     // < Maximum 2D surface height
+	CudaDevAttrMaxSurface2dlayeredHeight              CudaDeviceAttr = C.cudaDevAttrMaxSurface2DLayeredHeight              // < Maximum 2D layered surface height
+	CudaDevAttrMaxSurface2dlayeredLayers              CudaDeviceAttr = C.cudaDevAttrMaxSurface2DLayeredLayers              // < Maximum layers in a 2D layered surface
+	CudaDevAttrMaxSurface2dlayeredWidth               CudaDeviceAttr = C.cudaDevAttrMaxSurface2DLayeredWidth               // < Maximum 2D layered surface width
+	CudaDevAttrMaxSurface2dwidth                      CudaDeviceAttr = C.cudaDevAttrMaxSurface2DWidth                      // < Maximum 2D surface width
+	CudaDevAttrMaxSurface3ddepth                      CudaDeviceAttr = C.cudaDevAttrMaxSurface3DDepth                      // < Maximum 3D surface depth
+	CudaDevAttrMaxSurface3dheight                     CudaDeviceAttr = C.cudaDevAttrMaxSurface3DHeight                     // < Maximum 3D surface height
+	CudaDevAttrMaxSurface3dwidth                      CudaDeviceAttr = C.cudaDevAttrMaxSurface3DWidth                      // < Maximum 3D surface width
+	CudaDevAttrMaxSurfaceCubemapLayeredLayers         CudaDeviceAttr = C.cudaDevAttrMaxSurfaceCubemapLayeredLayers         // < Maximum layers in a cubemap layered surface
+	CudaDevAttrMaxSurfaceCubemapLayeredWidth          CudaDeviceAttr = C.cudaDevAttrMaxSurfaceCubemapLayeredWidth          // < Maximum cubemap layered surface width
+	CudaDevAttrMaxSurfaceCubemapWidth                 CudaDeviceAttr = C.cudaDevAttrMaxSurfaceCubemapWidth                 // < Maximum cubemap surface width
+	CudaDevAttrMaxTexture1dlayeredLayers              CudaDeviceAttr = C.cudaDevAttrMaxTexture1DLayeredLayers              // < Maximum layers in a 1D layered texture
+	CudaDevAttrMaxTexture1dlayeredWidth               CudaDeviceAttr = C.cudaDevAttrMaxTexture1DLayeredWidth               // < Maximum 1D layered texture width
+	CudaDevAttrMaxTexture1dlinearWidth                CudaDeviceAttr = C.cudaDevAttrMaxTexture1DLinearWidth                // < Maximum 1D linear texture width
+	CudaDevAttrMaxTexture1dmipmappedWidth             CudaDeviceAttr = C.cudaDevAttrMaxTexture1DMipmappedWidth             // < Maximum mipmapped 1D texture width
+	CudaDevAttrMaxTexture1dwidth                      CudaDeviceAttr = C.cudaDevAttrMaxTexture1DWidth                      // < Maximum 1D texture width
+	CudaDevAttrMaxTexture2dgatherHeight               CudaDeviceAttr = C.cudaDevAttrMaxTexture2DGatherHeight               // < Maximum 2D texture height if cudaArrayTextureGather is set
+	CudaDevAttrMaxTexture2dgatherWidth                CudaDeviceAttr = C.cudaDevAttrMaxTexture2DGatherWidth                // < Maximum 2D texture width if cudaArrayTextureGather is set
+	CudaDevAttrMaxTexture2dheight                     CudaDeviceAttr = C.cudaDevAttrMaxTexture2DHeight                     // < Maximum 2D texture height
+	CudaDevAttrMaxTexture2dlayeredHeight              CudaDeviceAttr = C.cudaDevAttrMaxTexture2DLayeredHeight              // < Maximum 2D layered texture height
+	CudaDevAttrMaxTexture2dlayeredLayers              CudaDeviceAttr = C.cudaDevAttrMaxTexture2DLayeredLayers              // < Maximum layers in a 2D layered texture
+	CudaDevAttrMaxTexture2dlayeredWidth               CudaDeviceAttr = C.cudaDevAttrMaxTexture2DLayeredWidth               // < Maximum 2D layered texture width
+	CudaDevAttrMaxTexture2dlinearHeight               CudaDeviceAttr = C.cudaDevAttrMaxTexture2DLinearHeight               // < Maximum 2D linear texture height
+	CudaDevAttrMaxTexture2dlinearPitch                CudaDeviceAttr = C.cudaDevAttrMaxTexture2DLinearPitch                // < Maximum 2D linear texture pitch in bytes
+	CudaDevAttrMaxTexture2dlinearWidth                CudaDeviceAttr = C.cudaDevAttrMaxTexture2DLinearWidth                // < Maximum 2D linear texture width
+	CudaDevAttrMaxTexture2dmipmappedHeight            CudaDeviceAttr = C.cudaDevAttrMaxTexture2DMipmappedHeight            // < Maximum mipmapped 2D texture height
+	CudaDevAttrMaxTexture2dmipmappedWidth             CudaDeviceAttr = C.cudaDevAttrMaxTexture2DMipmappedWidth             // < Maximum mipmapped 2D texture width
+	CudaDevAttrMaxTexture2dwidth                      CudaDeviceAttr = C.cudaDevAttrMaxTexture2DWidth                      // < Maximum 2D texture width
+	CudaDevAttrMaxTexture3ddepth                      CudaDeviceAttr = C.cudaDevAttrMaxTexture3DDepth                      // < Maximum 3D texture depth
+	CudaDevAttrMaxTexture3ddepthAlt                   CudaDeviceAttr = C.cudaDevAttrMaxTexture3DDepthAlt                   // < Alternate maximum 3D texture depth
+	CudaDevAttrMaxTexture3dheight                     CudaDeviceAttr = C.cudaDevAttrMaxTexture3DHeight                     // < Maximum 3D texture height
+	CudaDevAttrMaxTexture3dheightAlt                  CudaDeviceAttr = C.cudaDevAttrMaxTexture3DHeightAlt                  // < Alternate maximum 3D texture height
+	CudaDevAttrMaxTexture3dwidth                      CudaDeviceAttr = C.cudaDevAttrMaxTexture3DWidth                      // < Maximum 3D texture width
+	CudaDevAttrMaxTexture3dwidthAlt                   CudaDeviceAttr = C.cudaDevAttrMaxTexture3DWidthAlt                   // < Alternate maximum 3D texture width
+	CudaDevAttrMaxTextureCubemapLayeredLayers         CudaDeviceAttr = C.cudaDevAttrMaxTextureCubemapLayeredLayers         // < Maximum layers in a cubemap layered texture
+	CudaDevAttrMaxTextureCubemapLayeredWidth          CudaDeviceAttr = C.cudaDevAttrMaxTextureCubemapLayeredWidth          // < Maximum cubemap layered texture width/height
+	CudaDevAttrMaxTextureCubemapWidth                 CudaDeviceAttr = C.cudaDevAttrMaxTextureCubemapWidth                 // < Maximum cubemap texture width/height
+	CudaDevAttrMaxThreadsPerBlock                     CudaDeviceAttr = C.cudaDevAttrMaxThreadsPerBlock                     // < Maximum number of threads per block
+	CudaDevAttrMaxThreadsPerMultiProcessor            CudaDeviceAttr = C.cudaDevAttrMaxThreadsPerMultiProcessor            // < Maximum resident threads per multiprocessor
+	CudaDevAttrMemSyncDomainCount                     CudaDeviceAttr = C.cudaDevAttrMemSyncDomainCount                     // < Number of memory synchronization domains the device supports.
+	CudaDevAttrMemoryClockRate                        CudaDeviceAttr = C.cudaDevAttrMemoryClockRate                        // < Peak memory clock frequency in kilohertz
+	CudaDevAttrMemoryPoolSupportedHandleTypes         CudaDeviceAttr = C.cudaDevAttrMemoryPoolSupportedHandleTypes         // < Handle types supported with mempool based IPC
+	CudaDevAttrMemoryPoolsSupported                   CudaDeviceAttr = C.cudaDevAttrMemoryPoolsSupported                   // < Device supports using the ::cudaMallocAsync and ::cudaMemPool family of APIs
+	CudaDevAttrMpsEnabled                             CudaDeviceAttr = C.cudaDevAttrMpsEnabled                             // < Contexts created on this device will be shared via MPS
+	CudaDevAttrMultiGpuBoardGroupId                   CudaDeviceAttr = C.cudaDevAttrMultiGpuBoardGroupID                   // < Unique identifier for a group of devices on the same multi-GPU board
+	CudaDevAttrMultiProcessorCount                    CudaDeviceAttr = C.cudaDevAttrMultiProcessorCount                    // < Number of multiprocessors on device
+	CudaDevAttrNumaConfig                             CudaDeviceAttr = C.cudaDevAttrNumaConfig                             // < NUMA configuration of a device: value is of type ::cudaDeviceNumaConfig enum
+	CudaDevAttrNumaId                                 CudaDeviceAttr = C.cudaDevAttrNumaId                                 // < NUMA node ID of the GPU memory
+	CudaDevAttrOnlyPartialHostNativeAtomicSupported   CudaDeviceAttr = C.cudaDevAttrOnlyPartialHostNativeAtomicSupported   // < Link between the device and the host supports only some native atomic operations
+	CudaDevAttrPageableMemoryAccess                   CudaDeviceAttr = C.cudaDevAttrPageableMemoryAccess                   // < Device supports coherently accessing pageable memory without calling cudaHostRegister on it
+	CudaDevAttrPageableMemoryAccessUsesHostPageTables CudaDeviceAttr = C.cudaDevAttrPageableMemoryAccessUsesHostPageTables // < Device accesses pageable memory via the host's page tables.
+	CudaDevAttrPciBusId                               CudaDeviceAttr = C.cudaDevAttrPciBusId                               // < PCI bus ID of the device
+	CudaDevAttrPciDeviceId                            CudaDeviceAttr = C.cudaDevAttrPciDeviceId                            // < PCI device ID of the device
+	CudaDevAttrPciDomainId                            CudaDeviceAttr = C.cudaDevAttrPciDomainId                            // < PCI domain ID of the device
 	CudaDevAttrReserved122                            CudaDeviceAttr = C.cudaDevAttrReserved122
 	CudaDevAttrReserved123                            CudaDeviceAttr = C.cudaDevAttrReserved123
 	CudaDevAttrReserved124                            CudaDeviceAttr = C.cudaDevAttrReserved124
@@ -135,19 +135,19 @@ const (
 	CudaDevAttrReserved93                             CudaDeviceAttr = C.cudaDevAttrReserved93
 	CudaDevAttrReserved94                             CudaDeviceAttr = C.cudaDevAttrReserved94
 	CudaDevAttrReserved96                             CudaDeviceAttr = C.cudaDevAttrReserved96
-	CudaDevAttrReservedSharedMemoryPerBlock           CudaDeviceAttr = C.cudaDevAttrReservedSharedMemoryPerBlock
-	CudaDevAttrSingleToDoublePrecisionPerfRatio       CudaDeviceAttr = C.cudaDevAttrSingleToDoublePrecisionPerfRatio
-	CudaDevAttrSparseCudaArraySupported               CudaDeviceAttr = C.cudaDevAttrSparseCudaArraySupported
-	CudaDevAttrStreamPrioritiesSupported              CudaDeviceAttr = C.cudaDevAttrStreamPrioritiesSupported
-	CudaDevAttrSurfaceAlignment                       CudaDeviceAttr = C.cudaDevAttrSurfaceAlignment
-	CudaDevAttrTccDriver                              CudaDeviceAttr = C.cudaDevAttrTccDriver
-	CudaDevAttrTextureAlignment                       CudaDeviceAttr = C.cudaDevAttrTextureAlignment
-	CudaDevAttrTexturePitchAlignment                  CudaDeviceAttr = C.cudaDevAttrTexturePitchAlignment
-	CudaDevAttrTimelineSemaphoreInteropSupported      CudaDeviceAttr = C.cudaDevAttrTimelineSemaphoreInteropSupported
-	CudaDevAttrTotalConstantMemory                    CudaDeviceAttr = C.cudaDevAttrTotalConstantMemory
-	CudaDevAttrUnifiedAddressing                      CudaDeviceAttr = C.cudaDevAttrUnifiedAddressing
-	CudaDevAttrVulkanCigSupported                     CudaDeviceAttr = C.cudaDevAttrVulkanCigSupported
-	CudaDevAttrWarpSize                               CudaDeviceAttr = C.cudaDevAttrWarpSize
+	CudaDevAttrReservedSharedMemoryPerBlock           CudaDeviceAttr = C.cudaDevAttrReservedSharedMemoryPerBlock      // < Shared memory reserved by CUDA driver per block in bytes
+	CudaDevAttrSingleToDoublePrecisionPerfRatio       CudaDeviceAttr = C.cudaDevAttrSingleToDoublePrecisionPerfRatio  // < Ratio of single precision performance (in floating-point operations per second) to double precision performance
+	CudaDevAttrSparseCudaArraySupported               CudaDeviceAttr = C.cudaDevAttrSparseCudaArraySupported          // < Device supports sparse CUDA arrays and sparse CUDA mipmapped arrays
+	CudaDevAttrStreamPrioritiesSupported              CudaDeviceAttr = C.cudaDevAttrStreamPrioritiesSupported         // < Device supports stream priorities
+	CudaDevAttrSurfaceAlignment                       CudaDeviceAttr = C.cudaDevAttrSurfaceAlignment                  // < Alignment requirement for surfaces
+	CudaDevAttrTccDriver                              CudaDeviceAttr = C.cudaDevAttrTccDriver                         // < Device is using TCC driver model
+	CudaDevAttrTextureAlignment                       CudaDeviceAttr = C.cudaDevAttrTextureAlignment                  // < Alignment requirement for textures
+	CudaDevAttrTexturePitchAlignment                  CudaDeviceAttr = C.cudaDevAttrTexturePitchAlignment             // < Pitch alignment requirement for textures
+	CudaDevAttrTimelineSemaphoreInteropSupported      CudaDeviceAttr = C.cudaDevAttrTimelineSemaphoreInteropSupported // < External timeline semaphore interop is supported on the device
+	CudaDevAttrTotalConstantMemory                    CudaDeviceAttr = C.cudaDevAttrTotalConstantMemory               // < Memory available on device for __constant__ variables in a CUDA C kernel in bytes
+	CudaDevAttrUnifiedAddressing                      CudaDeviceAttr = C.cudaDevAttrUnifiedAddressing                 // < Device shares a unified address space with the host
+	CudaDevAttrVulkanCigSupported                     CudaDeviceAttr = C.cudaDevAttrVulkanCigSupported                // < Device supports CIG with Vulkan.
+	CudaDevAttrWarpSize                               CudaDeviceAttr = C.cudaDevAttrWarpSize                          // < Warp size in threads
 )
 
 // CudaDeviceAttrMessages maps CudaDeviceAttr values to their string representations.
@@ -165,14 +165,14 @@ var CudaDeviceAttrMessages = map[CudaDeviceAttr]string{
 	CudaDevAttrConcurrentKernels:                      "CudaDevAttrConcurrentKernels",
 	CudaDevAttrConcurrentManagedAccess:                "CudaDevAttrConcurrentManagedAccess",
 	CudaDevAttrCooperativeLaunch:                      "CudaDevAttrCooperativeLaunch",
-	CudaDevAttrD3D12CigSupported:                      "CudaDevAttrD3D12CigSupported",
+	CudaDevAttrD3d12cigSupported:                      "CudaDevAttrD3d12cigSupported",
 	CudaDevAttrDeferredMappingCudaArraySupported:      "CudaDevAttrDeferredMappingCudaArraySupported",
 	CudaDevAttrDirectManagedMemAccessFromHost:         "CudaDevAttrDirectManagedMemAccessFromHost",
 	CudaDevAttrEccEnabled:                             "CudaDevAttrEccEnabled",
 	CudaDevAttrGpudirectRdmaflushWritesOptions:        "CudaDevAttrGpudirectRdmaflushWritesOptions",
 	CudaDevAttrGpudirectRdmasupported:                 "CudaDevAttrGpudirectRdmasupported",
 	CudaDevAttrGpudirectRdmawritesOrdering:            "CudaDevAttrGpudirectRdmawritesOrdering",
-	CudaDevAttrGlobalL1CacheSupported:                 "CudaDevAttrGlobalL1CacheSupported",
+	CudaDevAttrGlobalL1cacheSupported:                 "CudaDevAttrGlobalL1cacheSupported",
 	CudaDevAttrGlobalMemoryBusWidth:                   "CudaDevAttrGlobalMemoryBusWidth",
 	CudaDevAttrGpuOverlap:                             "CudaDevAttrGpuOverlap",
 	CudaDevAttrGpuPciDeviceId:                         "CudaDevAttrGpuPciDeviceId",
@@ -188,8 +188,8 @@ var CudaDeviceAttrMessages = map[CudaDeviceAttr]string{
 	CudaDevAttrIpcEventSupport:                        "CudaDevAttrIpcEventSupport",
 	CudaDevAttrIsMultiGpuBoard:                        "CudaDevAttrIsMultiGpuBoard",
 	CudaDevAttrKernelExecTimeout:                      "CudaDevAttrKernelExecTimeout",
-	CudaDevAttrL2CacheSize:                            "CudaDevAttrL2CacheSize",
-	CudaDevAttrLocalL1CacheSupported:                  "CudaDevAttrLocalL1CacheSupported",
+	CudaDevAttrL2cacheSize:                            "CudaDevAttrL2cacheSize",
+	CudaDevAttrLocalL1cacheSupported:                  "CudaDevAttrLocalL1cacheSupported",
 	CudaDevAttrManagedMemory:                          "CudaDevAttrManagedMemory",
 	CudaDevAttrMaxAccessPolicyWindowSize:              "CudaDevAttrMaxAccessPolicyWindowSize",
 	CudaDevAttrMaxBlockDimX:                           "CudaDevAttrMaxBlockDimX",
@@ -199,50 +199,50 @@ var CudaDeviceAttrMessages = map[CudaDeviceAttr]string{
 	CudaDevAttrMaxGridDimX:                            "CudaDevAttrMaxGridDimX",
 	CudaDevAttrMaxGridDimY:                            "CudaDevAttrMaxGridDimY",
 	CudaDevAttrMaxGridDimZ:                            "CudaDevAttrMaxGridDimZ",
-	CudaDevAttrMaxPersistingL2CacheSize:               "CudaDevAttrMaxPersistingL2CacheSize",
+	CudaDevAttrMaxPersistingL2cacheSize:               "CudaDevAttrMaxPersistingL2cacheSize",
 	CudaDevAttrMaxPitch:                               "CudaDevAttrMaxPitch",
 	CudaDevAttrMaxRegistersPerBlock:                   "CudaDevAttrMaxRegistersPerBlock",
 	CudaDevAttrMaxRegistersPerMultiprocessor:          "CudaDevAttrMaxRegistersPerMultiprocessor",
 	CudaDevAttrMaxSharedMemoryPerBlock:                "CudaDevAttrMaxSharedMemoryPerBlock",
 	CudaDevAttrMaxSharedMemoryPerBlockOptin:           "CudaDevAttrMaxSharedMemoryPerBlockOptin",
 	CudaDevAttrMaxSharedMemoryPerMultiprocessor:       "CudaDevAttrMaxSharedMemoryPerMultiprocessor",
-	CudaDevAttrMaxSurface1DlayeredLayers:              "CudaDevAttrMaxSurface1DlayeredLayers",
-	CudaDevAttrMaxSurface1DlayeredWidth:               "CudaDevAttrMaxSurface1DlayeredWidth",
-	CudaDevAttrMaxSurface1Dwidth:                      "CudaDevAttrMaxSurface1Dwidth",
-	CudaDevAttrMaxSurface2Dheight:                     "CudaDevAttrMaxSurface2Dheight",
-	CudaDevAttrMaxSurface2DlayeredHeight:              "CudaDevAttrMaxSurface2DlayeredHeight",
-	CudaDevAttrMaxSurface2DlayeredLayers:              "CudaDevAttrMaxSurface2DlayeredLayers",
-	CudaDevAttrMaxSurface2DlayeredWidth:               "CudaDevAttrMaxSurface2DlayeredWidth",
-	CudaDevAttrMaxSurface2Dwidth:                      "CudaDevAttrMaxSurface2Dwidth",
-	CudaDevAttrMaxSurface3Ddepth:                      "CudaDevAttrMaxSurface3Ddepth",
-	CudaDevAttrMaxSurface3Dheight:                     "CudaDevAttrMaxSurface3Dheight",
-	CudaDevAttrMaxSurface3Dwidth:                      "CudaDevAttrMaxSurface3Dwidth",
+	CudaDevAttrMaxSurface1dlayeredLayers:              "CudaDevAttrMaxSurface1dlayeredLayers",
+	CudaDevAttrMaxSurface1dlayeredWidth:               "CudaDevAttrMaxSurface1dlayeredWidth",
+	CudaDevAttrMaxSurface1dwidth:                      "CudaDevAttrMaxSurface1dwidth",
+	CudaDevAttrMaxSurface2dheight:                     "CudaDevAttrMaxSurface2dheight",
+	CudaDevAttrMaxSurface2dlayeredHeight:              "CudaDevAttrMaxSurface2dlayeredHeight",
+	CudaDevAttrMaxSurface2dlayeredLayers:              "CudaDevAttrMaxSurface2dlayeredLayers",
+	CudaDevAttrMaxSurface2dlayeredWidth:               "CudaDevAttrMaxSurface2dlayeredWidth",
+	CudaDevAttrMaxSurface2dwidth:                      "CudaDevAttrMaxSurface2dwidth",
+	CudaDevAttrMaxSurface3ddepth:                      "CudaDevAttrMaxSurface3ddepth",
+	CudaDevAttrMaxSurface3dheight:                     "CudaDevAttrMaxSurface3dheight",
+	CudaDevAttrMaxSurface3dwidth:                      "CudaDevAttrMaxSurface3dwidth",
 	CudaDevAttrMaxSurfaceCubemapLayeredLayers:         "CudaDevAttrMaxSurfaceCubemapLayeredLayers",
 	CudaDevAttrMaxSurfaceCubemapLayeredWidth:          "CudaDevAttrMaxSurfaceCubemapLayeredWidth",
 	CudaDevAttrMaxSurfaceCubemapWidth:                 "CudaDevAttrMaxSurfaceCubemapWidth",
-	CudaDevAttrMaxTexture1DlayeredLayers:              "CudaDevAttrMaxTexture1DlayeredLayers",
-	CudaDevAttrMaxTexture1DlayeredWidth:               "CudaDevAttrMaxTexture1DlayeredWidth",
-	CudaDevAttrMaxTexture1DlinearWidth:                "CudaDevAttrMaxTexture1DlinearWidth",
-	CudaDevAttrMaxTexture1DmipmappedWidth:             "CudaDevAttrMaxTexture1DmipmappedWidth",
-	CudaDevAttrMaxTexture1Dwidth:                      "CudaDevAttrMaxTexture1Dwidth",
-	CudaDevAttrMaxTexture2DgatherHeight:               "CudaDevAttrMaxTexture2DgatherHeight",
-	CudaDevAttrMaxTexture2DgatherWidth:                "CudaDevAttrMaxTexture2DgatherWidth",
-	CudaDevAttrMaxTexture2Dheight:                     "CudaDevAttrMaxTexture2Dheight",
-	CudaDevAttrMaxTexture2DlayeredHeight:              "CudaDevAttrMaxTexture2DlayeredHeight",
-	CudaDevAttrMaxTexture2DlayeredLayers:              "CudaDevAttrMaxTexture2DlayeredLayers",
-	CudaDevAttrMaxTexture2DlayeredWidth:               "CudaDevAttrMaxTexture2DlayeredWidth",
-	CudaDevAttrMaxTexture2DlinearHeight:               "CudaDevAttrMaxTexture2DlinearHeight",
-	CudaDevAttrMaxTexture2DlinearPitch:                "CudaDevAttrMaxTexture2DlinearPitch",
-	CudaDevAttrMaxTexture2DlinearWidth:                "CudaDevAttrMaxTexture2DlinearWidth",
-	CudaDevAttrMaxTexture2DmipmappedHeight:            "CudaDevAttrMaxTexture2DmipmappedHeight",
-	CudaDevAttrMaxTexture2DmipmappedWidth:             "CudaDevAttrMaxTexture2DmipmappedWidth",
-	CudaDevAttrMaxTexture2Dwidth:                      "CudaDevAttrMaxTexture2Dwidth",
-	CudaDevAttrMaxTexture3Ddepth:                      "CudaDevAttrMaxTexture3Ddepth",
-	CudaDevAttrMaxTexture3DdepthAlt:                   "CudaDevAttrMaxTexture3DdepthAlt",
-	CudaDevAttrMaxTexture3Dheight:                     "CudaDevAttrMaxTexture3Dheight",
-	CudaDevAttrMaxTexture3DheightAlt:                  "CudaDevAttrMaxTexture3DheightAlt",
-	CudaDevAttrMaxTexture3Dwidth:                      "CudaDevAttrMaxTexture3Dwidth",
-	CudaDevAttrMaxTexture3DwidthAlt:                   "CudaDevAttrMaxTexture3DwidthAlt",
+	CudaDevAttrMaxTexture1dlayeredLayers:              "CudaDevAttrMaxTexture1dlayeredLayers",
+	CudaDevAttrMaxTexture1dlayeredWidth:               "CudaDevAttrMaxTexture1dlayeredWidth",
+	CudaDevAttrMaxTexture1dlinearWidth:                "CudaDevAttrMaxTexture1dlinearWidth",
+	CudaDevAttrMaxTexture1dmipmappedWidth:             "CudaDevAttrMaxTexture1dmipmappedWidth",
+	CudaDevAttrMaxTexture1dwidth:                      "CudaDevAttrMaxTexture1dwidth",
+	CudaDevAttrMaxTexture2dgatherHeight:               "CudaDevAttrMaxTexture2dgatherHeight",
+	CudaDevAttrMaxTexture2dgatherWidth:                "CudaDevAttrMaxTexture2dgatherWidth",
+	CudaDevAttrMaxTexture2dheight:                     "CudaDevAttrMaxTexture2dheight",
+	CudaDevAttrMaxTexture2dlayeredHeight:              "CudaDevAttrMaxTexture2dlayeredHeight",
+	CudaDevAttrMaxTexture2dlayeredLayers:              "CudaDevAttrMaxTexture2dlayeredLayers",
+	CudaDevAttrMaxTexture2dlayeredWidth:               "CudaDevAttrMaxTexture2dlayeredWidth",
+	CudaDevAttrMaxTexture2dlinearHeight:               "CudaDevAttrMaxTexture2dlinearHeight",
+	CudaDevAttrMaxTexture2dlinearPitch:                "CudaDevAttrMaxTexture2dlinearPitch",
+	CudaDevAttrMaxTexture2dlinearWidth:                "CudaDevAttrMaxTexture2dlinearWidth",
+	CudaDevAttrMaxTexture2dmipmappedHeight:            "CudaDevAttrMaxTexture2dmipmappedHeight",
+	CudaDevAttrMaxTexture2dmipmappedWidth:             "CudaDevAttrMaxTexture2dmipmappedWidth",
+	CudaDevAttrMaxTexture2dwidth:                      "CudaDevAttrMaxTexture2dwidth",
+	CudaDevAttrMaxTexture3ddepth:                      "CudaDevAttrMaxTexture3ddepth",
+	CudaDevAttrMaxTexture3ddepthAlt:                   "CudaDevAttrMaxTexture3ddepthAlt",
+	CudaDevAttrMaxTexture3dheight:                     "CudaDevAttrMaxTexture3dheight",
+	CudaDevAttrMaxTexture3dheightAlt:                  "CudaDevAttrMaxTexture3dheightAlt",
+	CudaDevAttrMaxTexture3dwidth:                      "CudaDevAttrMaxTexture3dwidth",
+	CudaDevAttrMaxTexture3dwidthAlt:                   "CudaDevAttrMaxTexture3dwidthAlt",
 	CudaDevAttrMaxTextureCubemapLayeredLayers:         "CudaDevAttrMaxTextureCubemapLayeredLayers",
 	CudaDevAttrMaxTextureCubemapLayeredWidth:          "CudaDevAttrMaxTextureCubemapLayeredWidth",
 	CudaDevAttrMaxTextureCubemapWidth:                 "CudaDevAttrMaxTextureCubemapWidth",
