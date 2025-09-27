@@ -34,7 +34,7 @@ func main() {
 		StartString:  "struct __device_builtin__ cudaDeviceProp",
 		TemplatePath: filepath.Join("..", "internal", "tmpl", "cuda_struct.tmpl"),
 		IsEnum:       false,
-		FieldRegex:   regexp.MustCompile(`^\s*([\w\s*]+)\s+([\w]+)(\[[\d\w]*\])?\s*;\s*(?:/\*\*?\s*(.*?)\s*\*/)?$`),
+		FieldRegex:   regexp.MustCompile(`^\s*([\w\s]+)\s+([\w]+)(\[[\d\w]+\])?\s*;\s*(?:/\*\*<?\s*(.*?)\s*\*/)?$`),
 	}
 	errorCfg := codegen.Config{
 		Package:      Package,
