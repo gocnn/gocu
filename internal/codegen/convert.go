@@ -56,8 +56,11 @@ func ToGoFieldName(name string) string {
 	return strings.Join(words, "")
 }
 
-// ToGoType converts a C type to a Go type.
-func ToGoType(cType string) string {
+// ToGoType converts a C type to a Go type (for enums, returns the base type).
+func ToGoType(cType string, isEnum bool) string {
+	if isEnum {
+		return "cudaError" // Or configurable base type
+	}
 	switch {
 	case strings.HasPrefix(cType, "char["):
 		return "string"
@@ -79,7 +82,10 @@ func ToGoType(cType string) string {
 }
 
 // ToFromCExpr generates the expression to convert a C field to a Go field.
-func ToFromCExpr(fieldName, cType, goType string) string {
+func ToFromCExpr(fieldName, cType, goType string, isEnum bool) string {
+	if isEnum {
+		return "C." + fieldName
+	}
 	switch {
 	case strings.HasPrefix(cType, "char["):
 		return "C.GoString(&prop." + fieldName + "[0])"
