@@ -7,7 +7,7 @@ import (
 
 // ToGoFieldName converts a C-style field name to Go-style UpperCamelCase.
 func ToGoFieldName(name string) string {
-	// Handle snake_case
+	// Handle snake case
 	if strings.Contains(name, "_") {
 		words := strings.Split(strings.TrimSpace(name), "_")
 		for i, word := range words {
@@ -56,8 +56,21 @@ func ToGoFieldName(name string) string {
 	return strings.Join(words, "")
 }
 
-// ToGoType converts a C type to a Go type.
-func ToGoType(cType string) string {
+// ToGoType converts a C type to a Go type (for enums, returns the base type).
+func ToGoType(cType string, isEnum bool) string {
+	if isEnum {
+		// Handle different enum types
+		switch cType {
+		case "cudaError":
+			return "CudaError"
+		case "cudaDeviceAttr":
+			return "DeviceAttribute"
+		case "cudaLimit":
+			return "CudaLimit"
+		default:
+			return "cudaError" // Default fallback
+		}
+	}
 	switch {
 	case strings.HasPrefix(cType, "char["):
 		return "string"
@@ -79,7 +92,10 @@ func ToGoType(cType string) string {
 }
 
 // ToFromCExpr generates the expression to convert a C field to a Go field.
-func ToFromCExpr(fieldName, cType, goType string) string {
+func ToFromCExpr(fieldName, cType, goType string, isEnum bool) string {
+	if isEnum {
+		return "C." + fieldName
+	}
 	switch {
 	case strings.HasPrefix(cType, "char["):
 		return "C.GoString(&prop." + fieldName + "[0])"

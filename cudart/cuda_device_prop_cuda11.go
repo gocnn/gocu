@@ -13,8 +13,8 @@ import (
 	"unsafe"
 )
 
-// DeviceProperties holds properties of a CUDA device.
-type DeviceProperties struct {
+// CudaDeviceProp holds properties of a CUDA device.
+type CudaDeviceProp struct {
 	Eccenabled                             int       // int
 	AccessPolicyMaxWindowSize              int       // int
 	AsyncEngineCount                       int       // int
@@ -97,8 +97,8 @@ type DeviceProperties struct {
 	WarpSize                               int       // int
 }
 
-// fromC converts a C.cudaDeviceProp to a Go DeviceProperties.
-func (p *DeviceProperties) fromC(prop *C.struct_cudaDeviceProp) {
+// fromC converts a C.cudaDeviceProp to a Go CudaDeviceProp.
+func (p *CudaDeviceProp) fromC(prop *C.struct_cudaDeviceProp) {
 	p.Eccenabled = int(prop.ECCEnabled)
 	p.AccessPolicyMaxWindowSize = int(prop.accessPolicyMaxWindowSize)
 	p.AsyncEngineCount = int(prop.asyncEngineCount)

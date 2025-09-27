@@ -59,12 +59,89 @@ func ParseHeader(path, structName string, fieldRegex *regexp.Regexp) ([]Field, e
 	return fields, scanner.Err()
 }
 
+// ParseEnum extracts enum values from a C header file.
+func ParseEnum(path, enumName string, fieldRegex *regexp.Regexp) ([]Field, error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return nil, fmt.Errorf("opening %s: %w", path, err)
+	}
+	defer file.Close()
+
+	var fields []Field
+	inEnum := false
+	reField := fieldRegex
+	if reField == nil {
+		reField = regexp.MustCompile(`^\s*(\w+)\s*=\s*(0x[0-9a-fA-F]+|\d+),?\s*(?:/\*\*<?\s*(.*?)\s*\*/)?`)
+	}
+
+	var currentDoc strings.Builder
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := strings.TrimSpace(scanner.Text())
+		if line == "" {
+			currentDoc.Reset()
+			continue
+		}
+
+		// Collect documentation (/** ... */)
+		if strings.HasPrefix(line, "/**") {
+			currentDoc.WriteString(strings.TrimSpace(strings.TrimPrefix(line, "/**")))
+			currentDoc.WriteString(" ")
+			continue
+		}
+		if strings.HasPrefix(line, " *") {
+			currentDoc.WriteString(strings.TrimSpace(strings.TrimPrefix(line, " *")))
+			currentDoc.WriteString(" ")
+			continue
+		}
+		if strings.HasPrefix(line, " */") {
+			currentDoc.WriteString(strings.TrimSpace(strings.TrimPrefix(line, " */")))
+			currentDoc.WriteString(" ")
+			continue
+		}
+
+		if strings.Contains(line, "enum __device_builtin__ "+enumName) {
+			inEnum = true
+			currentDoc.Reset()
+			continue
+		}
+		if inEnum && strings.Contains(line, "};") {
+			break
+		}
+		if !inEnum {
+			continue
+		}
+
+		matches := reField.FindStringSubmatch(line)
+		if len(matches) < 3 {
+			continue
+		}
+
+		name := strings.TrimSpace(matches[1])
+		value := strings.TrimSpace(matches[2])
+		doc := strings.TrimSpace(currentDoc.String())
+		fields = append(fields, Field{
+			Name: name,
+			Type: value,
+			Doc:  doc,
+		})
+		currentDoc.Reset()
+	}
+	return fields, scanner.Err()
+}
+
 // ParseAllVersions parses fields for multiple versions of a header file.
-func ParseAllVersions(headerDir string, versions []Version, structName string, fieldRegex *regexp.Regexp) (map[string][]Field, error) {
+func ParseAllVersions(headerDir string, versions []Version, structOrEnumName string, fieldRegex *regexp.Regexp, isEnum bool) (map[string][]Field, error) {
 	versionFields := make(map[string][]Field)
 	for _, ver := range versions {
 		path := filepath.Join(headerDir, ver.Version, "driver_types.h")
-		fields, err := ParseHeader(path, structName, fieldRegex)
+		var fields []Field
+		var err error
+		if isEnum {
+			fields, err = ParseEnum(path, structOrEnumName, fieldRegex)
+		} else {
+			fields, err = ParseHeader(path, structOrEnumName, fieldRegex)
+		}
 		if err != nil {
 			return nil, fmt.Errorf("version %s: %w", ver.Version, err)
 		}
@@ -73,7 +150,7 @@ func ParseAllVersions(headerDir string, versions []Version, structName string, f
 	return versionFields, nil
 }
 
-// FindCommonFields identifies fields present in all versions with identical types.
+// FindCommonFields identifies fields present in all versions with identical types/values.
 func FindCommonFields(versionFields map[string][]Field) []Field {
 	if len(versionFields) == 0 {
 		return nil
@@ -99,7 +176,7 @@ func FindCommonFields(versionFields map[string][]Field) []Field {
 	return common
 }
 
-// isCommonField checks if a field exists in all versions with the same type.
+// isCommonField checks if a field exists in all versions with the same type/value.
 func isCommonField(field Field, versionFields map[string][]Field, refVersion string) bool {
 	for version, fields := range versionFields {
 		if version == refVersion {

@@ -8,24 +8,8 @@ import (
 	"text/template"
 )
 
-// Version defines a version and its build tag.
-type Version struct {
-	Version  string
-	BuildTag string
-}
-
-// Config holds configuration for code generation.
-type Config struct {
-	Package      string
-	Filename     string
-	Versions     []Version
-	HeaderDir    string
-	StructName   string
-	TemplatePath string
-}
-
 // GenerateFile writes a Go file using the provided template and struct definition.
-func GenerateFile(filename string, def StructDef, cfg Config) error {
+func GenerateFile(filename string, def StructDef, cfg Config, isEnum bool) error {
 	f, err := os.Create(filename)
 	if err != nil {
 		return fmt.Errorf("creating %s: %w", filename, err)
@@ -37,13 +21,14 @@ func GenerateFile(filename string, def StructDef, cfg Config) error {
 		StructName: cfg.StructName,
 	}
 	for _, f := range def.Fields {
-		goType := ToGoType(f.Type)
+		goType := ToGoType(f.Type, isEnum)
 		data.Fields = append(data.Fields, TemplateField{
 			Name:      f.Name,
 			GoName:    ToGoFieldName(f.Name),
 			GoType:    goType,
 			CType:     f.Type,
-			FromCExpr: ToFromCExpr(f.Name, f.Type, goType),
+			FromCExpr: ToFromCExpr(f.Name, f.Type, goType, isEnum),
+			Doc:       f.Doc,
 		})
 	}
 	sort.Slice(data.Fields, func(i, j int) bool {
