@@ -8,7 +8,7 @@ See [INSTALL.md](INSTALL.md) for complete installation instructions for Windows 
 
 ## Quick Start
 
-See [example/cudblas/gemm](example/cudblas/gemm/) for a complete GPU-accelerated matrix multiplication example using CUBLAS.
+See [example/gemm](example/gemm/) for a complete GPU-accelerated matrix multiplication example using CUBLAS.
 
 ## License
 
