@@ -12,5 +12,6 @@ ENV PATH=$PATH:$GOPATH/bin
 RUN go install github.com/gocnn/gocu/cmd/gocu@latest
 
 WORKDIR /app
+COPY example/ ./example/
 
 CMD ["gocu"]
