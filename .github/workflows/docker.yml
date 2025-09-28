@@ -9,3 +9,5 @@ on:
 jobs:
   docker:
     uses: qntx/workflows/.github/workflows/docker.yml@main
+    with:
+      no-cache: true
