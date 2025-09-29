@@ -10,13 +10,13 @@
 .target sm_52
 .address_size 64
 
-	// .globl	_Z3addPiPKiS1_i
+	// .globl	add
 
-.visible .entry _Z3addPiPKiS1_i(
-	.param .u64 _Z3addPiPKiS1_i_param_0,
-	.param .u64 _Z3addPiPKiS1_i_param_1,
-	.param .u64 _Z3addPiPKiS1_i_param_2,
-	.param .u32 _Z3addPiPKiS1_i_param_3
+.visible .entry add(
+	.param .u64 add_param_0,
+	.param .u64 add_param_1,
+	.param .u64 add_param_2,
+	.param .u32 add_param_3
 )
 {
 	.reg .pred 	%p<6>;
@@ -24,10 +24,10 @@
 	.reg .b64 	%rd<35>;
 
 
-	ld.param.u64 	%rd15, [_Z3addPiPKiS1_i_param_0];
-	ld.param.u64 	%rd16, [_Z3addPiPKiS1_i_param_1];
-	ld.param.u64 	%rd17, [_Z3addPiPKiS1_i_param_2];
-	ld.param.u32 	%r12, [_Z3addPiPKiS1_i_param_3];
+	ld.param.u64 	%rd15, [add_param_0];
+	ld.param.u64 	%rd16, [add_param_1];
+	ld.param.u64 	%rd17, [add_param_2];
+	ld.param.u32 	%r12, [add_param_3];
 	cvta.to.global.u64 	%rd1, %rd15;
 	cvta.to.global.u64 	%rd2, %rd17;
 	cvta.to.global.u64 	%rd3, %rd16;
