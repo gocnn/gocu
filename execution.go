@@ -1,23 +1,32 @@
 package gocu
 
-// #include <cuda.h>
-// #include <stdlib.h>
-//
-// // Host function callback wrapper
-// extern void goHostFuncCallback(void* userData);
-//
-// static void hostFuncWrapper(void* userData) {
-//     goHostFuncCallback(userData);
-// }
-//
-// static CUhostFn getHostFuncWrapper() {
-//     return (CUhostFn)hostFuncWrapper;
-// }
+/*
+#include <cuda.h>
+*/
 import "C"
 import (
-	"sync"
 	"unsafe"
 )
+
+// Dim3 represents a 3D dimension for CUDA grids and blocks.
+type Dim3 struct {
+	X, Y, Z uint32
+}
+
+// MakeDim3 creates a Dim3 with the specified dimensions.
+func MakeDim3(x, y, z uint32) Dim3 {
+	return Dim3{X: x, Y: y, Z: z}
+}
+
+// MakeDim3_1D creates a 1D Dim3.
+func MakeDim3_1D(x uint32) Dim3 {
+	return Dim3{X: x, Y: 1, Z: 1}
+}
+
+// MakeDim3_2D creates a 2D Dim3.
+func MakeDim3_2D(x, y uint32) Dim3 {
+	return Dim3{X: x, Y: y, Z: 1}
+}
 
 // CUfunctionAttribute represents function attributes that can be queried
 type CUfunctionAttribute C.CUfunction_attribute
@@ -63,32 +72,6 @@ type CUlaunchConfig struct {
 	BlockDimZ      uint32
 	SharedMemBytes uint32
 	Stream         Stream
-}
-
-// CUhostFn represents a host function callback
-type CUhostFn func(userData unsafe.Pointer)
-
-// Global registry for host function callbacks
-var (
-	hostFuncRegistry = make(map[uintptr]CUhostFn)
-	hostFuncMutex    sync.RWMutex
-	hostFuncCounter  uintptr
-)
-
-//export goHostFuncCallback
-func goHostFuncCallback(userData unsafe.Pointer) {
-	id := uintptr(userData)
-	hostFuncMutex.RLock()
-	fn, exists := hostFuncRegistry[id]
-	hostFuncMutex.RUnlock()
-
-	if exists {
-		fn(userData)
-		// Clean up the registry entry
-		hostFuncMutex.Lock()
-		delete(hostFuncRegistry, id)
-		hostFuncMutex.Unlock()
-	}
 }
 
 // Function Information Functions
@@ -194,14 +177,15 @@ func (f Function) SetCacheConfig(config CUfuncCache) error {
 
 // LaunchKernel launches a CUDA function
 func LaunchKernel(function Function, gridDimX, gridDimY, gridDimZ, blockDimX, blockDimY, blockDimZ uint32, sharedMemBytes uint32, stream Stream, kernelParams []unsafe.Pointer, extra []unsafe.Pointer) error {
-	var kernelParamsPtr *unsafe.Pointer
-	var extraPtr *unsafe.Pointer
-
-	if len(kernelParams) > 0 {
-		kernelParamsPtr = &kernelParams[0]
-	}
-	if len(extra) > 0 {
-		extraPtr = &extra[0]
+	// Since Go 1.6, a cgo argument cannot have a Go pointer to Go pointer,
+	// so we copy the argument values go C memory first.
+	argv := C.malloc(C.size_t(len(kernelParams) * pointerSize))
+	argp := C.malloc(C.size_t(len(kernelParams) * pointerSize))
+	defer C.free(argv)
+	defer C.free(argp)
+	for i := range kernelParams {
+		*((*unsafe.Pointer)(offset(argp, i))) = offset(argv, i)       // argp[i] = &argv[i]
+		*((*uint64)(offset(argv, i))) = *((*uint64)(kernelParams[i])) // argv[i] = *kernelParams[i]
 	}
 
 	return Check(C.cuLaunchKernel(
@@ -210,10 +194,16 @@ func LaunchKernel(function Function, gridDimX, gridDimY, gridDimZ, blockDimX, bl
 		C.uint(blockDimX), C.uint(blockDimY), C.uint(blockDimZ),
 		C.uint(sharedMemBytes),
 		stream.CStream(),
-		kernelParamsPtr,
-		extraPtr,
+		(*unsafe.Pointer)(argp),
+		(*unsafe.Pointer)(nil),
 	))
 }
+
+func offset(ptr unsafe.Pointer, i int) unsafe.Pointer {
+	return unsafe.Pointer(uintptr(ptr) + pointerSize*uintptr(i))
+}
+
+const pointerSize = 8
 
 // Launch launches the kernel (method version)
 func (f Function) Launch(gridDimX, gridDimY, gridDimZ, blockDimX, blockDimY, blockDimZ uint32, sharedMemBytes uint32, stream Stream, kernelParams []unsafe.Pointer, extra []unsafe.Pointer) error {

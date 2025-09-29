@@ -1,7 +1,9 @@
 package gocu
 
-// #include <cuda.h>
-// #include <stdlib.h>
+/*
+#include <cuda.h>
+#include <stdlib.h>
+*/
 import "C"
 import (
 	"unsafe"
