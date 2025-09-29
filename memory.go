@@ -37,8 +37,8 @@ func Memcpy(dst, src DevicePtr, size int64) error {
 // Requires peer access to be enabled between the contexts.
 func MemcpyPeer(dst DevicePtr, dstCtx Context, src DevicePtr, srcCtx Context, size int64) error {
 	return Check(C.cuMemcpyPeer(
-		C.CUdeviceptr(dst), dstCtx.c(),
-		C.CUdeviceptr(src), srcCtx.c(),
+		C.CUdeviceptr(dst), dstCtx.CContext(),
+		C.CUdeviceptr(src), srcCtx.CContext(),
 		C.size_t(size),
 	))
 }
@@ -71,8 +71,8 @@ func MemcpyAsync(dst, src DevicePtr, size int64, stream Stream) error {
 // Requires peer access to be enabled. The copy is performed in the specified stream.
 func MemcpyPeerAsync(dst DevicePtr, dstCtx Context, src DevicePtr, srcCtx Context, size int64, stream Stream) error {
 	return Check(C.cuMemcpyPeerAsync(
-		C.CUdeviceptr(dst), dstCtx.c(),
-		C.CUdeviceptr(src), srcCtx.c(),
+		C.CUdeviceptr(dst), dstCtx.CContext(),
+		C.CUdeviceptr(src), srcCtx.CContext(),
 		C.size_t(size), stream.c(),
 	))
 }

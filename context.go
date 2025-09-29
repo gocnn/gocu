@@ -2,7 +2,9 @@
 
 package gocu
 
-// #include <cuda.h>
+/*
+#include <cuda.h>
+*/
 import "C"
 
 // CUlimit represents context resource limits
@@ -59,8 +61,8 @@ const (
 // Context is a CUDA context
 type Context struct{ ctx C.CUcontext }
 
-// C returns the Context as its C version
-func (ctx Context) c() C.CUcontext { return ctx.ctx }
+// CContext returns the Context as its C version
+func (ctx Context) CContext() C.CUcontext { return ctx.ctx }
 
 // Context Creation and Destruction
 
@@ -73,7 +75,7 @@ func CtxCreate(flags uint32, dev Device) (Context, error) {
 
 // CtxDestroy destroys a CUDA context
 func CtxDestroy(ctx Context) error {
-	return Check(C.cuCtxDestroy(ctx.c()))
+	return Check(C.cuCtxDestroy(ctx.CContext()))
 }
 
 // Destroy destroys the context (method version)
@@ -85,7 +87,7 @@ func (ctx Context) Destroy() error {
 
 // CtxPushCurrent pushes a context on the current CPU thread
 func CtxPushCurrent(ctx Context) error {
-	return Check(C.cuCtxPushCurrent(ctx.c()))
+	return Check(C.cuCtxPushCurrent(ctx.CContext()))
 }
 
 // PushCurrent pushes the context on the current CPU thread (method version)
@@ -102,7 +104,7 @@ func CtxPopCurrent() (Context, error) {
 
 // CtxSetCurrent binds the specified CUDA context to the calling CPU thread
 func CtxSetCurrent(ctx Context) error {
-	return Check(C.cuCtxSetCurrent(ctx.c()))
+	return Check(C.cuCtxSetCurrent(ctx.CContext()))
 }
 
 // SetCurrent binds the context to the calling CPU thread (method version)
@@ -122,7 +124,7 @@ func CtxGetCurrent() (Context, error) {
 // CtxGetApiVersion gets the context's API version
 func CtxGetApiVersion(ctx Context) (uint32, error) {
 	var version C.uint
-	result := Check(C.cuCtxGetApiVersion(ctx.c(), &version))
+	result := Check(C.cuCtxGetApiVersion(ctx.CContext(), &version))
 	return uint32(version), result
 }
 
@@ -153,7 +155,7 @@ func CtxGetFlags() (uint32, error) {
 // CtxGetId returns the unique Id associated with the context
 func CtxGetId(ctx Context) (uint64, error) {
 	var ctxId C.ulonglong
-	result := Check(C.cuCtxGetId(ctx.c(), &ctxId))
+	result := Check(C.cuCtxGetId(ctx.CContext(), &ctxId))
 	return uint64(ctxId), result
 }
 
@@ -247,7 +249,7 @@ func CtxResetPersistingL2Cache() error {
 
 // CtxRecordEvent records an event
 func CtxRecordEvent(ctx Context, event Event) error {
-	return Check(C.cuCtxRecordEvent(ctx.c(), event.c()))
+	return Check(C.cuCtxRecordEvent(ctx.CContext(), event.c()))
 }
 
 // RecordEvent records an event (method version)
@@ -257,7 +259,7 @@ func (ctx Context) RecordEvent(event Event) error {
 
 // CtxWaitEvent makes a context wait on an event
 func CtxWaitEvent(ctx Context, event Event) error {
-	return Check(C.cuCtxWaitEvent(ctx.c(), event.c()))
+	return Check(C.cuCtxWaitEvent(ctx.CContext(), event.c()))
 }
 
 // WaitEvent makes the context wait on an event (method version)
