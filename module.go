@@ -54,6 +54,9 @@ func (m Module) c() C.CUmodule { return m.module }
 // Function is a CUDA function
 type Function struct{ function C.CUfunction }
 
+// C returns the Function as its C version
+func (f Function) c() C.CUfunction { return f.function }
+
 // LinkState is a CUDA linker state
 type LinkState struct{ state C.CUlinkState }
 
