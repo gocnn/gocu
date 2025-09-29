@@ -24,12 +24,12 @@ var (
 func main() {
 	cuResultCfg := codegen.Config{
 		Package:      Package,
-		Filename:     "cu_result",
+		Filename:     "result",
 		Versions:     Versions,
 		HeaderDir:    HeaderDir,
 		HeaderFile:   "cuda.h",
 		Include:      "cuda.h",
-		StructName:   "CUResult",
+		StructName:   "Result",
 		CGoType:      "",
 		StartString:  "typedef enum cudaError_enum",
 		TemplatePath: filepath.Join("internal", "tmpl", "cuda_enum.tmpl"),
@@ -38,12 +38,12 @@ func main() {
 	}
 	deviceAttrCfg := codegen.Config{
 		Package:      Package,
-		Filename:     "cu_device_attr",
+		Filename:     "device_attr",
 		Versions:     Versions,
 		HeaderDir:    HeaderDir,
 		HeaderFile:   "cuda.h",
 		Include:      "cuda.h",
-		StructName:   "CUDeviceAttr",
+		StructName:   "DeviceAttr",
 		CGoType:      "",
 		StartString:  "typedef enum CUdevice_attribute_enum",
 		TemplatePath: filepath.Join("internal", "tmpl", "cuda_enum.tmpl"),

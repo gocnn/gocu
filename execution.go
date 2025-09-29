@@ -272,22 +272,3 @@ func LaunchCooperativeKernel(function Function, gridDimX, gridDimY, gridDimZ, bl
 func (f Function) LaunchCooperative(gridDimX, gridDimY, gridDimZ, blockDimX, blockDimY, blockDimZ uint32, sharedMemBytes uint32, stream Stream, kernelParams []unsafe.Pointer) error {
 	return LaunchCooperativeKernel(f, gridDimX, gridDimY, gridDimZ, blockDimX, blockDimY, blockDimZ, sharedMemBytes, stream, kernelParams)
 }
-
-// LaunchHostFunc enqueues a host function call in a stream
-func LaunchHostFunc(stream Stream, fn CUhostFn, userData unsafe.Pointer) error {
-	// Register the function with a unique ID
-	hostFuncMutex.Lock()
-	hostFuncCounter++
-	id := hostFuncCounter
-	hostFuncRegistry[id] = fn
-	hostFuncMutex.Unlock()
-
-	// Use the ID as userData
-	return Check(C.cuLaunchHostFunc(stream.c(), C.getHostFuncWrapper(), unsafe.Pointer(uintptr(id))))
-}
-
-// LaunchHostFunc enqueues a host function call in the stream (method version)
-func (s Stream) LaunchHostFunc(fn CUhostFn, userData unsafe.Pointer) error {
-	return LaunchHostFunc(s, fn, userData)
-}
-   

@@ -24,12 +24,12 @@ var (
 func main() {
 	devicePropCfg := codegen.Config{
 		Package:      Package,
-		Filename:     "cuda_device_prop",
+		Filename:     "device_prop",
 		Versions:     Versions,
 		HeaderDir:    HeaderDir,
 		HeaderFile:   "driver_types.h",
 		Include:      "cuda_runtime.h",
-		StructName:   "CudaDeviceProp",
+		StructName:   "DeviceProp",
 		CGoType:      "struct_cudaDeviceProp",
 		StartString:  "struct __device_builtin__ cudaDeviceProp",
 		TemplatePath: filepath.Join("..", "internal", "tmpl", "cuda_struct.tmpl"),
@@ -38,12 +38,12 @@ func main() {
 	}
 	errorCfg := codegen.Config{
 		Package:      Package,
-		Filename:     "cuda_error",
+		Filename:     "error",
 		Versions:     Versions,
 		HeaderDir:    HeaderDir,
 		HeaderFile:   "driver_types.h",
 		Include:      "cuda_runtime.h",
-		StructName:   "CudaError",
+		StructName:   "Error",
 		CGoType:      "",
 		StartString:  "enum __device_builtin__ cudaError",
 		TemplatePath: filepath.Join("..", "internal", "tmpl", "cuda_enum.tmpl"),
@@ -52,12 +52,12 @@ func main() {
 	}
 	deviceAttrCfg := codegen.Config{
 		Package:      Package,
-		Filename:     "cuda_device_attr",
+		Filename:     "device_attr",
 		Versions:     Versions,
 		HeaderDir:    HeaderDir,
 		HeaderFile:   "driver_types.h",
 		Include:      "cuda_runtime.h",
-		StructName:   "CudaDeviceAttr",
+		StructName:   "DeviceAttr",
 		CGoType:      "",
 		StartString:  "enum __device_builtin__ cudaDeviceAttr",
 		TemplatePath: filepath.Join("..", "internal", "tmpl", "cuda_enum.tmpl"),

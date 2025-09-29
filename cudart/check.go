@@ -6,19 +6,19 @@ package cudart
 import "C"
 import "fmt"
 
-// CudaError represents a CUDA error code.
-type CudaError C.enum_cudaError
+// Error represents a CUDA error code.
+type Error C.enum_cudaError
 
-func (err CudaError) Error() string { return err.String() }
-func (err CudaError) String() string {
-	if msg, ok := CudaErrorMessages[err]; ok {
+func (err Error) Error() string { return err.String() }
+func (err Error) String() string {
+	if msg, ok := ErrorMessages[err]; ok {
 		return msg
 	}
-	return fmt.Sprintf("UnknownErrorCode:%d", err)
+	return fmt.Sprintf("Unknown Error Code:%d", err)
 }
 
 func Check(x C.cudaError_t) error {
-	err := CudaError(x)
+	err := Error(x)
 	if err == CudaSuccess {
 		return nil
 	}

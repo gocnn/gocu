@@ -4,18 +4,18 @@ package gocu
 import "C"
 import "fmt"
 
-type CUResult int
+type Result int
 
-func (err CUResult) Error() string { return err.String() }
-func (err CUResult) String() string {
-	if msg, ok := CUResultMessages[err]; ok {
+func (err Result) Error() string { return err.String() }
+func (err Result) String() string {
+	if msg, ok := ResultMessages[err]; ok {
 		return msg
 	}
 	return fmt.Sprintf("UnknownErrorCode:%d", err)
 }
 
 func Check(x C.CUresult) error {
-	err := CUResult(x)
+	err := Result(x)
 	if err == CudaSuccess {
 		return nil
 	}
