@@ -11,8 +11,23 @@ type Dim3 struct {
 	X, Y, Z uint32
 }
 
-// toCDim3 converts Go Dim3 to C dim3.
-func (d Dim3) toCDim3() C.dim3 {
+// MakeDim3 creates a Dim3 with the specified dimensions.
+func MakeDim3(x, y, z uint32) Dim3 {
+	return Dim3{X: x, Y: y, Z: z}
+}
+
+// MakeDim3_1D creates a 1D Dim3.
+func MakeDim3_1D(x uint32) Dim3 {
+	return Dim3{X: x, Y: 1, Z: 1}
+}
+
+// MakeDim3_2D creates a 2D Dim3.
+func MakeDim3_2D(x, y uint32) Dim3 {
+	return Dim3{X: x, Y: y, Z: 1}
+}
+
+// ToCDim3 converts Go Dim3 to C dim3.
+func (d Dim3) ToCDim3() C.dim3 {
 	return C.dim3{x: C.uint(d.X), y: C.uint(d.Y), z: C.uint(d.Z)}
 }
 
@@ -50,7 +65,7 @@ type HostFn func(userData unsafe.Pointer)
 // args: array of pointers to kernel arguments
 // sharedMem: dynamic shared memory size per thread block in bytes
 // stream: stream to launch the kernel on
-func LaunchKernel(function unsafe.Pointer, gridDim, blockDim Dim3, args []unsafe.Pointer, sharedMem int64, stream Stream) error {
+func LaunchKernel(function unsafe.Pointer, gridDim, blockDim Dim3, args []unsafe.Pointer, sharedMem int64, stream *Stream) error {
 	var argsPtr *unsafe.Pointer
 	if len(args) > 0 {
 		argsPtr = &args[0]
@@ -58,17 +73,17 @@ func LaunchKernel(function unsafe.Pointer, gridDim, blockDim Dim3, args []unsafe
 
 	return Check(C.cudaLaunchKernel(
 		function,
-		gridDim.toCDim3(),
-		blockDim.toCDim3(),
+		gridDim.ToCDim3(),
+		blockDim.ToCDim3(),
 		argsPtr,
 		C.size_t(sharedMem),
-		stream.c(),
+		stream.CStream(),
 	))
 }
 
 // LaunchCooperativeKernel launches a device function where thread blocks can cooperate.
 // This is used for kernels that require synchronization between thread blocks.
-func LaunchCooperativeKernel(function unsafe.Pointer, gridDim, blockDim Dim3, args []unsafe.Pointer, sharedMem int64, stream Stream) error {
+func LaunchCooperativeKernel(function unsafe.Pointer, gridDim, blockDim Dim3, args []unsafe.Pointer, sharedMem int64, stream *Stream) error {
 	var argsPtr *unsafe.Pointer
 	if len(args) > 0 {
 		argsPtr = &args[0]
@@ -76,36 +91,21 @@ func LaunchCooperativeKernel(function unsafe.Pointer, gridDim, blockDim Dim3, ar
 
 	return Check(C.cudaLaunchCooperativeKernel(
 		function,
-		gridDim.toCDim3(),
-		blockDim.toCDim3(),
+		gridDim.ToCDim3(),
+		blockDim.ToCDim3(),
 		argsPtr,
 		C.size_t(sharedMem),
-		stream.c(),
+		stream.CStream(),
 	))
 }
 
 // LaunchHostFunc enqueues a host function call in a stream.
 // The host function will be called when all previously enqueued operations complete.
-func LaunchHostFunc(stream Stream, fn HostFn, userData unsafe.Pointer) error {
+func LaunchHostFunc(stream *Stream, fn HostFn, userData unsafe.Pointer) error {
 	// Store the Go function and userData in a way that's safe for CGO
 	// We need to use a different approach since we can't pass Go function pointers to C
 
 	// For now, return an error indicating this function needs proper implementation
 	// TODO: Implement proper callback mechanism using cgo export functions
 	return Check(C.cudaErrorNotSupported)
-}
-
-// MakeDim3 creates a Dim3 with the specified dimensions.
-func MakeDim3(x, y, z uint32) Dim3 {
-	return Dim3{X: x, Y: y, Z: z}
-}
-
-// MakeDim3_1D creates a 1D Dim3.
-func MakeDim3_1D(x uint32) Dim3 {
-	return Dim3{X: x, Y: 1, Z: 1}
-}
-
-// MakeDim3_2D creates a 2D Dim3.
-func MakeDim3_2D(x, y uint32) Dim3 {
-	return Dim3{X: x, Y: y, Z: 1}
 }

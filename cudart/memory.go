@@ -104,32 +104,32 @@ func MemcpyHtoH(dst, src HostPtr, bytes int64) error {
 }
 
 // MemcpyAsync copies data between memory locations asynchronously.
-func MemcpyAsync(dst, src unsafe.Pointer, bytes int64, kind uint, stream Stream) error {
-	return Check(C.cudaMemcpyAsync(dst, src, C.size_t(bytes), uint32(kind), stream.c()))
+func MemcpyAsync(dst, src unsafe.Pointer, bytes int64, kind uint, stream *Stream) error {
+	return Check(C.cudaMemcpyAsync(dst, src, C.size_t(bytes), uint32(kind), stream.CStream()))
 }
 
 // MemcpyAutoAsync copies data with automatic direction detection asynchronously.
-func MemcpyAutoAsync(dst, src unsafe.Pointer, bytes int64, stream Stream) error {
+func MemcpyAutoAsync(dst, src unsafe.Pointer, bytes int64, stream *Stream) error {
 	return MemcpyAsync(dst, src, bytes, Auto, stream)
 }
 
 // MemcpyHtoDAsync copies data from host to device memory asynchronously.
-func MemcpyHtoDAsync(dst DevicePtr, src HostPtr, bytes int64, stream Stream) error {
+func MemcpyHtoDAsync(dst DevicePtr, src HostPtr, bytes int64, stream *Stream) error {
 	return MemcpyAsync(unsafe.Pointer(dst), unsafe.Pointer(src), bytes, HtoD, stream)
 }
 
 // MemcpyDtoHAsync copies data from device to host memory asynchronously.
-func MemcpyDtoHAsync(dst HostPtr, src DevicePtr, bytes int64, stream Stream) error {
+func MemcpyDtoHAsync(dst HostPtr, src DevicePtr, bytes int64, stream *Stream) error {
 	return MemcpyAsync(unsafe.Pointer(dst), unsafe.Pointer(src), bytes, DtoH, stream)
 }
 
 // MemcpyDtoDAsync copies data from device to device memory asynchronously.
-func MemcpyDtoDAsync(dst, src DevicePtr, bytes int64, stream Stream) error {
+func MemcpyDtoDAsync(dst, src DevicePtr, bytes int64, stream *Stream) error {
 	return MemcpyAsync(unsafe.Pointer(dst), unsafe.Pointer(src), bytes, DtoD, stream)
 }
 
 // MemcpyHtoHAsync copies data from host to host memory asynchronously.
-func MemcpyHtoHAsync(dst, src HostPtr, bytes int64, stream Stream) error {
+func MemcpyHtoHAsync(dst, src HostPtr, bytes int64, stream *Stream) error {
 	return MemcpyAsync(unsafe.Pointer(dst), unsafe.Pointer(src), bytes, HtoH, stream)
 }
 
@@ -139,6 +139,6 @@ func Memset(dst DevicePtr, value byte, bytes int64) error {
 }
 
 // MemsetAsync sets memory to a value asynchronously.
-func MemsetAsync(dst DevicePtr, value byte, bytes int64, stream Stream) error {
-	return Check(C.cudaMemsetAsync(unsafe.Pointer(dst), C.int(value), C.size_t(bytes), stream.c()))
+func MemsetAsync(dst DevicePtr, value byte, bytes int64, stream *Stream) error {
+	return Check(C.cudaMemsetAsync(unsafe.Pointer(dst), C.int(value), C.size_t(bytes), stream.CStream()))
 }

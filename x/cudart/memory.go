@@ -236,7 +236,7 @@ func MemcpyHtoH[T any](dst, src []T) error {
 // MemcpyAsync copies data between memory locations asynchronously with specified direction.
 // If slice lengths differ, copies min(len(dst), len(src)) elements.
 // The operation is queued in the specified stream and returns immediately.
-func MemcpyAsync[T any](dst, src []T, kind uint, stream cudart.Stream) error {
+func MemcpyAsync[T any](dst, src []T, kind uint, stream *cudart.Stream) error {
 	if len(src) == 0 || len(dst) == 0 {
 		return nil
 	}
@@ -252,7 +252,7 @@ func MemcpyAsync[T any](dst, src []T, kind uint, stream cudart.Stream) error {
 // MemcpyAutoAsync copies data with automatic direction detection asynchronously.
 // If slice lengths differ, copies min(len(dst), len(src)) elements.
 // CUDA automatically detects the copy direction and queues the operation in the stream.
-func MemcpyAutoAsync[T any](dst, src []T, stream cudart.Stream) error {
+func MemcpyAutoAsync[T any](dst, src []T, stream *cudart.Stream) error {
 	if len(src) == 0 || len(dst) == 0 {
 		return nil
 	}
@@ -266,7 +266,7 @@ func MemcpyAutoAsync[T any](dst, src []T, stream cudart.Stream) error {
 }
 
 // MemcpyHtoDAsync copies a Go slice from host to device memory asynchronously.
-func MemcpyHtoDAsync[T any](dst cudart.DevicePtr, src []T, stream cudart.Stream) error {
+func MemcpyHtoDAsync[T any](dst cudart.DevicePtr, src []T, stream *cudart.Stream) error {
 	if len(src) == 0 {
 		return nil
 	}
@@ -276,7 +276,7 @@ func MemcpyHtoDAsync[T any](dst cudart.DevicePtr, src []T, stream cudart.Stream)
 }
 
 // MemcpyDtoHAsync copies data from device to host memory asynchronously.
-func MemcpyDtoHAsync[T any](dst []T, src cudart.DevicePtr, stream cudart.Stream) error {
+func MemcpyDtoHAsync[T any](dst []T, src cudart.DevicePtr, stream *cudart.Stream) error {
 	if len(dst) == 0 {
 		return nil
 	}
@@ -286,7 +286,7 @@ func MemcpyDtoHAsync[T any](dst []T, src cudart.DevicePtr, stream cudart.Stream)
 }
 
 // MemcpyDtoDAsync copies data between device memory locations asynchronously.
-func MemcpyDtoDAsync[T any](dst, src cudart.DevicePtr, count int, stream cudart.Stream) error {
+func MemcpyDtoDAsync[T any](dst, src cudart.DevicePtr, count int, stream *cudart.Stream) error {
 	if count == 0 {
 		return nil
 	}
@@ -298,7 +298,7 @@ func MemcpyDtoDAsync[T any](dst, src cudart.DevicePtr, count int, stream cudart.
 // MemcpyHtoHAsync copies data between host memory locations asynchronously.
 // If slice lengths differ, copies min(len(dst), len(src)) elements.
 // The operation is queued in the specified stream for asynchronous execution.
-func MemcpyHtoHAsync[T any](dst, src []T, stream cudart.Stream) error {
+func MemcpyHtoHAsync[T any](dst, src []T, stream *cudart.Stream) error {
 	if len(src) == 0 || len(dst) == 0 {
 		return nil
 	}
@@ -322,7 +322,7 @@ func Memset[T any](dst cudart.DevicePtr, value byte, count int) error {
 }
 
 // MemsetAsync sets device memory to a value asynchronously.
-func MemsetAsync[T any](dst cudart.DevicePtr, value byte, count int, stream cudart.Stream) error {
+func MemsetAsync[T any](dst cudart.DevicePtr, value byte, count int, stream *cudart.Stream) error {
 	if count == 0 {
 		return nil
 	}

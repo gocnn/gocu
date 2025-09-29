@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/gocnn/gocu/cublas"
+	"github.com/gocnn/gocu/x/cublas"
 	"github.com/gocnn/gocu/x/cudart"
 )
 
@@ -35,9 +35,9 @@ func main() {
 	defer cudart.Free(devB)
 	defer cudart.Free(devC)
 
-	impl := cublas.New()
-	defer impl.Close()
-	impl.Sgemm(cublas.NoTranspose, cublas.NoTranspose, M, N, K, alpha, devA, M, devB, K, beta, devC, M)
+	blas := cublas.New()
+	defer blas.Close()
+	blas.Sgemm(cublas.NoTrans, cublas.NoTrans, M, N, K, alpha, devA, M, devB, K, beta, devC, M)
 
 	cudart.MemcpyDtoH(C, devC)
 

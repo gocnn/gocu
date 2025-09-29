@@ -13,8 +13,8 @@ import (
 	"unsafe"
 )
 
-// CudaDeviceProp holds the definition.
-type CudaDeviceProp struct {
+// DeviceProp holds the definition.
+type DeviceProp struct {
 	Eccenabled                             int       // int
 	AccessPolicyMaxWindowSize              int       // int
 	AsyncEngineCount                       int       // int
@@ -111,8 +111,8 @@ type CudaDeviceProp struct {
 	WarpSize                               int       // int
 }
 
-// fromC converts a C.struct_cudaDeviceProp to a Go CudaDeviceProp.
-func (p *CudaDeviceProp) fromC(prop *C.struct_cudaDeviceProp) {
+// fromC converts a C.struct_cudaDeviceProp to a Go DeviceProp.
+func (p *DeviceProp) fromC(prop *C.struct_cudaDeviceProp) {
 	p.Eccenabled = int(prop.ECCEnabled)
 	p.AccessPolicyMaxWindowSize = int(prop.accessPolicyMaxWindowSize)
 	p.AsyncEngineCount = int(prop.asyncEngineCount)

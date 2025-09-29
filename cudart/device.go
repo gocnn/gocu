@@ -8,21 +8,21 @@ import "C"
 // Device represents a CUDA device ordinal.
 type Device int
 
-// CudaDeviceAttr represents CUDA device attributes that can be queried.
-type CudaDeviceAttr uint32
+// DeviceAttr represents CUDA device attributes that can be queried.
+type DeviceAttr uint32
 
-// CudaLimit represents CUDA limits that can be queried or set.
-type CudaLimit uint32
+// Limit represents CUDA limits that can be queried or set.
+type Limit uint32
 
-// Constants for CudaLimit.
+// Constants for Limit.
 const (
-	CudaLimitDevRuntimePendingLaunchCount CudaLimit = C.cudaLimitDevRuntimePendingLaunchCount
-	CudaLimitDevRuntimeSyncDepth          CudaLimit = C.cudaLimitDevRuntimeSyncDepth
-	CudaLimitMallocHeapSize               CudaLimit = C.cudaLimitMallocHeapSize
-	CudaLimitMaxL2FetchGranularity        CudaLimit = C.cudaLimitMaxL2FetchGranularity
-	CudaLimitPersistingL2CacheSize        CudaLimit = C.cudaLimitPersistingL2CacheSize
-	CudaLimitPrintfFifoSize               CudaLimit = C.cudaLimitPrintfFifoSize
-	CudaLimitStackSize                    CudaLimit = C.cudaLimitStackSize
+	LimitDevRuntimePendingLaunchCount Limit = C.cudaLimitDevRuntimePendingLaunchCount
+	LimitDevRuntimeSyncDepth          Limit = C.cudaLimitDevRuntimeSyncDepth
+	LimitMallocHeapSize               Limit = C.cudaLimitMallocHeapSize
+	LimitMaxL2FetchGranularity        Limit = C.cudaLimitMaxL2FetchGranularity
+	LimitPersistingL2CacheSize        Limit = C.cudaLimitPersistingL2CacheSize
+	LimitPrintfFifoSize               Limit = C.cudaLimitPrintfFifoSize
+	LimitStackSize                    Limit = C.cudaLimitStackSize
 )
 
 // GetDevice returns which device is currently being used.
@@ -45,7 +45,7 @@ func GetDeviceCount() (int, error) {
 }
 
 // GetDeviceAttribute returns information about the device.
-func GetDeviceAttribute(attr CudaDeviceAttr, device Device) (int, error) {
+func GetDeviceAttribute(attr DeviceAttr, device Device) (int, error) {
 	var value C.int
 	err := Check(C.cudaDeviceGetAttribute(&value, uint32(attr), C.int(device)))
 	return int(value), err
@@ -74,21 +74,21 @@ func GetDeviceFlags() (uint, error) {
 }
 
 // DeviceGetLimit returns resource limits.
-func DeviceGetLimit(limit CudaLimit) (int64, error) {
+func DeviceGetLimit(limit Limit) (int64, error) {
 	var value C.size_t
 	err := Check(C.cudaDeviceGetLimit(&value, uint32(limit)))
 	return int64(value), err
 }
 
 // DeviceSetLimit sets resource limits.
-func DeviceSetLimit(limit CudaLimit, value int64) error {
+func DeviceSetLimit(limit Limit, value int64) error {
 	return Check(C.cudaDeviceSetLimit(uint32(limit), C.size_t(value)))
 }
 
 // GetDeviceProperties returns the properties of a compute device.
-func GetDeviceProperties(device Device) (*CudaDeviceProp, error) {
+func GetDeviceProperties(device Device) (*DeviceProp, error) {
 	var prop C.struct_cudaDeviceProp
-	var properties CudaDeviceProp
+	var properties DeviceProp
 	err := Check(C.cudaGetDeviceProperties(&prop, C.int(device)))
 	if err != nil {
 		return nil, err

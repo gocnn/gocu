@@ -51,12 +51,15 @@ func main() {
 		panic(err)
 	}
 
-	impl := cublas.New()
-	defer impl.Close()
+	handle, err := cublas.Create()
+	if err != nil {
+		panic(err)
+	}
+	defer handle.Destroy()
 
-	impl.Sgemm(cublas.NoTranspose, cublas.NoTranspose, M, N, K, alpha, devA, M, devB, K, beta, devC, M)
+	err = cublas.Sgemm(handle, cublas.NoTrans, cublas.NoTrans, M, N, K, alpha, devA, M, devB, K, beta, devC, M)
 
-	if err := impl.Err(); err != nil {
+	if err != nil {
 		panic(err)
 	}
 

@@ -12,8 +12,8 @@ import (
 // Device represents a CUDA device ordinal.
 type Device C.CUdeviceptr
 
-// DeviceAttribute represents CUDA device attributes that can be queried. Generated from cuda v12.0 cuda.h.
-type CUDeviceAttr int
+// DeviceAttr represents CUDA device attributes that can be queried. Generated from cuda v12.0 cuda.h.
+type DeviceAttr int
 
 // DeviceGet retrieves the device with the specified index.
 // Returns an error if the index is invalid.
@@ -65,7 +65,7 @@ func (dev Device) UUID() (uuid.UUID, error) {
 
 // DeviceGetAttribute retrieves the value of the specified device attribute.
 // Returns an error if the query fails.
-func DeviceGetAttribute(attr CUDeviceAttr, dev Device) (int, error) {
+func DeviceGetAttribute(attr DeviceAttr, dev Device) (int, error) {
 	var val C.int
 	err := Check(C.cuDeviceGetAttribute(&val, C.CUdevice_attribute(attr), C.CUdevice(dev)))
 	return int(val), err
@@ -73,7 +73,7 @@ func DeviceGetAttribute(attr CUDeviceAttr, dev Device) (int, error) {
 
 // Attribute retrieves the value of the specified device attribute.
 // Returns an error if the query fails.
-func (dev Device) Attribute(attr CUDeviceAttr) (int, error) {
+func (dev Device) Attribute(attr DeviceAttr) (int, error) {
 	return DeviceGetAttribute(attr, dev)
 }
 
