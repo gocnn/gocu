@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"unsafe"
 
 	"github.com/gocnn/gocu/cublas"
 	"github.com/gocnn/gocu/cudart"
@@ -28,15 +29,15 @@ func main() {
 	}
 	C := make([]float32, M*N)
 
-	devA, err := cudart.Malloc(cudart.SliceBytes(A))
+	devA, err := cudart.Malloc(int64(len(A) * 4))
 	if err != nil {
 		panic(err)
 	}
-	devB, err := cudart.Malloc(cudart.SliceBytes(B))
+	devB, err := cudart.Malloc(int64(len(B) * 4))
 	if err != nil {
 		panic(err)
 	}
-	devC, err := cudart.Malloc(cudart.SliceBytes(C))
+	devC, err := cudart.Malloc(int64(len(C) * 4))
 	if err != nil {
 		panic(err)
 	}
@@ -44,10 +45,10 @@ func main() {
 	defer cudart.Free(devB)
 	defer cudart.Free(devC)
 
-	if err := cudart.MemcpyHtoD(devA, cudart.SliceToHostPtr(A), cudart.SliceBytes(A)); err != nil {
+	if err := cudart.MemcpyHtoD(devA, cudart.HostPtr(unsafe.Pointer(&A[0])), int64(len(A)*4)); err != nil {
 		panic(err)
 	}
-	if err := cudart.MemcpyHtoD(devB, cudart.SliceToHostPtr(B), cudart.SliceBytes(B)); err != nil {
+	if err := cudart.MemcpyHtoD(devB, cudart.HostPtr(unsafe.Pointer(&B[0])), int64(len(B)*4)); err != nil {
 		panic(err)
 	}
 
@@ -63,7 +64,7 @@ func main() {
 		panic(err)
 	}
 
-	if err := cudart.MemcpyDtoH(cudart.SliceToHostPtr(C), devC, cudart.SliceBytes(C)); err != nil {
+	if err := cudart.MemcpyDtoH(cudart.HostPtr(unsafe.Pointer(&C[0])), devC, int64(len(C)*4)); err != nil {
 		panic(err)
 	}
 

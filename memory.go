@@ -60,41 +60,41 @@ func MemcpyDtoD(dst, src DevicePtr, size int64) error {
 
 // MemcpyAsync copies size bytes from src to dst on the current device asynchronously.
 // The copy is performed in the specified stream.
-func MemcpyAsync(dst, src DevicePtr, size int64, stream Stream) error {
+func MemcpyAsync(dst, src DevicePtr, size int64, stream *Stream) error {
 	return Check(C.cuMemcpyAsync(
 		C.CUdeviceptr(dst), C.CUdeviceptr(src),
-		C.size_t(size), stream.c(),
+		C.size_t(size), stream.CStream(),
 	))
 }
 
 // MemcpyPeerAsync copies size bytes from src on srcCtx to dst on dstCtx across devices asynchronously.
 // Requires peer access to be enabled. The copy is performed in the specified stream.
-func MemcpyPeerAsync(dst DevicePtr, dstCtx Context, src DevicePtr, srcCtx Context, size int64, stream Stream) error {
+func MemcpyPeerAsync(dst DevicePtr, dstCtx Context, src DevicePtr, srcCtx Context, size int64, stream *Stream) error {
 	return Check(C.cuMemcpyPeerAsync(
 		C.CUdeviceptr(dst), dstCtx.CContext(),
 		C.CUdeviceptr(src), srcCtx.CContext(),
-		C.size_t(size), stream.c(),
+		C.size_t(size), stream.CStream(),
 	))
 }
 
 // MemcpyHtoDAsync copies size bytes from host memory (src) to device memory (dst) asynchronously.
 // The copy is performed in the specified stream.
-func MemcpyHtoDAsync(dst DevicePtr, src unsafe.Pointer, size int64, stream Stream) error {
-	return Check(C.cuMemcpyHtoDAsync(C.CUdeviceptr(dst), src, C.size_t(size), stream.c()))
+func MemcpyHtoDAsync(dst DevicePtr, src unsafe.Pointer, size int64, stream *Stream) error {
+	return Check(C.cuMemcpyHtoDAsync(C.CUdeviceptr(dst), src, C.size_t(size), stream.CStream()))
 }
 
 // MemcpyDtoHAsync copies size bytes from device memory (src) to host memory (dst) asynchronously.
 // The copy is performed in the specified stream.
-func MemcpyDtoHAsync(dst unsafe.Pointer, src DevicePtr, size int64, stream Stream) error {
-	return Check(C.cuMemcpyDtoHAsync(dst, C.CUdeviceptr(src), C.size_t(size), stream.c()))
+func MemcpyDtoHAsync(dst unsafe.Pointer, src DevicePtr, size int64, stream *Stream) error {
+	return Check(C.cuMemcpyDtoHAsync(dst, C.CUdeviceptr(src), C.size_t(size), stream.CStream()))
 }
 
 // MemcpyDtoDAsync copies size bytes from src to dst on the same device asynchronously.
 // The copy is performed in the specified stream.
-func MemcpyDtoDAsync(dst, src DevicePtr, size int64, stream Stream) error {
+func MemcpyDtoDAsync(dst, src DevicePtr, size int64, stream *Stream) error {
 	return Check(C.cuMemcpyDtoDAsync(
 		C.CUdeviceptr(dst), C.CUdeviceptr(src),
-		C.size_t(size), stream.c(),
+		C.size_t(size), stream.CStream(),
 	))
 }
 
@@ -147,53 +147,53 @@ func MemsetD2D32(dst DevicePtr, pitch, width, height int64, value uint) error {
 
 // MemsetD8Async sets size bytes of device memory at dst to the specified 8-bit value asynchronously.
 // The operation is performed in the specified stream. Returns an error if the operation fails.
-func MemsetD8Async(dst DevicePtr, value byte, size int64, stream Stream) error {
-	return Check(C.cuMemsetD8Async(C.CUdeviceptr(dst), C.uchar(value), C.size_t(size), stream.c()))
+func MemsetD8Async(dst DevicePtr, value byte, size int64, stream *Stream) error {
+	return Check(C.cuMemsetD8Async(C.CUdeviceptr(dst), C.uchar(value), C.size_t(size), stream.CStream()))
 }
 
 // MemsetD16Async sets size 16-bit words of device memory at dst to the specified 16-bit value asynchronously.
 // Size must be a multiple of 2. The operation is performed in the specified stream.
 // Returns an error if the operation fails.
-func MemsetD16Async(dst DevicePtr, value uint16, size int64, stream Stream) error {
-	return Check(C.cuMemsetD16Async(C.CUdeviceptr(dst), C.ushort(value), C.size_t(size), stream.c()))
+func MemsetD16Async(dst DevicePtr, value uint16, size int64, stream *Stream) error {
+	return Check(C.cuMemsetD16Async(C.CUdeviceptr(dst), C.ushort(value), C.size_t(size), stream.CStream()))
 }
 
 // MemsetD32Async sets size 32-bit words of device memory at dst to the specified 32-bit value asynchronously.
 // Size must be a multiple of 4. The operation is performed in the specified stream.
 // Returns an error if the operation fails.
-func MemsetD32Async(dst DevicePtr, value uint, size int64, stream Stream) error {
-	return Check(C.cuMemsetD32Async(C.CUdeviceptr(dst), C.uint(value), C.size_t(size), stream.c()))
+func MemsetD32Async(dst DevicePtr, value uint, size int64, stream *Stream) error {
+	return Check(C.cuMemsetD32Async(C.CUdeviceptr(dst), C.uint(value), C.size_t(size), stream.CStream()))
 }
 
 // MemsetD2D8Async sets a 2D device memory region at dst to the specified 8-bit value asynchronously.
 // The region has the given pitch, width, and height. The operation is performed in the specified stream.
 // Returns an error if the operation fails.
-func MemsetD2D8Async(dst DevicePtr, pitch, width, height int64, value byte, stream Stream) error {
+func MemsetD2D8Async(dst DevicePtr, pitch, width, height int64, value byte, stream *Stream) error {
 	return Check(C.cuMemsetD2D8Async(
 		C.CUdeviceptr(dst), C.size_t(pitch),
 		C.uchar(value), C.size_t(width), C.size_t(height),
-		stream.c(),
+		stream.CStream(),
 	))
 }
 
 // MemsetD2D16Async sets a 2D device memory region at dst to the specified 16-bit value asynchronously.
 // The region has the given pitch, width, and height. Width must be a multiple of 2.
 // The operation is performed in the specified stream. Returns an error if the operation fails.
-func MemsetD2D16Async(dst DevicePtr, pitch, width, height int64, value uint16, stream Stream) error {
+func MemsetD2D16Async(dst DevicePtr, pitch, width, height int64, value uint16, stream *Stream) error {
 	return Check(C.cuMemsetD2D16Async(
 		C.CUdeviceptr(dst), C.size_t(pitch),
 		C.ushort(value), C.size_t(width), C.size_t(height),
-		stream.c(),
+		stream.CStream(),
 	))
 }
 
 // MemsetD2D32Async sets a 2D device memory region at dst to the specified 32-bit value asynchronously.
 // The region has the given pitch, width, and height. Width must be a multiple of 4.
 // The operation is performed in the specified stream. Returns an error if the operation fails.
-func MemsetD2D32Async(dst DevicePtr, pitch, width, height int64, value uint, stream Stream) error {
+func MemsetD2D32Async(dst DevicePtr, pitch, width, height int64, value uint, stream *Stream) error {
 	return Check(C.cuMemsetD2D32Async(
 		C.CUdeviceptr(dst), C.size_t(pitch),
 		C.uint(value), C.size_t(width), C.size_t(height),
-		stream.c(),
+		stream.CStream(),
 	))
 }

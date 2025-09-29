@@ -4,6 +4,11 @@ package cublas
 #include <cublas_v2.h>
 */
 import "C"
+import (
+	"unsafe"
+
+	"github.com/gocnn/gocu/cudart"
+)
 
 type Handle struct {
 	h C.cublasHandle_t
@@ -35,22 +40,22 @@ func (h *Handle) CHandle() C.cublasHandle_t {
 	return h.h
 }
 
-// // SetStream sets the cuBLAS library stream, which will be used to execute all subsequent calls to the cuBLAS library functions.
-// // If the cuBLAS library stream is not set, all kernels use the default NULL stream.
-// // This routine can be used to change the stream between kernel launches and then to reset the cuBLAS library stream back to NULL.
-// // Additionally this function unconditionally resets the cuBLAS library workspace back to the default workspace pool.
-// func (h Handle) SetStream(stream *cudart.Stream) error {
-// 	return Check(C.cublasSetStream(h.h, stream.CStream()))
-// }
+// SetStream sets the cuBLAS library stream, which will be used to execute all subsequent calls to the cuBLAS library functions.
+// If the cuBLAS library stream is not set, all kernels use the default NULL stream.
+// This routine can be used to change the stream between kernel launches and then to reset the cuBLAS library stream back to NULL.
+// Additionally this function unconditionally resets the cuBLAS library workspace back to the default workspace pool.
+func (h Handle) SetStream(stream *cudart.Stream) error {
+	return Check(C.cublasSetStream(h.h, C.cudaStream_t(unsafe.Pointer(stream.CStream()))))
+}
 
-// // GetStream gets the cuBLAS library stream, which is being used to execute all calls to the cuBLAS library functions.
-// // If the cuBLAS library stream is not set, all kernels use the default NULL stream.
-// func (h Handle) GetStream() (*cudart.Stream, error) {
-// 	var streamId C.cudaStream_t
-// 	stream := &cudart.Stream{}
-// 	if err := Check(C.cublasGetStream(h.h, &streamId)); err != nil {
-// 		return nil, err
-// 	}
-// 	stream.SetCStream(streamId)
-// 	return stream, nil
-// }
+// GetStream gets the cuBLAS library stream, which is being used to execute all calls to the cuBLAS library functions.
+// If the cuBLAS library stream is not set, all kernels use the default NULL stream.
+func (h Handle) GetStream() (*cudart.Stream, error) {
+	var streamId C.cudaStream_t
+	if err := Check(C.cublasGetStream(h.h, &streamId)); err != nil {
+		return nil, err
+	}
+	stream := &cudart.Stream{}
+	stream.SetCStream(unsafe.Pointer(streamId))
+	return stream, nil
+}

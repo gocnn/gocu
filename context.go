@@ -62,74 +62,74 @@ const (
 type Context struct{ ctx C.CUcontext }
 
 // CContext returns the Context as its C version
-func (ctx Context) CContext() C.CUcontext { return ctx.ctx }
+func (ctx *Context) CContext() C.CUcontext { return ctx.ctx }
 
 // Context Creation and Destruction
 
 // CtxCreate creates a CUDA context
-func CtxCreate(flags uint32, dev Device) (Context, error) {
+func CtxCreate(flags uint32, dev Device) (*Context, error) {
 	var ctx C.CUcontext
 	result := Check(C.cuCtxCreate(&ctx, C.uint(flags), C.CUdevice(dev)))
-	return Context{ctx: ctx}, result
+	return &Context{ctx: ctx}, result
 }
 
 // CtxDestroy destroys a CUDA context
-func CtxDestroy(ctx Context) error {
+func CtxDestroy(ctx *Context) error {
 	return Check(C.cuCtxDestroy(ctx.CContext()))
 }
 
 // Destroy destroys the context (method version)
-func (ctx Context) Destroy() error {
+func (ctx *Context) Destroy() error {
 	return CtxDestroy(ctx)
 }
 
 // Context Stack Management
 
 // CtxPushCurrent pushes a context on the current CPU thread
-func CtxPushCurrent(ctx Context) error {
+func CtxPushCurrent(ctx *Context) error {
 	return Check(C.cuCtxPushCurrent(ctx.CContext()))
 }
 
 // PushCurrent pushes the context on the current CPU thread (method version)
-func (ctx Context) PushCurrent() error {
+func (ctx *Context) PushCurrent() error {
 	return CtxPushCurrent(ctx)
 }
 
 // CtxPopCurrent pops the current CUDA context from the current CPU thread
-func CtxPopCurrent() (Context, error) {
+func CtxPopCurrent() (*Context, error) {
 	var ctx C.CUcontext
 	result := Check(C.cuCtxPopCurrent(&ctx))
-	return Context{ctx: ctx}, result
+	return &Context{ctx: ctx}, result
 }
 
 // CtxSetCurrent binds the specified CUDA context to the calling CPU thread
-func CtxSetCurrent(ctx Context) error {
+func CtxSetCurrent(ctx *Context) error {
 	return Check(C.cuCtxSetCurrent(ctx.CContext()))
 }
 
 // SetCurrent binds the context to the calling CPU thread (method version)
-func (ctx Context) SetCurrent() error {
+func (ctx *Context) SetCurrent() error {
 	return CtxSetCurrent(ctx)
 }
 
 // CtxGetCurrent returns the CUDA context bound to the calling CPU thread
-func CtxGetCurrent() (Context, error) {
+func CtxGetCurrent() (*Context, error) {
 	var ctx C.CUcontext
 	result := Check(C.cuCtxGetCurrent(&ctx))
-	return Context{ctx: ctx}, result
+	return &Context{ctx: ctx}, result
 }
 
 // Context Property Queries
 
 // CtxGetApiVersion gets the context's API version
-func CtxGetApiVersion(ctx Context) (uint32, error) {
+func CtxGetApiVersion(ctx *Context) (uint32, error) {
 	var version C.uint
 	result := Check(C.cuCtxGetApiVersion(ctx.CContext(), &version))
 	return uint32(version), result
 }
 
 // GetApiVersion gets the context's API version (method version)
-func (ctx Context) GetApiVersion() (uint32, error) {
+func (ctx *Context) GetApiVersion() (uint32, error) {
 	return CtxGetApiVersion(ctx)
 }
 
@@ -141,7 +141,7 @@ func CtxGetDevice() (Device, error) {
 }
 
 // GetDevice returns the device handle for the context (method version)
-func (ctx Context) GetDevice() (Device, error) {
+func (ctx *Context) GetDevice() (Device, error) {
 	return CtxGetDevice()
 }
 
@@ -153,14 +153,14 @@ func CtxGetFlags() (uint32, error) {
 }
 
 // CtxGetId returns the unique Id associated with the context
-func CtxGetId(ctx Context) (uint64, error) {
+func CtxGetId(ctx *Context) (uint64, error) {
 	var ctxId C.ulonglong
 	result := Check(C.cuCtxGetId(ctx.CContext(), &ctxId))
 	return uint64(ctxId), result
 }
 
 // GetId returns the unique Id associated with the context (method version)
-func (ctx Context) GetId() (uint64, error) {
+func (ctx *Context) GetId() (uint64, error) {
 	return CtxGetId(ctx)
 }
 
@@ -234,7 +234,7 @@ func CtxSynchronize() error {
 }
 
 // Synchronize blocks for the context's tasks to complete (method version)
-func (ctx Context) Synchronize() error {
+func (ctx *Context) Synchronize() error {
 	return CtxSynchronize()
 }
 
@@ -248,21 +248,21 @@ func CtxResetPersistingL2Cache() error {
 // Event Operations
 
 // CtxRecordEvent records an event
-func CtxRecordEvent(ctx Context, event Event) error {
-	return Check(C.cuCtxRecordEvent(ctx.CContext(), event.c()))
+func CtxRecordEvent(ctx *Context, event *Event) error {
+	return Check(C.cuCtxRecordEvent(ctx.CContext(), event.CEvent()))
 }
 
 // RecordEvent records an event (method version)
-func (ctx Context) RecordEvent(event Event) error {
+func (ctx *Context) RecordEvent(event *Event) error {
 	return CtxRecordEvent(ctx, event)
 }
 
 // CtxWaitEvent makes a context wait on an event
-func CtxWaitEvent(ctx Context, event Event) error {
-	return Check(C.cuCtxWaitEvent(ctx.CContext(), event.c()))
+func CtxWaitEvent(ctx *Context, event *Event) error {
+	return Check(C.cuCtxWaitEvent(ctx.CContext(), event.CEvent()))
 }
 
 // WaitEvent makes the context wait on an event (method version)
-func (ctx Context) WaitEvent(event Event) error {
+func (ctx *Context) WaitEvent(event *Event) error {
 	return CtxWaitEvent(ctx, event)
 }

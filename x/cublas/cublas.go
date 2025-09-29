@@ -51,7 +51,6 @@ const (
 
 type CudaBlas struct {
 	handle *cublas.Handle
-	stream *cudart.Stream
 	sync.Mutex
 }
 
@@ -77,12 +76,16 @@ func (h *CudaBlas) Handle() *cublas.Handle {
 	return h.handle
 }
 
-// Stream returns the stream being used by the BLAS handler.
-func (h *CudaBlas) Stream() *cudart.Stream {
-	return h.stream
-}
-
 // SetStream sets the stream to be used by the BLAS handler.
 func (h *CudaBlas) SetStream(stream *cudart.Stream) {
-	h.stream = stream
+	h.Lock()
+	defer h.Unlock()
+	h.handle.SetStream(stream)
+}
+
+// GetStream gets the stream being used by the BLAS handler.
+func (h *CudaBlas) GetStream() (*cudart.Stream, error) {
+	h.Lock()
+	defer h.Unlock()
+	return h.handle.GetStream()
 }

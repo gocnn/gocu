@@ -26,20 +26,20 @@ func main() {
 		1, 0, 2, 0,
 		0, 1, 0, 2,
 	})
-	devC, managedC, _ := cudart.MallocManaged(make([]float32, M*N))
+	devC, hostC, _ := cudart.MallocManaged(make([]float32, M*N))
 	defer cudart.Free(devA)
 	defer cudart.Free(devB)
 	defer cudart.Free(devC)
 
-	impl := cublas.New()
-	defer impl.Close()
-	impl.Sgemm(cublas.NoTrans, cublas.NoTrans, M, N, K, alpha, devA, M, devB, K, beta, devC, M)
+	blas := cublas.New()
+	defer blas.Close()
+	blas.Sgemm(cublas.NoTrans, cublas.NoTrans, M, N, K, alpha, devA, M, devB, K, beta, devC, M)
 
 	cudart.DeviceSynchronize()
 
 	for i := range M {
 		for j := range N {
-			fmt.Printf("%8.1f ", managedC[i*N+j])
+			fmt.Printf("%8.1f ", hostC[i*N+j])
 		}
 		fmt.Println()
 	}

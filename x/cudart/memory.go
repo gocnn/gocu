@@ -27,7 +27,7 @@ func Malloc[T any](slice []T) (cudart.DevicePtr, error) {
 	if len(slice) == 0 {
 		return cudart.DevicePtr(nil), nil
 	}
-	bytes := cudart.SliceBytes(slice)
+	bytes := SliceBytes(slice)
 	return cudart.Malloc(bytes)
 }
 
@@ -44,7 +44,7 @@ func MallocHost[T any](slice []T) (cudart.HostPtr, error) {
 	if len(slice) == 0 {
 		return cudart.HostPtr(nil), nil
 	}
-	bytes := cudart.SliceBytes(slice)
+	bytes := SliceBytes(slice)
 	return cudart.MallocHost(bytes)
 }
 
@@ -94,7 +94,7 @@ func MallocHostAndCopy[T any](src []T) (cudart.HostPtr, []T, error) {
 	}
 
 	// Create a slice that points to the allocated memory
-	hostSlice := cudart.HostPtrToSlice[T](ptr, len(src))
+	hostSlice := HostPtrToSlice[T](ptr, len(src))
 	copy(hostSlice, src)
 
 	return ptr, hostSlice, nil
@@ -115,9 +115,9 @@ func MallocManaged[T any](slice []T) (cudart.DevicePtr, []T, error) {
 	if len(slice) == 0 {
 		return cudart.DevicePtr(nil), nil, nil
 	}
-	bytes := cudart.SliceBytes(slice)
+	bytes := SliceBytes(slice)
 	ptr, err := cudart.MallocManaged(bytes)
-	return cudart.DevicePtr(ptr), cudart.HostPtrToSlice[T](cudart.HostPtr(ptr), len(slice)), err
+	return cudart.DevicePtr(ptr), HostPtrToSlice[T](cudart.HostPtr(ptr), len(slice)), err
 }
 
 // MallocManagedAndCopy allocates unified memory and copies the slice data to it.
@@ -165,8 +165,8 @@ func Memcpy[T any](dst, src []T, kind uint) error {
 	// Use the smaller of the two slice lengths to prevent buffer overflow
 	count := min(len(dst), len(src))
 
-	dstPtr := cudart.SliceToHostPtr(dst[:count])
-	srcPtr := cudart.SliceToHostPtr(src[:count])
+	dstPtr := SliceToHostPtr(dst[:count])
+	srcPtr := SliceToHostPtr(src[:count])
 	bytes := int64(count) * int64(int(unsafe.Sizeof(src[0])))
 	return cudart.Memcpy(unsafe.Pointer(dstPtr), unsafe.Pointer(srcPtr), bytes, kind)
 }
@@ -181,8 +181,8 @@ func MemcpyAuto[T any](dst, src []T) error {
 	// Use the smaller of the two slice lengths to prevent buffer overflow
 	count := min(len(dst), len(src))
 
-	dstPtr := cudart.SliceToHostPtr(dst[:count])
-	srcPtr := cudart.SliceToHostPtr(src[:count])
+	dstPtr := SliceToHostPtr(dst[:count])
+	srcPtr := SliceToHostPtr(src[:count])
 	bytes := int64(count) * int64(int(unsafe.Sizeof(src[0])))
 	return cudart.MemcpyAuto(unsafe.Pointer(dstPtr), unsafe.Pointer(srcPtr), bytes)
 }
@@ -192,8 +192,8 @@ func MemcpyHtoD[T any](dst cudart.DevicePtr, src []T) error {
 	if len(src) == 0 {
 		return nil
 	}
-	srcPtr := cudart.SliceToHostPtr(src)
-	bytes := cudart.SliceBytes(src)
+	srcPtr := SliceToHostPtr(src)
+	bytes := SliceBytes(src)
 	return cudart.MemcpyHtoD(dst, srcPtr, bytes)
 }
 
@@ -202,8 +202,8 @@ func MemcpyDtoH[T any](dst []T, src cudart.DevicePtr) error {
 	if len(dst) == 0 {
 		return nil
 	}
-	dstPtr := cudart.SliceToHostPtr(dst)
-	bytes := cudart.SliceBytes(dst)
+	dstPtr := SliceToHostPtr(dst)
+	bytes := SliceBytes(dst)
 	return cudart.MemcpyDtoH(dstPtr, src, bytes)
 }
 
@@ -227,8 +227,8 @@ func MemcpyHtoH[T any](dst, src []T) error {
 	// Use the smaller of the two slice lengths to prevent buffer overflow
 	count := min(len(dst), len(src))
 
-	dstPtr := cudart.SliceToHostPtr(dst[:count])
-	srcPtr := cudart.SliceToHostPtr(src[:count])
+	dstPtr := SliceToHostPtr(dst[:count])
+	srcPtr := SliceToHostPtr(src[:count])
 	bytes := int64(count) * int64(int(unsafe.Sizeof(src[0])))
 	return cudart.MemcpyHtoH(dstPtr, srcPtr, bytes)
 }
@@ -243,8 +243,8 @@ func MemcpyAsync[T any](dst, src []T, kind uint, stream *cudart.Stream) error {
 	// Use the smaller of the two slice lengths to prevent buffer overflow
 	count := min(len(dst), len(src))
 
-	dstPtr := cudart.SliceToHostPtr(dst[:count])
-	srcPtr := cudart.SliceToHostPtr(src[:count])
+	dstPtr := SliceToHostPtr(dst[:count])
+	srcPtr := SliceToHostPtr(src[:count])
 	bytes := int64(count) * int64(int(unsafe.Sizeof(src[0])))
 	return cudart.MemcpyAsync(unsafe.Pointer(dstPtr), unsafe.Pointer(srcPtr), bytes, kind, stream)
 }
@@ -259,8 +259,8 @@ func MemcpyAutoAsync[T any](dst, src []T, stream *cudart.Stream) error {
 	// Use the smaller of the two slice lengths to prevent buffer overflow
 	count := min(len(dst), len(src))
 
-	dstPtr := cudart.SliceToHostPtr(dst[:count])
-	srcPtr := cudart.SliceToHostPtr(src[:count])
+	dstPtr := SliceToHostPtr(dst[:count])
+	srcPtr := SliceToHostPtr(src[:count])
 	bytes := int64(count) * int64(int(unsafe.Sizeof(src[0])))
 	return cudart.MemcpyAutoAsync(unsafe.Pointer(dstPtr), unsafe.Pointer(srcPtr), bytes, stream)
 }
@@ -270,8 +270,8 @@ func MemcpyHtoDAsync[T any](dst cudart.DevicePtr, src []T, stream *cudart.Stream
 	if len(src) == 0 {
 		return nil
 	}
-	srcPtr := cudart.SliceToHostPtr(src)
-	bytes := cudart.SliceBytes(src)
+	srcPtr := SliceToHostPtr(src)
+	bytes := SliceBytes(src)
 	return cudart.MemcpyAsync(unsafe.Pointer(dst), unsafe.Pointer(srcPtr), bytes, HtoD, stream)
 }
 
@@ -280,8 +280,8 @@ func MemcpyDtoHAsync[T any](dst []T, src cudart.DevicePtr, stream *cudart.Stream
 	if len(dst) == 0 {
 		return nil
 	}
-	dstPtr := cudart.SliceToHostPtr(dst)
-	bytes := cudart.SliceBytes(dst)
+	dstPtr := SliceToHostPtr(dst)
+	bytes := SliceBytes(dst)
 	return cudart.MemcpyAsync(unsafe.Pointer(dstPtr), unsafe.Pointer(src), bytes, DtoH, stream)
 }
 
@@ -291,7 +291,7 @@ func MemcpyDtoDAsync[T any](dst, src cudart.DevicePtr, count int, stream *cudart
 		return nil
 	}
 	var dummy T
-	bytes := int64(count) * int64(cudart.SliceBytes([]T{dummy})/1)
+	bytes := int64(count) * int64(SliceBytes([]T{dummy})/1)
 	return cudart.MemcpyAsync(unsafe.Pointer(dst), unsafe.Pointer(src), bytes, DtoD, stream)
 }
 
@@ -305,8 +305,8 @@ func MemcpyHtoHAsync[T any](dst, src []T, stream *cudart.Stream) error {
 	// Use the smaller of the two slice lengths to prevent buffer overflow
 	count := min(len(dst), len(src))
 
-	dstPtr := cudart.SliceToHostPtr(dst[:count])
-	srcPtr := cudart.SliceToHostPtr(src[:count])
+	dstPtr := SliceToHostPtr(dst[:count])
+	srcPtr := SliceToHostPtr(src[:count])
 	bytes := int64(count) * int64(int(unsafe.Sizeof(src[0])))
 	return cudart.MemcpyAsync(unsafe.Pointer(dstPtr), unsafe.Pointer(srcPtr), bytes, HtoH, stream)
 }
@@ -327,6 +327,6 @@ func MemsetAsync[T any](dst cudart.DevicePtr, value byte, count int, stream *cud
 		return nil
 	}
 	var dummy T
-	bytes := int64(count) * int64(cudart.SliceBytes([]T{dummy})/1)
+	bytes := int64(count) * int64(SliceBytes([]T{dummy})/1)
 	return cudart.MemsetAsync(dst, value, bytes, stream)
 }
