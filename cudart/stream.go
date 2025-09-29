@@ -4,6 +4,7 @@ package cudart
 #include <cuda_runtime.h>
 */
 import "C"
+import "unsafe"
 
 // StreamFlags represents flags for stream creation.
 type StreamFlags uint
@@ -24,8 +25,8 @@ func (s *Stream) CStream() C.cudaStream_t {
 }
 
 // SetCStream sets the underlying C.cudaStream_t value.
-func (s *Stream) SetCStream(stream C.cudaStream_t) {
-	s.stream = stream
+func (s *Stream) SetCStream(stream unsafe.Pointer) {
+	s.stream = C.cudaStream_t(stream)
 }
 
 // StreamCreate creates an asynchronous stream.

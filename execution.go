@@ -209,7 +209,7 @@ func LaunchKernel(function Function, gridDimX, gridDimY, gridDimZ, blockDimX, bl
 		C.uint(gridDimX), C.uint(gridDimY), C.uint(gridDimZ),
 		C.uint(blockDimX), C.uint(blockDimY), C.uint(blockDimZ),
 		C.uint(sharedMemBytes),
-		stream.c(),
+		stream.CStream(),
 		kernelParamsPtr,
 		extraPtr,
 	))
@@ -230,7 +230,7 @@ func LaunchKernelEx(config CUlaunchConfig, function Function, kernelParams []uns
 		blockDimY:      C.uint(config.BlockDimY),
 		blockDimZ:      C.uint(config.BlockDimZ),
 		sharedMemBytes: C.uint(config.SharedMemBytes),
-		hStream:        config.Stream.c(),
+		hStream:        config.Stream.CStream(),
 	}
 
 	var kernelParamsPtr *unsafe.Pointer
@@ -263,7 +263,7 @@ func LaunchCooperativeKernel(function Function, gridDimX, gridDimY, gridDimZ, bl
 		C.uint(gridDimX), C.uint(gridDimY), C.uint(gridDimZ),
 		C.uint(blockDimX), C.uint(blockDimY), C.uint(blockDimZ),
 		C.uint(sharedMemBytes),
-		stream.c(),
+		stream.CStream(),
 		kernelParamsPtr,
 	))
 }
