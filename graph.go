@@ -1,6 +1,8 @@
 package gocu
 
-// #include <cuda.h>
+/*
+#include <cuda.h>
+*/
 import "C"
 
 // CUGraph is a CUDA graph

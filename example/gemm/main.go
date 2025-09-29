@@ -59,7 +59,6 @@ func main() {
 	defer handle.Destroy()
 
 	err = cublas.Sgemm(handle, cublas.NoTrans, cublas.NoTrans, M, N, K, alpha, devA, M, devB, K, beta, devC, M)
-
 	if err != nil {
 		panic(err)
 	}

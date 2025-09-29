@@ -1,6 +1,8 @@
 package gocu
 
-// #include <cuda.h>
+/*
+#include <cuda.h>
+*/
 import "C"
 
 // EventFlags are flags to be used with event creation
