@@ -10,7 +10,7 @@ import (
 )
 
 // Device represents a CUDA device ordinal.
-type Device int
+type Device C.CUdeviceptr
 
 // DeviceAttribute represents CUDA device attributes that can be queried. Generated from cuda v12.0 cuda.h.
 type CUDeviceAttr int
