@@ -1,9 +1,11 @@
-package gocu
+//go:build static
 
-// This file provides CGO flags for dynamic linking with CUDA libraries (default).
+package cudart
+
+// This file provides CGO flags for static linking with CUDART libraries.
 
 /*
-#cgo LDFLAGS: -lcuda
+#cgo LDFLAGS: -lcudart_static
 
 #cgo linux LDFLAGS: -L/usr/local/cuda/lib64
 #cgo linux CFLAGS: -I/usr/local/cuda/include
