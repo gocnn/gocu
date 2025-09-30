@@ -10,7 +10,7 @@ func Generate(cfg Config) error {
 		return fmt.Errorf("parsing versions: %w", err)
 	}
 
-	commonFields := FindCommonFields(versionFields)
+	commonFields := FindCommonFields(versionFields, cfg.IsEnum)
 
 	defaultCfg := cfg
 	defaultCfg.Filename += ".go"

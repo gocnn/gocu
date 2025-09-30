@@ -9,43 +9,43 @@ import "C"
 type StreamFlags uint32
 
 const (
-	StreamDefault     StreamFlags = 0x0 // Default stream flag
-	StreamNonBlocking StreamFlags = 0x1 // Stream does not synchronize with stream 0 (the NULL stream)
+	CuStreamDefault     StreamFlags = C.CU_STREAM_DEFAULT      // Default stream flag
+	CuStreamNonBlocking StreamFlags = C.CU_STREAM_NON_BLOCKING // Stream does not synchronize with stream 0 (the NULL stream)
 )
 
-// CUStreamCaptureMode is the mode for stream capture
-type CUStreamCaptureMode C.CUstreamCaptureMode
+// StreamCaptureMode is the mode for stream capture
+type StreamCaptureMode C.CUstreamCaptureMode
 
 const (
-	StreamCaptureModeGlobal      CUStreamCaptureMode = C.CU_STREAM_CAPTURE_MODE_GLOBAL
-	StreamCaptureModeThreadLocal CUStreamCaptureMode = C.CU_STREAM_CAPTURE_MODE_THREAD_LOCAL
-	StreamCaptureModeRelaxed     CUStreamCaptureMode = C.CU_STREAM_CAPTURE_MODE_RELAXED
+	CuStreamCaptureModeGlobal      StreamCaptureMode = C.CU_STREAM_CAPTURE_MODE_GLOBAL
+	CuStreamCaptureModeThreadLocal StreamCaptureMode = C.CU_STREAM_CAPTURE_MODE_THREAD_LOCAL
+	CuStreamCaptureModeRelaxed     StreamCaptureMode = C.CU_STREAM_CAPTURE_MODE_RELAXED
 )
 
 // EventWaitFlags are flags to be used with stream wait event operations
 type EventWaitFlags uint32
 
 const (
-	EventWaitDefault  EventWaitFlags = C.CU_EVENT_WAIT_DEFAULT  // Default event wait flag
-	EventWaitExternal EventWaitFlags = C.CU_EVENT_WAIT_EXTERNAL // Event is captured as external node during stream capture
+	CuEventWaitDefault  EventWaitFlags = C.CU_EVENT_WAIT_DEFAULT  // Default event wait flag
+	CuEventWaitExternal EventWaitFlags = C.CU_EVENT_WAIT_EXTERNAL // Event is captured as external node during stream capture
 )
 
 // MemAttachFlags are flags to be used with memory attach operations
 type MemAttachFlags uint32
 
 const (
-	MemAttachGlobal MemAttachFlags = C.CU_MEM_ATTACH_GLOBAL // Memory can be accessed by any stream on any device
-	MemAttachHost   MemAttachFlags = C.CU_MEM_ATTACH_HOST   // Memory cannot be accessed by any stream on any device
-	MemAttachSingle MemAttachFlags = C.CU_MEM_ATTACH_SINGLE // Memory can only be accessed by a single stream on the associated device
+	CuMemAttachGlobal MemAttachFlags = C.CU_MEM_ATTACH_GLOBAL // Memory can be accessed by any stream on any device
+	CuMemAttachHost   MemAttachFlags = C.CU_MEM_ATTACH_HOST   // Memory cannot be accessed by any stream on any device
+	CuMemAttachSingle MemAttachFlags = C.CU_MEM_ATTACH_SINGLE // Memory can only be accessed by a single stream on the associated device
 )
 
 // Stream capture status
-type CUStreamCaptureStatus C.CUstreamCaptureStatus
+type StreamCaptureStatus C.CUstreamCaptureStatus
 
 const (
-	StreamCaptureStatusNone        CUStreamCaptureStatus = C.CU_STREAM_CAPTURE_STATUS_NONE
-	StreamCaptureStatusActive      CUStreamCaptureStatus = C.CU_STREAM_CAPTURE_STATUS_ACTIVE
-	StreamCaptureStatusInvalidated CUStreamCaptureStatus = C.CU_STREAM_CAPTURE_STATUS_INVALIDATED
+	CuStreamCaptureStatusNone        StreamCaptureStatus = C.CU_STREAM_CAPTURE_STATUS_NONE
+	CuStreamCaptureStatusActive      StreamCaptureStatus = C.CU_STREAM_CAPTURE_STATUS_ACTIVE
+	CuStreamCaptureStatusInvalidated StreamCaptureStatus = C.CU_STREAM_CAPTURE_STATUS_INVALIDATED
 )
 
 // Stream is a CUDA stream
@@ -156,12 +156,12 @@ func (s *Stream) AttachMemAsync(dptr DevicePtr, length uint64, flags MemAttachFl
 }
 
 // StreamBeginCapture begins graph capture on a stream
-func StreamBeginCapture(stream *Stream, mode CUStreamCaptureMode) error {
+func StreamBeginCapture(stream *Stream, mode StreamCaptureMode) error {
 	return Check(C.cuStreamBeginCapture(stream.CStream(), C.CUstreamCaptureMode(mode)))
 }
 
 // BeginCapture begins graph capture on the stream (method version)
-func (s *Stream) BeginCapture(mode CUStreamCaptureMode) error {
+func (s *Stream) BeginCapture(mode StreamCaptureMode) error {
 	return StreamBeginCapture(s, mode)
 }
 
@@ -178,12 +178,12 @@ func (s *Stream) EndCapture() (*Graph, error) {
 }
 
 // StreamIsCapturing returns a stream's capture status
-func StreamIsCapturing(stream *Stream) (CUStreamCaptureStatus, error) {
+func StreamIsCapturing(stream *Stream) (StreamCaptureStatus, error) {
 	var status C.CUstreamCaptureStatus
-	return CUStreamCaptureStatus(status), Check(C.cuStreamIsCapturing(stream.CStream(), &status))
+	return StreamCaptureStatus(status), Check(C.cuStreamIsCapturing(stream.CStream(), &status))
 }
 
 // IsCapturing returns the stream's capture status (method version)
-func (s *Stream) IsCapturing() (CUStreamCaptureStatus, error) {
+func (s *Stream) IsCapturing() (StreamCaptureStatus, error) {
 	return StreamIsCapturing(s)
 }

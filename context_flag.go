@@ -11,6 +11,7 @@ import "C"
 
 // Constants for ContextFlag.
 const (
+	CuCtxFlagsMask         ContextFlag = C.CU_CTX_FLAGS_MASK
 	CuCtxLmemResizeToMax   ContextFlag = C.CU_CTX_LMEM_RESIZE_TO_MAX  // Keep local memory allocation after launch
 	CuCtxSchedAuto         ContextFlag = C.CU_CTX_SCHED_AUTO          // Automatic scheduling
 	CuCtxSchedBlockingSync ContextFlag = C.CU_CTX_SCHED_BLOCKING_SYNC // Set blocking synchronization as default scheduling
@@ -21,6 +22,7 @@ const (
 
 // ContextFlagMessages maps ContextFlag values to their string representations.
 var ContextFlagMessages = map[ContextFlag]string{
+	CuCtxFlagsMask:         "CuCtxFlagsMask",
 	CuCtxLmemResizeToMax:   "CuCtxLmemResizeToMax",
 	CuCtxSchedAuto:         "CuCtxSchedAuto",
 	CuCtxSchedBlockingSync: "CuCtxSchedBlockingSync",

@@ -6,38 +6,20 @@ package gocu
 import "C"
 import "unsafe"
 
-// CUjitInputType represents the type of input for JIT compilation
-type CUjitInputType C.CUjitInputType
+// JitInputType represents the type of input for JIT compilation
+type JitInputType C.CUjitInputType
 
 const (
-	JitInputTypeCubin   CUjitInputType = C.CU_JIT_INPUT_CUBIN     // Compiled device-class-specific device code
-	JitInputTypePtx     CUjitInputType = C.CU_JIT_INPUT_PTX       // PTX source code
-	JitInputTypeFatBin  CUjitInputType = C.CU_JIT_INPUT_FATBINARY // Fat binary
-	JitInputTypeObject  CUjitInputType = C.CU_JIT_INPUT_OBJECT    // Host object with embedded device code
-	JitInputTypeLibrary CUjitInputType = C.CU_JIT_INPUT_LIBRARY   // Archive of host objects with embedded device code
-	JitInputTypeNvvm    CUjitInputType = C.CU_JIT_INPUT_NVVM      // NVVM intermediate representation
+	JitInputTypeCubin   JitInputType = C.CU_JIT_INPUT_CUBIN     // Compiled device-class-specific device code
+	JitInputTypePtx     JitInputType = C.CU_JIT_INPUT_PTX       // PTX source code
+	JitInputTypeFatBin  JitInputType = C.CU_JIT_INPUT_FATBINARY // Fat binary
+	JitInputTypeObject  JitInputType = C.CU_JIT_INPUT_OBJECT    // Host object with embedded device code
+	JitInputTypeLibrary JitInputType = C.CU_JIT_INPUT_LIBRARY   // Archive of host objects with embedded device code
+	JitInputTypeNvvm    JitInputType = C.CU_JIT_INPUT_NVVM      // NVVM intermediate representation
 )
 
-// CUjitOption represents JIT compilation options
-type CUjitOption C.CUjit_option
-
-const (
-	JitMaxRegisters            CUjitOption = C.CU_JIT_MAX_REGISTERS
-	JitThreadsPerBlock         CUjitOption = C.CU_JIT_THREADS_PER_BLOCK
-	JitWallTime                CUjitOption = C.CU_JIT_WALL_TIME
-	JitInfoLogBuffer           CUjitOption = C.CU_JIT_INFO_LOG_BUFFER
-	JitInfoLogBufferSizeBytes  CUjitOption = C.CU_JIT_INFO_LOG_BUFFER_SIZE_BYTES
-	JitErrorLogBuffer          CUjitOption = C.CU_JIT_ERROR_LOG_BUFFER
-	JitErrorLogBufferSizeBytes CUjitOption = C.CU_JIT_ERROR_LOG_BUFFER_SIZE_BYTES
-	JitOptimizationLevel       CUjitOption = C.CU_JIT_OPTIMIZATION_LEVEL
-	JitTargetFromContext       CUjitOption = C.CU_JIT_TARGET_FROM_CUCONTEXT
-	JitTarget                  CUjitOption = C.CU_JIT_TARGET
-	JitFallbackStrategy        CUjitOption = C.CU_JIT_FALLBACK_STRATEGY
-	JitGenerateDebugInfo       CUjitOption = C.CU_JIT_GENERATE_DEBUG_INFO
-	JitLogVerbose              CUjitOption = C.CU_JIT_LOG_VERBOSE
-	JitGenerateLineInfo        CUjitOption = C.CU_JIT_GENERATE_LINE_INFO
-	JitCacheMode               CUjitOption = C.CU_JIT_CACHE_MODE
-)
+// JitOption represents JIT compilation options
+type JitOption C.CUjit_option
 
 // CUmoduleLoadingMode represents module loading mode
 type CUmoduleLoadingMode C.CUmoduleLoadingMode
@@ -84,7 +66,7 @@ func ModuleLoadData(image []byte) (Module, error) {
 }
 
 // ModuleLoadDataEx loads a module's data from memory with options
-func ModuleLoadDataEx(image []byte, options []CUjitOption, optionValues []unsafe.Pointer) (Module, error) {
+func ModuleLoadDataEx(image []byte, options []JitOption, optionValues []unsafe.Pointer) (Module, error) {
 	var module C.CUmodule
 	var optionsPtr *C.CUjit_option
 	var valuesPtr *unsafe.Pointer
@@ -200,7 +182,7 @@ func ModuleGetLoadingMode() (CUmoduleLoadingMode, error) {
 // JIT Linking Functions
 
 // LinkCreate creates a pending JIT linker invocation
-func LinkCreate(options []CUjitOption, optionValues []unsafe.Pointer) (LinkState, error) {
+func LinkCreate(options []JitOption, optionValues []unsafe.Pointer) (LinkState, error) {
 	var state C.CUlinkState
 	var optionsPtr *C.CUjit_option
 	var valuesPtr *unsafe.Pointer
@@ -228,7 +210,7 @@ func (l LinkState) Destroy() error {
 }
 
 // LinkAddData adds an input to a pending linker invocation
-func LinkAddData(state LinkState, inputType CUjitInputType, data []byte, name string, options []CUjitOption, optionValues []unsafe.Pointer) error {
+func LinkAddData(state LinkState, inputType JitInputType, data []byte, name string, options []JitOption, optionValues []unsafe.Pointer) error {
 	var cname *C.char
 	if name != "" {
 		cname = C.CString(name)
@@ -251,12 +233,12 @@ func LinkAddData(state LinkState, inputType CUjitInputType, data []byte, name st
 }
 
 // AddData adds an input to the pending linker invocation (method version)
-func (l LinkState) AddData(inputType CUjitInputType, data []byte, name string, options []CUjitOption, optionValues []unsafe.Pointer) error {
+func (l LinkState) AddData(inputType JitInputType, data []byte, name string, options []JitOption, optionValues []unsafe.Pointer) error {
 	return LinkAddData(l, inputType, data, name, options, optionValues)
 }
 
 // LinkAddFile adds a file input to a pending linker invocation
-func LinkAddFile(state LinkState, inputType CUjitInputType, path string, options []CUjitOption, optionValues []unsafe.Pointer) error {
+func LinkAddFile(state LinkState, inputType JitInputType, path string, options []JitOption, optionValues []unsafe.Pointer) error {
 	cpath := C.CString(path)
 	defer C.free(unsafe.Pointer(cpath))
 
@@ -275,7 +257,7 @@ func LinkAddFile(state LinkState, inputType CUjitInputType, path string, options
 }
 
 // AddFile adds a file input to the pending linker invocation (method version)
-func (l LinkState) AddFile(inputType CUjitInputType, path string, options []CUjitOption, optionValues []unsafe.Pointer) error {
+func (l LinkState) AddFile(inputType JitInputType, path string, options []JitOption, optionValues []unsafe.Pointer) error {
 	return LinkAddFile(l, inputType, path, options, optionValues)
 }
 
