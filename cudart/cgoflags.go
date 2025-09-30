@@ -1,3 +1,5 @@
+//go:build !static
+
 package cudart
 
 /*

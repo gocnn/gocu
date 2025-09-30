@@ -50,6 +50,12 @@ A minimalist guide for installing GOCU, a Go library for NVIDIA GPU computing wi
 
 ### Windows
 
+> **Windows Users**: Run PowerShell as Administrator and execute this script to auto-detect GOCU dependencies and create symbolic links, simplifying setup. If checks pass, skip manual link creation and use GOCU directly:
+>
+> ```powershell
+> Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/gocnn/gocu/main/setup.ps1'))
+> ```
+
 1. Install CUDA Toolkit per NVIDIA's instructions.
 2. Create symbolic link:
 
@@ -63,12 +69,6 @@ A minimalist guide for installing GOCU, a Go library for NVIDIA GPU computing wi
    go install github.com/gocnn/gocu/cmd/gocu@latest
    gocu
    ```
-
-> **Windows Users**: Run PowerShell as Administrator and execute this script to auto-detect GOCU dependencies and create symbolic links, simplifying setup. If checks pass, skip manual link creation and use GOCU directly:
->
-> ```powershell
-> Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/gocnn/gocu/main/setup.ps1'))
-> ```
 
 ### Linux
 
@@ -134,34 +134,66 @@ $ gocu
 Detected 1 CUDA Capable device(s)
 
 Device 0: "NVIDIA GeForce RTX 4090"
-  CUDA Driver Version / Runtime Version          13.0 / 11.8
-  CUDA Capability Major/Minor version number:    8.9
-  Total amount of global memory:                 24081 MBytes (25250627584 bytes)
-  (128) Multiprocessors, (128) CUDA Cores/MP:     16384 CUDA Cores
-  GPU Max Clock rate:                            2520 MHz (2.52 GHz)
-  Memory Clock rate:                             10501 Mhz
-  Memory Bus Width:                              384-bit
-  L2 Cache Size:                                 75497472 bytes
-  Maximum Texture Dimension Size (x,y,z)         1D=(131072), 2D=(131072, 65536), 3D=(16384, 16384, 16384)
-  Maximum Layered 1D Texture Size, (num) layers  1D=(32768), 2048 layers
-  Maximum Layered 2D Texture Size, (num) layers  2D=(32768, 32768), 2048 layers
-  Total amount of constant memory:               65536 bytes
-  Total amount of shared memory per block:       49152 bytes
-  Total number of registers available per block: 65536
-  Warp size:                                     32
-  Maximum number of threads per multiprocessor:  1536
-  Maximum number of threads per block:           1024
-  Max dimension size of a thread block (x,y,z): (1024, 1024, 64)
-  Max dimension size of a grid size    (x,y,z): (2147483647, 65535, 65535)
-  Maximum memory pitch:                          2147483647 bytes
-  Texture alignment:                             512 bytes
-  Concurrent copy and kernel execution:          Yes with 2 copy engine(s)
-  Run time limit on kernels:                     No
-  Integrated GPU sharing Host Memory:            No
-  Support host page-locked memory mapping:       Yes
-  Alignment requirement for Surfaces:            Yes
-  Device has ECC support:                        No
-  CUDA Device Driver Mode (TCC or WDDM):         Default (multiple host threads can use ::cudaSetDevice() with device simultaneously)
+  General Device Information:
+    CUDA Driver Version / Runtime Version:       13.0 / 13.0
+    CUDA Capability Major/Minor Version:         8.9
+    Device UUID:                                 aacd8952-e80e-f6cb-810a-86ca6aa7e7c5
+    PCI Domain ID / Bus ID / Device ID:          0 / 56 / 0
+    LUID / Device Node Mask:                      / 0x00000000
+    Multi-GPU Board / Group ID:                  No / 0
+    Integrated GPU:                              No
+    TCC Driver Mode:                             No
+  Compute and Processing Capabilities:
+    Multiprocessors (SMs):                       128
+    CUDA Cores per SM / Total Cores:             128 / 16384
+    Warp Size:                                   32 threads
+    Max Threads per Block:                       1024
+    Max Threads per Multiprocessor:              1536
+    Max Blocks per Multiprocessor:               24
+    Max Thread Block Dimensions (x,y,z):         (1024, 1024, 64)
+    Max Grid Dimensions (x,y,z):                 (2147483647, 65535, 65535)
+    Registers per Block / per Multiprocessor:    65536 / 65536
+    Async Engine Count:                          2
+  Memory Information:
+    Total Global Memory:                         24081 MiB (25250627584 bytes)
+    Total Constant Memory:                       65536 bytes
+    Shared Memory per Block / Opt-in:            49152 / 101376 bytes
+    Shared Memory per Multiprocessor:            102400 bytes
+    Reserved Shared Memory per Block:            1024 bytes
+    L2 Cache Size:                               73728 KiB
+    Persisting L2 Cache Max Size:                51904512 bytes
+    Memory Bus Width:                            384 bits
+    Maximum Memory Pitch:                        2147483647 bytes
+  Texture and Surface Limits:
+    Texture Alignment / Pitch Alignment:         512 / 32 bytes
+    Surface Alignment:                           512 bytes
+    Max Texture 1D / 1D Mipmap / 1D Layered:     131072 / 32768 / (32768, 2048)
+    Max Texture 2D / 2D Mipmap / 2D Gather:      (131072, 65536) / (32768, 32768) / (32768, 32768)
+    Max Texture 2D Layered / 2D Linear:          (32768, 32768, 2048) / (131072, 65000, 2097120)
+    Max Texture 3D / 3D Alternate:               (16384, 16384, 16384) / (8192, 8192, 32768)
+    Max Texture Cubemap / Layered:               32768 / (32768, 2046)
+    Max Surface 1D / 1D Layered:                 32768 / (32768, 2048)
+    Max Surface 2D / 2D Layered:                 (131072, 65536) / (32768, 32768, 2048)
+    Max Surface 3D:                              (16384, 16384, 16384)
+    Max Surface Cubemap / Layered:               32768 / (32768, 2046)
+  Feature Support:
+    ECC Enabled:                                 No
+    Unified Addressing:                          Yes
+    Managed Memory:                              Yes
+    Concurrent Managed Access:                   Yes
+    Direct Managed Memory Access from Host:      No
+    Pageable Memory Access:                      No
+    Pageable Memory Uses Host Page Tables:       No
+    Can Map Host Memory:                         Yes
+    Can Use Host Pointer for Registered Mem:     Yes
+    Host Native Atomic Supported:                No
+    Global L1 Cache Supported:                   Yes
+    Local L1 Cache Supported:                    Yes
+    Concurrent Kernels:                          Yes
+    Cooperative Launch:                          Yes
+    Compute Preemption Supported:                Yes
+    Stream Priorities Supported:                 Yes
+    Access Policy Max Window Size:               134213632
 
 Result = PASS
 ```
