@@ -9,18 +9,18 @@ import "C"
 type EventFlags byte
 
 const (
-	DefaultEvent      EventFlags = C.CU_EVENT_DEFAULT        // Default event flag
-	BlockingSyncEvent EventFlags = C.CU_EVENT_BLOCKING_SYNC  // Event uses blocking synchronization
-	DisableTiming     EventFlags = C.CU_EVENT_DISABLE_TIMING // Event will not record timing data
-	InterprocessEvent EventFlags = C.CU_EVENT_INTERPROCESS   // Event is suitable for interprocess use. DisableTiming must be set
+	CuEventDefault       EventFlags = C.CU_EVENT_DEFAULT        // Default event flag
+	CuEventBlockingSync  EventFlags = C.CU_EVENT_BLOCKING_SYNC  // Event uses blocking synchronization
+	CuEventDisableTiming EventFlags = C.CU_EVENT_DISABLE_TIMING // Event will not record timing data
+	CuEventInterprocess  EventFlags = C.CU_EVENT_INTERPROCESS   // Event is suitable for interprocess use. DisableTiming must be set
 )
 
 // EventRecordFlags are flags to be used with event recording
 type EventRecordFlags uint32
 
 const (
-	EventRecordDefault  EventRecordFlags = C.CU_EVENT_RECORD_DEFAULT  // Default event record flag
-	EventRecordExternal EventRecordFlags = C.CU_EVENT_RECORD_EXTERNAL // Event is captured as external node during stream capture
+	CuEventRecordDefault  EventRecordFlags = C.CU_EVENT_RECORD_DEFAULT  // Default event record flag
+	CuEventRecordExternal EventRecordFlags = C.CU_EVENT_RECORD_EXTERNAL // Event is captured as external node during stream capture
 )
 
 // Event represents a CUDA event

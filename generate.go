@@ -78,6 +78,20 @@ func main() {
 		IsEnum:       true,
 		FieldRegex:   regexp.MustCompile(`^\s*(\w+)\s*=\s*(0x[0-9a-fA-F]+|\d+),?\s*(?:/\*\*<?\s*(.*?)\s*\*/)?$`),
 	}
+	jitOptionCfg := codegen.Config{
+		Package:      Package,
+		Filename:     "jit_option",
+		Versions:     Versions,
+		HeaderDir:    HeaderDir,
+		HeaderFile:   "cuda.h",
+		Include:      "cuda.h",
+		StructName:   "JitOption",
+		CGoType:      "",
+		StartString:  "typedef enum CUjit_option_enum",
+		TemplatePath: filepath.Join("internal", "tmpl", "cuda_enum.tmpl"),
+		IsEnum:       true,
+		FieldRegex:   regexp.MustCompile(`^\s*(\w+)\s*(?:=\s*(0x[0-9a-fA-F]+|\d+))?,?\s*(?:/\*\*<?\s*(.*?)\s*\*/)?$`),
+	}
 
 	if err := codegen.Generate(cuResultCfg); err != nil {
 		fmt.Fprintf(os.Stderr, "CUResult: %v\n", err)
@@ -93,6 +107,10 @@ func main() {
 	}
 	if err := codegen.Generate(contextFlagCfg); err != nil {
 		fmt.Fprintf(os.Stderr, "ContextFlag: %v\n", err)
+		os.Exit(1)
+	}
+	if err := codegen.Generate(jitOptionCfg); err != nil {
+		fmt.Fprintf(os.Stderr, "JitOption: %v\n", err)
 		os.Exit(1)
 	}
 }

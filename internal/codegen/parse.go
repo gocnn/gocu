@@ -160,7 +160,7 @@ func ParseAllVersions(cfg Config) (map[string][]Field, error) {
 }
 
 // FindCommonFields identifies fields present in all versions with identical types/values.
-func FindCommonFields(versionFields map[string][]Field) []Field {
+func FindCommonFields(versionFields map[string][]Field, isEnum bool) []Field {
 	if len(versionFields) == 0 {
 		return nil
 	}
@@ -181,7 +181,16 @@ func FindCommonFields(versionFields map[string][]Field) []Field {
 			}
 			found := false
 			for _, vf := range fields {
-				if vf.Name == f.Name && vf.Type == f.Type {
+				// For enums, only compare names since values may differ between versions
+				// For structs, compare both name and type
+				var matches bool
+				if isEnum {
+					matches = vf.Name == f.Name
+				} else {
+					matches = vf.Name == f.Name && vf.Type == f.Type
+				}
+
+				if matches {
 					found = true
 					break
 				}
