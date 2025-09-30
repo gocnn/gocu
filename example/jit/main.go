@@ -15,7 +15,7 @@ func main() {
 	var n int64 = 1024
 
 	device, _ := gocu.DeviceGet(0)
-	ctx, _ := gocu.CtxCreate(gocu.CtxSchedAuto, device)
+	ctx, _ := gocu.CtxCreate(gocu.CuCtxSchedAuto, device)
 	defer ctx.Destroy()
 	module, _ := gocu.ModuleLoadData([]byte(ptx))
 	defer module.Unload()

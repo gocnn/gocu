@@ -50,20 +50,20 @@ const (
 // Module is a CUDA module
 type Module struct{ module C.CUmodule }
 
-// C returns the Module as its C version
-func (m Module) c() C.CUmodule { return m.module }
+// CModule returns the Module as its C version
+func (m Module) CModule() C.CUmodule { return m.module }
 
 // Function is a CUDA function
 type Function struct{ function C.CUfunction }
 
-// C returns the Function as its C version
-func (f Function) c() C.CUfunction { return f.function }
+// CFunction returns the Function as its C version
+func (f Function) CFunction() C.CUfunction { return f.function }
 
 // LinkState is a CUDA linker state
 type LinkState struct{ state C.CUlinkState }
 
-// C returns the LinkState as its C version
-func (l LinkState) c() C.CUlinkState { return l.state }
+// CLinkState returns the LinkState as its C version
+func (l LinkState) CLinkState() C.CUlinkState { return l.state }
 
 // Module Loading Functions
 
@@ -110,7 +110,7 @@ func ModuleLoadFatBinary(fatCubin []byte) (Module, error) {
 
 // ModuleUnload unloads a module
 func ModuleUnload(module Module) error {
-	return Check(C.cuModuleUnload(module.c()))
+	return Check(C.cuModuleUnload(module.CModule()))
 }
 
 // Unload unloads the module (method version)
@@ -125,7 +125,7 @@ func ModuleGetFunction(module Module, name string) (Function, error) {
 	var function C.CUfunction
 	cname := C.CString(name)
 	defer C.free(unsafe.Pointer(cname))
-	result := Check(C.cuModuleGetFunction(&function, module.c(), cname))
+	result := Check(C.cuModuleGetFunction(&function, module.CModule(), cname))
 	return Function{function: function}, result
 }
 
@@ -137,7 +137,7 @@ func (m Module) GetFunction(name string) (Function, error) {
 // ModuleGetFunctionCount returns the number of functions within a module
 func ModuleGetFunctionCount(module Module) (uint32, error) {
 	var count C.uint
-	result := Check(C.cuModuleGetFunctionCount(&count, module.c()))
+	result := Check(C.cuModuleGetFunctionCount(&count, module.CModule()))
 	return uint32(count), result
 }
 
@@ -154,7 +154,7 @@ func ModuleEnumerateFunctions(module Module, numFunctions uint32) ([]Function, e
 		functionsPtr = &functions[0]
 	}
 
-	result := Check(C.cuModuleEnumerateFunctions(functionsPtr, C.uint(numFunctions), module.c()))
+	result := Check(C.cuModuleEnumerateFunctions(functionsPtr, C.uint(numFunctions), module.CModule()))
 	if result != nil {
 		return nil, result
 	}
@@ -179,7 +179,7 @@ func ModuleGetGlobal(module Module, name string) (DevicePtr, uint64, error) {
 	var bytes C.size_t
 	cname := C.CString(name)
 	defer C.free(unsafe.Pointer(cname))
-	result := Check(C.cuModuleGetGlobal(&dptr, &bytes, module.c(), cname))
+	result := Check(C.cuModuleGetGlobal(&dptr, &bytes, module.CModule(), cname))
 	return DevicePtr(dptr), uint64(bytes), result
 }
 
@@ -219,7 +219,7 @@ func LinkCreate(options []CUjitOption, optionValues []unsafe.Pointer) (LinkState
 
 // LinkDestroy destroys state for a JIT linker invocation
 func LinkDestroy(state LinkState) error {
-	return Check(C.cuLinkDestroy(state.c()))
+	return Check(C.cuLinkDestroy(state.CLinkState()))
 }
 
 // Destroy destroys the linker state (method version)
@@ -245,7 +245,7 @@ func LinkAddData(state LinkState, inputType CUjitInputType, data []byte, name st
 		valuesPtr = &optionValues[0]
 	}
 
-	return Check(C.cuLinkAddData(state.c(), C.CUjitInputType(inputType),
+	return Check(C.cuLinkAddData(state.CLinkState(), C.CUjitInputType(inputType),
 		unsafe.Pointer(&data[0]), C.size_t(len(data)), cname,
 		C.uint(len(options)), optionsPtr, (*unsafe.Pointer)(unsafe.Pointer(valuesPtr))))
 }
@@ -270,7 +270,7 @@ func LinkAddFile(state LinkState, inputType CUjitInputType, path string, options
 		valuesPtr = &optionValues[0]
 	}
 
-	return Check(C.cuLinkAddFile(state.c(), C.CUjitInputType(inputType), cpath,
+	return Check(C.cuLinkAddFile(state.CLinkState(), C.CUjitInputType(inputType), cpath,
 		C.uint(len(options)), optionsPtr, (*unsafe.Pointer)(unsafe.Pointer(valuesPtr))))
 }
 
@@ -284,7 +284,7 @@ func LinkComplete(state LinkState) ([]byte, error) {
 	var cubinOut unsafe.Pointer
 	var sizeOut C.size_t
 
-	result := Check(C.cuLinkComplete(state.c(), &cubinOut, &sizeOut))
+	result := Check(C.cuLinkComplete(state.CLinkState(), &cubinOut, &sizeOut))
 	if result != nil {
 		return nil, result
 	}
