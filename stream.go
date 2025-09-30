@@ -5,9 +5,9 @@ package gocu
 */
 import "C"
 
+// Stream creation flags
 type StreamFlags uint32
 
-// Stream creation flags
 const (
 	StreamDefault     StreamFlags = 0x0 // Default stream flag
 	StreamNonBlocking StreamFlags = 0x1 // Stream does not synchronize with stream 0 (the NULL stream)
@@ -166,14 +166,14 @@ func (s *Stream) BeginCapture(mode CUStreamCaptureMode) error {
 }
 
 // StreamEndCapture ends capture on a stream, returning the captured graph
-func StreamEndCapture(stream *Stream) (CUGraph, error) {
+func StreamEndCapture(stream *Stream) (*Graph, error) {
 	var graph C.CUgraph
 	result := Check(C.cuStreamEndCapture(stream.CStream(), &graph))
-	return CUGraph{graph: graph}, result
+	return &Graph{graph: graph}, result
 }
 
 // EndCapture ends capture on the stream, returning the captured graph (method version)
-func (s *Stream) EndCapture() (CUGraph, error) {
+func (s *Stream) EndCapture() (*Graph, error) {
 	return StreamEndCapture(s)
 }
 

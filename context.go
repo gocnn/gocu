@@ -7,56 +7,11 @@ package gocu
 */
 import "C"
 
-// CUlimit represents context resource limits
-type CUlimit C.CUlimit
+// Limit represents context resource limits
+type Limit C.CUlimit
 
-const (
-	LimitStackSize                    CUlimit = C.CU_LIMIT_STACK_SIZE                       // GPU thread stack size
-	LimitPrintfFifoSize               CUlimit = C.CU_LIMIT_PRINTF_FIFO_SIZE                 // GPU printf FIFO size
-	LimitMallocHeapSize               CUlimit = C.CU_LIMIT_MALLOC_HEAP_SIZE                 // GPU malloc heap size
-	LimitDevRuntimeSyncDepth          CUlimit = C.CU_LIMIT_DEV_RUNTIME_SYNC_DEPTH           // GPU device runtime synchronization depth
-	LimitDevRuntimePendingLaunchCount CUlimit = C.CU_LIMIT_DEV_RUNTIME_PENDING_LAUNCH_COUNT // GPU device runtime pending launch count
-	LimitMaxL2FetchGranularity        CUlimit = C.CU_LIMIT_MAX_L2_FETCH_GRANULARITY         // L2 cache fetch granularity
-	LimitPersistingL2CacheSize        CUlimit = C.CU_LIMIT_PERSISTING_L2_CACHE_SIZE         // Persisting L2 cache size
-)
-
-// CUexecAffinityType represents execution affinity types
-type CUexecAffinityType C.CUexecAffinityType
-
-const (
-	ExecAffinityTypeSMCount CUexecAffinityType = C.CU_EXEC_AFFINITY_TYPE_SM_COUNT // SM count affinity
-	ExecAffinityTypeMax     CUexecAffinityType = C.CU_EXEC_AFFINITY_TYPE_MAX      // Maximum execution affinity type
-)
-
-// CUexecAffinityParam represents execution affinity parameters
-type CUexecAffinityParam struct {
-	Type  CUexecAffinityType
-	Param CUexecAffinitySmCount
-}
-
-// CUexecAffinitySmCount represents SM count affinity parameters
-type CUexecAffinitySmCount struct {
-	Val uint32
-}
-
-// CUctxCreateParams represents context creation parameters
-type CUctxCreateParams struct {
-	ExecAffinityParamCount uint32
-	ExecAffinityParams     *CUexecAffinityParam
-}
-
-// Context creation flags
-const (
-	CtxSchedAuto          uint32 = C.CU_CTX_SCHED_AUTO           // Automatic scheduling
-	CtxSchedSpin          uint32 = C.CU_CTX_SCHED_SPIN           // Spin when waiting for results from the GPU
-	CtxSchedYield         uint32 = C.CU_CTX_SCHED_YIELD          // Yield when waiting for results from the GPU
-	CtxSchedBlockingSync  uint32 = C.CU_CTX_SCHED_BLOCKING_SYNC  // Use blocking synchronization
-	CtxBlockingSync       uint32 = C.CU_CTX_BLOCKING_SYNC        // Use blocking synchronization (deprecated)
-	CtxMapHost            uint32 = C.CU_CTX_MAP_HOST             // Support mapped pinned allocations
-	CtxLmemResizeToMax    uint32 = C.CU_CTX_LMEM_RESIZE_TO_MAX   // Keep local memory allocation after launch
-	CtxCoredumpEnable     uint32 = C.CU_CTX_COREDUMP_ENABLE      // Enable coredump creation
-	CtxUserCoredumpEnable uint32 = C.CU_CTX_USER_COREDUMP_ENABLE // Enable user-triggered coredump creation
-)
+// ContextFlag represents context creation flags
+type ContextFlag uint32
 
 // Context is a CUDA context
 type Context struct{ ctx C.CUcontext }
@@ -64,10 +19,8 @@ type Context struct{ ctx C.CUcontext }
 // CContext returns the Context as its C version
 func (ctx *Context) CContext() C.CUcontext { return ctx.ctx }
 
-// Context Creation and Destruction
-
 // CtxCreate creates a CUDA context
-func CtxCreate(flags uint32, dev Device) (*Context, error) {
+func CtxCreate(flags ContextFlag, dev Device) (*Context, error) {
 	var ctx C.CUcontext
 	result := Check(C.cuCtxCreate(&ctx, C.uint(flags), C.CUdevice(dev)))
 	return &Context{ctx: ctx}, result
@@ -82,8 +35,6 @@ func CtxDestroy(ctx *Context) error {
 func (ctx *Context) Destroy() error {
 	return CtxDestroy(ctx)
 }
-
-// Context Stack Management
 
 // CtxPushCurrent pushes a context on the current CPU thread
 func CtxPushCurrent(ctx *Context) error {
@@ -119,8 +70,6 @@ func CtxGetCurrent() (*Context, error) {
 	return &Context{ctx: ctx}, result
 }
 
-// Context Property Queries
-
 // CtxGetApiVersion gets the context's API version
 func CtxGetApiVersion(ctx *Context) (uint32, error) {
 	var version C.uint
@@ -152,6 +101,11 @@ func CtxGetFlags() (uint32, error) {
 	return uint32(flags), result
 }
 
+// CtxSetFlags sets the flags for the current context
+func CtxSetFlags(flags uint32) error {
+	return Check(C.cuCtxSetFlags(C.uint(flags)))
+}
+
 // CtxGetId returns the unique Id associated with the context
 func CtxGetId(ctx *Context) (uint64, error) {
 	var ctxId C.ulonglong
@@ -164,17 +118,15 @@ func (ctx *Context) GetId() (uint64, error) {
 	return CtxGetId(ctx)
 }
 
-// Resource Limit Management
-
 // CtxGetLimit returns resource limits
-func CtxGetLimit(limit CUlimit) (uint64, error) {
+func CtxGetLimit(limit Limit) (uint64, error) {
 	var pvalue C.size_t
 	result := Check(C.cuCtxGetLimit(&pvalue, C.CUlimit(limit)))
 	return uint64(pvalue), result
 }
 
 // CtxSetLimit sets resource limits
-func CtxSetLimit(limit CUlimit, value uint64) error {
+func CtxSetLimit(limit Limit, value uint64) error {
 	return Check(C.cuCtxSetLimit(C.CUlimit(limit), C.size_t(value)))
 }
 
@@ -184,28 +136,6 @@ func CtxGetStreamPriorityRange() (int, int, error) {
 	result := Check(C.cuCtxGetStreamPriorityRange(&leastPriority, &greatestPriority))
 	return int(leastPriority), int(greatestPriority), result
 }
-
-// Execution Affinity
-
-// CtxGetExecAffinity returns the execution affinity setting for the current context
-func CtxGetExecAffinity(affinityType CUexecAffinityType) (CUexecAffinityParam, error) {
-	var param CUexecAffinityParam
-	cParam := C.CUexecAffinityParam{
-		_type: C.CUexecAffinityType(affinityType),
-	}
-
-	result := Check(C.cuCtxGetExecAffinity(&cParam, C.CUexecAffinityType(affinityType)))
-	if result != nil {
-		return param, result
-	}
-
-	param.Type = CUexecAffinityType(cParam._type)
-	// Note: Proper conversion of param union would be needed here
-
-	return param, nil
-}
-
-// Cache Configuration
 
 // CtxGetCacheConfig returns the preferred cache configuration for the current context
 func CtxGetCacheConfig() (CUfuncCache, error) {
@@ -219,15 +149,6 @@ func CtxSetCacheConfig(config CUfuncCache) error {
 	return Check(C.cuCtxSetCacheConfig(C.CUfunc_cache(config)))
 }
 
-// Context Flags
-
-// CtxSetFlags sets the flags for the current context
-func CtxSetFlags(flags uint32) error {
-	return Check(C.cuCtxSetFlags(C.uint(flags)))
-}
-
-// Synchronization
-
 // CtxSynchronize blocks for the current context's tasks to complete
 func CtxSynchronize() error {
 	return Check(C.cuCtxSynchronize())
@@ -238,14 +159,10 @@ func (ctx *Context) Synchronize() error {
 	return CtxSynchronize()
 }
 
-// L2 Cache Management
-
 // CtxResetPersistingL2Cache resets all persisting lines in cache to normal status
 func CtxResetPersistingL2Cache() error {
 	return Check(C.cuCtxResetPersistingL2Cache())
 }
-
-// Event Operations
 
 // CtxRecordEvent records an event
 func CtxRecordEvent(ctx *Context, event *Event) error {

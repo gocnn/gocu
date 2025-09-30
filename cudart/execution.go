@@ -55,9 +55,6 @@ const (
 	FuncCachePreferEqual  FuncCache = C.cudaFuncCachePreferEqual  // Prefer equal sized L1 cache and shared memory
 )
 
-// HostFn represents a host function that can be launched on a stream.
-type HostFn func(userData unsafe.Pointer)
-
 // LaunchKernel launches a device function (kernel).
 // func: pointer to the kernel function
 // gridDim: grid dimensions
@@ -97,15 +94,4 @@ func LaunchCooperativeKernel(function unsafe.Pointer, gridDim, blockDim Dim3, ar
 		C.size_t(sharedMem),
 		stream.CStream(),
 	))
-}
-
-// LaunchHostFunc enqueues a host function call in a stream.
-// The host function will be called when all previously enqueued operations complete.
-func LaunchHostFunc(stream *Stream, fn HostFn, userData unsafe.Pointer) error {
-	// Store the Go function and userData in a way that's safe for CGO
-	// We need to use a different approach since we can't pass Go function pointers to C
-
-	// For now, return an error indicating this function needs proper implementation
-	// TODO: Implement proper callback mechanism using cgo export functions
-	return Check(C.cudaErrorNotSupported)
 }

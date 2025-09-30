@@ -79,7 +79,7 @@ type CUlaunchConfig struct {
 // FuncGetAttribute returns information about a function
 func FuncGetAttribute(function Function, attrib CUfunctionAttribute) (int, error) {
 	var pi C.int
-	result := Check(C.cuFuncGetAttribute(&pi, C.CUfunction_attribute(attrib), function.c()))
+	result := Check(C.cuFuncGetAttribute(&pi, C.CUfunction_attribute(attrib), function.CFunction()))
 	return int(pi), result
 }
 
@@ -90,7 +90,7 @@ func (f Function) GetAttribute(attrib CUfunctionAttribute) (int, error) {
 
 // FuncSetAttribute sets information about a function
 func FuncSetAttribute(function Function, attrib CUfunctionAttribute, value int) error {
-	return Check(C.cuFuncSetAttribute(function.c(), C.CUfunction_attribute(attrib), C.int(value)))
+	return Check(C.cuFuncSetAttribute(function.CFunction(), C.CUfunction_attribute(attrib), C.int(value)))
 }
 
 // SetAttribute sets information about the function (method version)
@@ -101,7 +101,7 @@ func (f Function) SetAttribute(attrib CUfunctionAttribute, value int) error {
 // FuncGetModule returns a module handle from a function
 func FuncGetModule(function Function) (Module, error) {
 	var module C.CUmodule
-	result := Check(C.cuFuncGetModule(&module, function.c()))
+	result := Check(C.cuFuncGetModule(&module, function.CFunction()))
 	return Module{module: module}, result
 }
 
@@ -113,7 +113,7 @@ func (f Function) GetModule() (Module, error) {
 // FuncGetName returns the function name for a CUfunction handle
 func FuncGetName(function Function) (string, error) {
 	var name *C.char
-	result := Check(C.cuFuncGetName(&name, function.c()))
+	result := Check(C.cuFuncGetName(&name, function.CFunction()))
 	if result != nil {
 		return "", result
 	}
@@ -128,7 +128,7 @@ func (f Function) GetName() (string, error) {
 // FuncGetParamInfo returns the offset and size of a kernel parameter
 func FuncGetParamInfo(function Function, paramIndex uint64) (uint64, uint64, error) {
 	var paramOffset, paramSize C.size_t
-	result := Check(C.cuFuncGetParamInfo(function.c(), C.size_t(paramIndex), &paramOffset, &paramSize))
+	result := Check(C.cuFuncGetParamInfo(function.CFunction(), C.size_t(paramIndex), &paramOffset, &paramSize))
 	return uint64(paramOffset), uint64(paramSize), result
 }
 
@@ -142,7 +142,7 @@ func (f Function) GetParamInfo(paramIndex uint64) (uint64, uint64, error) {
 // FuncIsLoaded returns if the function is loaded
 func FuncIsLoaded(function Function) (CUfunctionLoadingState, error) {
 	var state C.CUfunctionLoadingState
-	result := Check(C.cuFuncIsLoaded(&state, function.c()))
+	result := Check(C.cuFuncIsLoaded(&state, function.CFunction()))
 	return CUfunctionLoadingState(state), result
 }
 
@@ -153,7 +153,7 @@ func (f Function) IsLoaded() (CUfunctionLoadingState, error) {
 
 // FuncLoad loads a function
 func FuncLoad(function Function) error {
-	return Check(C.cuFuncLoad(function.c()))
+	return Check(C.cuFuncLoad(function.CFunction()))
 }
 
 // Load loads the function (method version)
@@ -165,7 +165,7 @@ func (f Function) Load() error {
 
 // FuncSetCacheConfig sets the preferred cache configuration for a device function
 func FuncSetCacheConfig(function Function, config CUfuncCache) error {
-	return Check(C.cuFuncSetCacheConfig(function.c(), C.CUfunc_cache(config)))
+	return Check(C.cuFuncSetCacheConfig(function.CFunction(), C.CUfunc_cache(config)))
 }
 
 // SetCacheConfig sets the preferred cache configuration (method version)
@@ -189,7 +189,7 @@ func LaunchKernel(function Function, gridDimX, gridDimY, gridDimZ, blockDimX, bl
 	}
 
 	return Check(C.cuLaunchKernel(
-		function.c(),
+		function.CFunction(),
 		C.uint(gridDimX), C.uint(gridDimY), C.uint(gridDimZ),
 		C.uint(blockDimX), C.uint(blockDimY), C.uint(blockDimZ),
 		C.uint(sharedMemBytes),
@@ -233,7 +233,7 @@ func LaunchKernelEx(config CUlaunchConfig, function Function, kernelParams []uns
 		extraPtr = &extra[0]
 	}
 
-	return Check(C.cuLaunchKernelEx(&cConfig, function.c(), kernelParamsPtr, extraPtr))
+	return Check(C.cuLaunchKernelEx(&cConfig, function.CFunction(), kernelParamsPtr, extraPtr))
 }
 
 // LaunchEx launches the kernel with extended configuration (method version)
@@ -249,7 +249,7 @@ func LaunchCooperativeKernel(function Function, gridDimX, gridDimY, gridDimZ, bl
 	}
 
 	return Check(C.cuLaunchCooperativeKernel(
-		function.c(),
+		function.CFunction(),
 		C.uint(gridDimX), C.uint(gridDimY), C.uint(gridDimZ),
 		C.uint(blockDimX), C.uint(blockDimY), C.uint(blockDimZ),
 		C.uint(sharedMemBytes),
