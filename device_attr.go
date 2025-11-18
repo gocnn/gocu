@@ -15,9 +15,9 @@ const (
 	CuDeviceAttributeCanFlushRemoteWrites                   DeviceAttr = C.CU_DEVICE_ATTRIBUTE_CAN_FLUSH_REMOTE_WRITES                      // The ::CU_STREAM_WAIT_VALUE_FLUSH flag and the ::CU_STREAM_MEM_OP_FLUSH_REMOTE_WRITES MemOp are supported on the device. See \ref CUDA_MEMOP for additional details.
 	CuDeviceAttributeCanMapHostMemory                       DeviceAttr = C.CU_DEVICE_ATTRIBUTE_CAN_MAP_HOST_MEMORY                          // Device can map host memory into CUDA address space
 	CuDeviceAttributeCanTex2dGather                         DeviceAttr = C.CU_DEVICE_ATTRIBUTE_CAN_TEX2D_GATHER                             // Deprecated, do not use.
-	CuDeviceAttributeCanUse64BitStreamMemOps                DeviceAttr = C.CU_DEVICE_ATTRIBUTE_CAN_USE_64_BIT_STREAM_MEM_OPS                // 64-bit operations are supported in ::cuStreamBatchMemOp and related MemOp APIs.
+	CuDeviceAttributeCanUse64BitStreamMemOps                DeviceAttr = C.CU_DEVICE_ATTRIBUTE_CAN_USE_64_BIT_STREAM_MEM_OPS                // 64-bit operations are supported in ::cuStreamBatchMemOp and related APIs.
 	CuDeviceAttributeCanUseHostPointerForRegisteredMem      DeviceAttr = C.CU_DEVICE_ATTRIBUTE_CAN_USE_HOST_POINTER_FOR_REGISTERED_MEM      // Device can access host registered memory at the same virtual address as the CPU
-	CuDeviceAttributeCanUseStreamWaitValueNor               DeviceAttr = C.CU_DEVICE_ATTRIBUTE_CAN_USE_STREAM_WAIT_VALUE_NOR                // ::CU_STREAM_WAIT_VALUE_NOR is supported by MemOp APIs.
+	CuDeviceAttributeCanUseStreamWaitValueNor               DeviceAttr = C.CU_DEVICE_ATTRIBUTE_CAN_USE_STREAM_WAIT_VALUE_NOR                // ::CU_STREAM_WAIT_VALUE_NOR is supported.
 	CuDeviceAttributeClockRate                              DeviceAttr = C.CU_DEVICE_ATTRIBUTE_CLOCK_RATE                                   // Typical clock frequency in kilohertz
 	CuDeviceAttributeClusterLaunch                          DeviceAttr = C.CU_DEVICE_ATTRIBUTE_CLUSTER_LAUNCH                               // Indicates device supports cluster launch
 	CuDeviceAttributeComputeCapabilityMajor                 DeviceAttr = C.CU_DEVICE_ATTRIBUTE_COMPUTE_CAPABILITY_MAJOR                     // Major compute capability version number
@@ -43,7 +43,7 @@ const (
 	CuDeviceAttributeHandleTypePosixFileDescriptorSupported DeviceAttr = C.CU_DEVICE_ATTRIBUTE_HANDLE_TYPE_POSIX_FILE_DESCRIPTOR_SUPPORTED  // Device supports exporting memory to a posix file descriptor with ::cuMemExportToShareableHandle, if requested via ::cuMemCreate
 	CuDeviceAttributeHandleTypeWin32HandleSupported         DeviceAttr = C.CU_DEVICE_ATTRIBUTE_HANDLE_TYPE_WIN32_HANDLE_SUPPORTED           // Device supports exporting memory to a Win32 NT handle with ::cuMemExportToShareableHandle, if requested via ::cuMemCreate
 	CuDeviceAttributeHandleTypeWin32KmtHandleSupported      DeviceAttr = C.CU_DEVICE_ATTRIBUTE_HANDLE_TYPE_WIN32_KMT_HANDLE_SUPPORTED       // Device supports exporting memory to a Win32 KMT handle with ::cuMemExportToShareableHandle, if requested via ::cuMemCreate
-	CuDeviceAttributeHostNativeAtomicSupported              DeviceAttr = C.CU_DEVICE_ATTRIBUTE_HOST_NATIVE_ATOMIC_SUPPORTED                 // Link between the device and the host supports native atomic operations
+	CuDeviceAttributeHostNativeAtomicSupported              DeviceAttr = C.CU_DEVICE_ATTRIBUTE_HOST_NATIVE_ATOMIC_SUPPORTED                 // Link between the device and the host supports native atomic operations (this is a placeholder attribute, and is not supported on any current hardware)
 	CuDeviceAttributeHostRegisterSupported                  DeviceAttr = C.CU_DEVICE_ATTRIBUTE_HOST_REGISTER_SUPPORTED                      // Device supports host memory registration via ::cudaHostRegister.
 	CuDeviceAttributeIntegrated                             DeviceAttr = C.CU_DEVICE_ATTRIBUTE_INTEGRATED                                   // Device is integrated with host memory
 	CuDeviceAttributeKernelExecTimeout                      DeviceAttr = C.CU_DEVICE_ATTRIBUTE_KERNEL_EXEC_TIMEOUT                          // Specifies whether there is a run time limit on kernels

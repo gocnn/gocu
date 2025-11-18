@@ -1,3 +1,6 @@
+//go:build cuda
+// +build cuda
+
 package cublas
 
 // #include <cublas_v2.h>
