@@ -1,21 +1,19 @@
-//go:build cuda
-// +build cuda
+//go:build !cuda && !cuda11 && !cuda12 && !cuda13
 
 package cublas
 
-/*
-#include <cublas_v2.h>
-*/
-import "C"
-
+// SrotmParams contains Givens transformation parameters returned
+// by the Float32 Srotm method.
 type SrotmParams struct {
-	flag float32
-	h    [4]float32
+	Flag float32
+	H    [4]float32
 }
 
+// DrotmParams contains Givens transformation parameters returned
+// by the Float64 Drotm method.
 type DrotmParams struct {
-	flag float64
-	h    [4]float64
+	Flag float64
+	H    [4]float64
 }
 
 // Order is used to specify the matrix storage format. We still interact with
@@ -28,38 +26,34 @@ const (
 )
 
 // Transpose specifies the transposition operation for CUBLAS operations.
-// This directly maps to cublasOperation_t values for optimal performance.
-type Transpose C.cublasOperation_t
+type Transpose int
 
 const (
-	NoTrans   Transpose = Transpose(C.CUBLAS_OP_N) // No transpose operation
-	Trans     Transpose = Transpose(C.CUBLAS_OP_T) // Transpose operation
-	ConjTrans Transpose = Transpose(C.CUBLAS_OP_C) // Conjugate transpose operation
+	NoTrans   Transpose = 0 // No transpose operation
+	Trans     Transpose = 1 // Transpose operation
+	ConjTrans Transpose = 2 // Conjugate transpose operation
 )
 
 // Side specifies which side of the matrix operation is performed.
-// This directly maps to cublasSideMode_t values for optimal performance.
-type Side C.cublasSideMode_t
+type Side int
 
 const (
-	Left  Side = Side(C.CUBLAS_SIDE_LEFT)  // Operation performed from the left
-	Right Side = Side(C.CUBLAS_SIDE_RIGHT) // Operation performed from the right
+	Left  Side = 0 // Operation performed from the left
+	Right Side = 1 // Operation performed from the right
 )
 
 // Diag specifies whether a matrix is unit triangular or not.
-// This directly maps to cublasDiagType_t values for optimal performance.
-type Diag C.cublasDiagType_t
+type Diag int
 
 const (
-	NonUnit Diag = Diag(C.CUBLAS_DIAG_NON_UNIT) // Matrix is not unit triangular
-	Unit    Diag = Diag(C.CUBLAS_DIAG_UNIT)     // Matrix is unit triangular
+	NonUnit Diag = 0 // Matrix is not unit triangular
+	Unit    Diag = 1 // Matrix is unit triangular
 )
 
 // Uplo specifies whether the matrix is upper or lower triangular.
-// This directly maps to cublasFillMode_t values for optimal performance.
-type Uplo C.cublasFillMode_t
+type Uplo int
 
 const (
-	Upper Uplo = Uplo(C.CUBLAS_FILL_MODE_UPPER) // Upper triangular matrix
-	Lower Uplo = Uplo(C.CUBLAS_FILL_MODE_LOWER) // Lower triangular matrix
+	Upper Uplo = 0 // Upper triangular matrix
+	Lower Uplo = 1 // Lower triangular matrix
 )
